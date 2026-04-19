@@ -43,13 +43,16 @@ coverage/
 htmlcov/
 .pytest_cache/
 
-# === データファイル（データパイプラインの場合） ===
-# data/raw/
-# data/processed/
-# outputs/
-# notebooks/.ipynb_checkpoints/
+# === データファイル・可視化ツール（実データはコミットしない） ===
+data/
+outputs/
+.superset/
+.ipynb_checkpoints/
+*.csv
+*.xlsx
+*.sqlite
+*.db
 
 # === その他 ===
 *.tgz
 *.tar.gz
-.superset/
