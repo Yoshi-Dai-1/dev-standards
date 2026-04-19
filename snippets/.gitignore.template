@@ -1,0 +1,54 @@
+# === 依存関係 ===
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# === ビルド成果物 ===
+dist/
+build/
+out/
+.next/
+.nuxt/
+
+# === 環境変数（機密情報） ===
+.env
+.env.local
+.env.*.local
+# .env.example はコミットする（SSOTとして機能するため）
+
+# === OS生成ファイル ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === エディタ・IDE ===
+.vscode/settings.json
+# .vscode/extensions.json はコミットしてよい（チームで共有）
+.idea/
+*.swp
+*.swo
+
+# === ログ ===
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === テスト・カバレッジ ===
+coverage/
+.coverage
+htmlcov/
+.pytest_cache/
+
+# === データファイル（データパイプラインの場合） ===
+# data/raw/
+# data/processed/
+# outputs/
+# notebooks/.ipynb_checkpoints/
+
+# === その他 ===
+*.tgz
+*.tar.gz
