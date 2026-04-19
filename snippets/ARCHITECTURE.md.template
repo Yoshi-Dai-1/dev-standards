@@ -63,13 +63,6 @@
 
 ---
 
-## ファイルサイズ
-
-- 通常のソースファイル：200〜300行以内
-- 超えたときは責務を分割する
-
----
-
 ## 非機能要件
 
 <!-- 詳細は dev-standards/principles/non-functional-requirements.md を参照 -->

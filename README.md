@@ -13,12 +13,15 @@
 
 ```
 dev-standards/
-  principles/          汎用原則（プロジェクト種別を問わず適用）
+  principles/          汎用原則（プロジェクト種別・フェーズを問わず適用）
+    project-definition.md           フェーズ0：何を・なぜ・誰のために作るかの定義
     directory-structure.md          ディレクトリ設計の根本思想・判断フローチャート
     naming-conventions.md           ケーススタイル・ファイル名・変数名の規則
     file-size-and-cohesion.md       行数指針・凝集度・循環依存・バレルexport
     ssot-and-constants.md           型定義・定数・環境変数のSSOT管理
     non-functional-requirements.md  性能・可用性・セキュリティ・コストの定義
+    code-review.md                  レビューの観点・AIレビュー依頼テンプレート
+    production-readiness.md         本番リリース前チェックリスト
 
   architectures/       プロジェクト種別ごとのディレクトリ構成パターン
     web-frontend-large.md     FSD（機能が多いWebアプリ）
@@ -27,7 +30,6 @@ dev-standards/
     monorepo.md               pnpm workspaces + Turborepo
     data-pipeline.md          Python中心のデータ処理・スクリプト集
     document-project.md       教材・ドキュメント（ナンバリング例外ルール含む）
-    production-readiness.md   本番リリース前チェックリスト
 
   decisions/           ADR（Architecture Decision Records）：判断の記録
     001-no-numbering-in-src.md
@@ -45,20 +47,39 @@ dev-standards/
       coding-conventions.md.template  AIへのコーディング規約ファイル雛形
 ```
 
+## 開発フローとファイルの対応
+
+```
+フェーズ0 プロジェクト定義    → principles/project-definition.md
+フェーズ1 技術選定            → snippets/tech-decision.md.template → decisions/
+フェーズ2 アーキテクチャ決定  → architectures/ → snippets/ARCHITECTURE.md.template
+フェーズ3 開発環境セットアップ → snippets/.gitignore・.env.example・tsconfig.base.json
+フェーズ4 実装               → principles/（命名規則・SSOT・凝集度）
+                               snippets/.claude/（AIへの文脈ファイル）
+フェーズ5 コードレビュー      → principles/code-review.md
+フェーズ6 本番リリース        → principles/production-readiness.md
+フェーズ7 判断の記録          → decisions/（ADR・技術選定）
+```
+
 ## 使い方
 
 ### 新プロジェクト開始時
 
-1. `architectures/` から最も近いパターンを選ぶ
-2. `snippets/ARCHITECTURE.md.template` をプロジェクトルートにコピーして記入する
-3. `snippets/.claude/project-context.md.template` を `.claude/project-context.md` としてコピーして記入する
-4. `snippets/.claude/coding-conventions.md.template` を `.claude/coding-conventions.md` としてコピーする
-5. 技術選定の根拠を `snippets/tech-decision.md.template` を使って `decisions/` に記録する
-6. 開発中に生じた設計判断を `decisions/` にADRとして追記する
+1. `principles/project-definition.md` のテンプレートで目的・要件・制約を定義する
+2. `architectures/` から最も近いパターンを選ぶ
+3. `snippets/ARCHITECTURE.md.template` をプロジェクトルートにコピーして記入する
+4. `snippets/.claude/project-context.md.template` を `.claude/project-context.md` としてコピーして記入する
+5. `snippets/.claude/coding-conventions.md.template` を `.claude/coding-conventions.md` としてコピーする
+6. 技術選定の根拠を `snippets/tech-decision.md.template` で `decisions/` に記録する
+
+### 実装中
+
+- `principles/` の各原則をAIへの指示時に渡す
+- コードレビューは `principles/code-review.md` のテンプレートを使う
 
 ### 本番リリース前
 
-`architectures/production-readiness.md` のチェックリストを確認する。
+`principles/production-readiness.md` のチェックリストを確認する。
 
 ### AI（Claude等）への指示時
 
@@ -68,9 +89,6 @@ dev-standards/
 - ARCHITECTURE.md                  （設計思想・層のルール・非機能要件）
 - .claude/coding-conventions.md   （コーディング規約）
 ```
-
-`principles/` の各ファイルは設計判断の根拠として参照する。
-AIへの指示には上記3ファイルで十分。
 
 ## 更新ルール
 
