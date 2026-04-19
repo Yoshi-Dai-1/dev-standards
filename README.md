@@ -14,9 +14,29 @@
 ```
 dev-standards/
   principles/          汎用原則（種別を問わず適用）
+    directory-structure.md
+    naming-conventions.md
+    file-size-and-cohesion.md
+    ssot-and-constants.md
+    non-functional-requirements.md   ← 性能・可用性・セキュリティ・コストの定義
   architectures/       プロジェクト種別ごとのディレクトリ構成パターン
+    web-frontend-large.md
+    web-frontend-small.md
+    backend-api.md
+    monorepo.md
+    data-pipeline.md
+    document-project.md
+    production-readiness.md          ← 本番運用チェックリスト
   decisions/           ADR（Architecture Decision Records）：判断の記録
   snippets/            コピペ用設定ファイル・テンプレート
+    tech-decision.md.template        ← 技術選定の記録テンプレート
+    ARCHITECTURE.md.template
+    .gitignore.template
+    .env.example.template
+    tsconfig.base.json
+    .claude/
+      project-context.md.template
+      coding-conventions.md.template
 ```
 
 ## 使い方
