@@ -24,6 +24,7 @@ Thumbs.db
 desktop.ini
 
 # === エディタ・IDE ===
+.superset/
 .vscode/settings.json
 # .vscode/extensions.json はコミットしてよい（チームで共有）
 .idea/
@@ -52,4 +53,3 @@ htmlcov/
 # === その他 ===
 *.tgz
 *.tar.gz
-\n# === プロジェクト固有 ===\n.superset/
