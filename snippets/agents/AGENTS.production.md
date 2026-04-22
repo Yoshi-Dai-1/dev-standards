@@ -43,7 +43,8 @@ Phase: Production Migration
 
 ## TDD Cycle
 
-詳細は `dev-standards/principles/tdd-with-ai.md` を参照。
+詳細はdev-standardsの `principles/tdd-with-ai.md` を参照
+（セッション開始時にパスをAIに伝えるか、ファイルを直接渡す）。
 このフェーズではセキュリティ関連のテストケースを必ず含める。
 
 ## Current Task
@@ -65,4 +66,4 @@ production-readiness対応：[該当項目と状態]
 ## Phase Transition
 
 production-readiness.mdの必須項目がすべて完了し初回リリースが完了したとき：
-→ AGENTS.md を `dev-standards/snippets/agents/AGENTS.operation.md` に切り替えることを提案する
+→ dev-standardsの `snippets/agents/AGENTS.operation.md` の内容でAGENTS.mdを上書きすることを提案する。

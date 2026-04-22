@@ -54,7 +54,8 @@
 5. テストを実行して結果を報告する
 6. 失敗した場合は原因を説明して修正しStep5に戻る
 
-詳細は `dev-standards/principles/tdd-with-ai.md` を参照。
+詳細はdev-standardsの `principles/tdd-with-ai.md` を参照
+（セッション開始時にパスをAIに伝えるか、ファイルを直接渡す）。
 
 ## Current Task
 
@@ -77,4 +78,4 @@
 
 以下を聞いたとき、本番移行の検討を提案する：
 「本番に出したい」「公開したい」「ユーザーに使ってもらいたい」
-→ AGENTS.md を `dev-standards/snippets/agents/AGENTS.production.md` に切り替えることを提案する
+→ dev-standardsの `snippets/agents/AGENTS.production.md` の内容でAGENTS.mdを上書きすることを提案する。

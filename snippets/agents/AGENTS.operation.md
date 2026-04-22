@@ -51,10 +51,12 @@ Phase: Production Operation
 
 **DDD診断**：services/・features/のビジネスロジックを読んで、
 同じバリデーションの重複・ルールの意図の不明確化・変更波及の拡大が起きていないか確認する。
-→ 詳細は `dev-standards/principles/production-deployment.md` のDDDセクション参照。
+→ 詳細はdev-standardsの `principles/production-deployment.md` のDDDセクション参照
+（セッション開始時にパスをAIに伝えるか、ファイルを直接渡す）。
 
 **スキル化候補**：同じ種類の作業が3回以上来た場合、
-`dev-standards/decisions/skill-candidates.md` に記録して報告する。
+dev-standardsの `decisions/skill-candidates.md` に記録して報告する
+（セッション開始時にパスをAIに伝えるか、ファイルを直接渡す）。
 
 ## TDD for Bug Fixes
 

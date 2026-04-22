@@ -87,17 +87,75 @@ dev-standards/
 
 ## 新プロジェクト開始時の手順
 
+### Step 0：dev-standards を PC に取得する（初回のみ）
+
 ```bash
-# 1. 新プロジェクトのルートで実行
-DEV_STANDARDS_PATH=/path/to/dev-standards ./setup-harness.sh [prototype|production|operation]
+# GitHubからdev-standardsをダウンロードする（1回だけ実行）
+# 自分のPC上の任意の場所で実行する
+cd ~/Documents   # または好きな場所
+git clone https://github.com/[あなたのユーザー名]/dev-standards.git
+```
 
-# 2. 生成されたファイルを記入する（人間が行う）
-#    - AGENTS.md          プロジェクト名・目的・現在のタスク
-#    - ARCHITECTURE.md    技術スタック・層のルール・非機能要件
+これで `~/Documents/dev-standards/` フォルダが作られる。以降は不要。
 
-# 3. 必要に応じてHooksを有効化する
-#    .claude/hooks/*.example の .example を外して修正
-#    chmod +x .claude/hooks/*.sh
+### Step 1：新プロジェクトのフォルダを作る
+
+```bash
+# dev-standards の隣にプロジェクトフォルダを作成する（推奨）
+cd ~/Documents
+mkdir my-new-project
+cd my-new-project
+```
+
+**推奨配置：**
+```
+Documents/
+  dev-standards/       ← 複数プロジェクトで共有する（ここには触らない）
+  my-project-a/        ← 新しいプロジェクト
+  my-project-b/
+```
+
+### Step 2：セットアップスクリプトを実行する
+
+```bash
+# my-new-project/ の中で実行する
+# DEV_STANDARDS_PATH = dev-standardsがどこにあるか
+# bash = シェルスクリプトを実行する命令
+# ../dev-standards/setup-harness.sh = 実行するスクリプトのパス
+# prototype = フェーズ指定（省略可・デフォルトはprototype）
+
+DEV_STANDARDS_PATH=../dev-standards bash ../dev-standards/setup-harness.sh prototype
+```
+
+実行するとハーネスのファイル構造が展開される（骨格のみ）。
+
+### Step 3：プロジェクト固有の情報を記入する（人間が行う）
+
+```bash
+# スクリプト実行後にこの2ファイルを必ず記入する
+# ← これをやって初めてハーネスとして機能し始める
+
+# AGENTS.md       → プロジェクト名・技術スタック・現在のタスク
+# ARCHITECTURE.md → 層のルール・技術スタック詳細・非機能要件
+```
+
+### Step 4：（任意）Hooksを有効にする
+
+```bash
+# .claude/hooks/ に .example がついたファイルがある
+# .example を外してプロジェクトに合わせて修正する
+cp .claude/hooks/post-skill-run.sh.example .claude/hooks/post-skill-run.sh
+# ← ファイルを編集してプロジェクトのパスに合わせる
+chmod +x .claude/hooks/*.sh
+```
+
+### Step 5：AIとの最初のセッションで dev-standards のパスを伝える
+
+```
+以下のファイルを参照しながら作業してください：
+- AGENTS.md（このプロジェクトの作業指示）
+- ARCHITECTURE.md（設計の詳細）
+- dev-standardsの原則ファイル（パス：../dev-standards/principles/）
 ```
 
 ---
