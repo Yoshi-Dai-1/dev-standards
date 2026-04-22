@@ -1,0 +1,42 @@
+#!/bin/bash
+# pre-commit.sh.example
+# コミット前に機密情報の混入を検出するHook
+#
+# セットアップ：
+#   1. このファイルを pre-commit.sh にコピー
+#   2. 実行権限を付与: chmod +x .claude/hooks/pre-commit.sh
+#   3. Claude Codeの設定でPreToolUse（Bashツール）イベントに登録
+#      またはgit hooksとして .git/hooks/pre-commit に配置
+
+echo "🔒 セキュリティチェック中..."
+
+# 機密情報パターンの検出
+PATTERNS=(
+  "API_KEY\s*="
+  "SECRET\s*="
+  "PASSWORD\s*="
+  "PRIVATE_KEY"
+  "Bearer [a-zA-Z0-9]"
+)
+
+FOUND=0
+for PATTERN in "${PATTERNS[@]}"; do
+  # .envファイルと.gitignoreされたファイルは除外
+  MATCHES=$(git diff --cached --name-only | xargs grep -l "$PATTERN" 2>/dev/null | grep -v "\.env" | grep -v "\.example")
+  if [ -n "$MATCHES" ]; then
+    echo "⚠️  WARNING: 機密情報の可能性があるパターンを検出"
+    echo "   パターン: $PATTERN"
+    echo "   ファイル: $MATCHES"
+    FOUND=1
+  fi
+done
+
+if [ $FOUND -eq 1 ]; then
+  echo ""
+  echo "❌ コミットを中止しました。上記のファイルを確認してください。"
+  echo "   意図的な場合は: git commit --no-verify"
+  exit 1
+fi
+
+echo "✅ セキュリティチェック通過"
+exit 0

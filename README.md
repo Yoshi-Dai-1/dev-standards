@@ -1,98 +1,144 @@
 # dev-standards
 
-あらゆるプロジェクト種別に横断的に適用できる、アーキテクチャ設計のナレッジベース。
-設計思想・命名規則・アーキテクチャパターンの判断基準を集積し、AIとともに開発するための文脈ファイルとして機能する。
+AIとともに開発するためのハーネスエンジニアリングのナレッジベース。
+あらゆるプロジェクト種別に横断的に適用できる設計思想・テンプレート・原則を集積する。
 
-## このリポジトリの目的
+---
 
-- **思想の記録**：なぜその構成を選んだかの判断根拠を残す
-- **再利用**：新プロジェクト開始時の設計コストをゼロに近づける
-- **AI協働**：AIへの指示時に「このドキュメントに従って」と渡す文脈ファイルとして使う
+## このリポジトリの位置づけ
+
+```
+dev-standards（このリポジトリ）
+  = ハーネスの設計図・テンプレート集
+
+各プロジェクトの .claude/
+  = 実際に機能するハーネス本体
+
+dev-standardsをプロジェクトに「配置」しても機能しない。
+setup-harness.sh でテンプレートをコピーして、
+プロジェクト固有の情報を記入することで初めて機能する。
+```
+
+---
 
 ## 構成
 
 ```
 dev-standards/
-  principles/          汎用原則（プロジェクト種別・フェーズを問わず適用）
-    project-definition.md           フェーズ0：何を・なぜ・誰のために作るかの定義
-    directory-structure.md          ディレクトリ設計の根本思想・判断フローチャート
-    naming-conventions.md           ケーススタイル・ファイル名・変数名の規則
-    file-size-and-cohesion.md       行数指針・凝集度・循環依存・バレルexport
-    ssot-and-constants.md           型定義・定数・環境変数のSSOT管理
-    non-functional-requirements.md  性能・可用性・セキュリティ・コストの定義
-    code-review.md                  レビューの観点・AIレビュー依頼テンプレート
-    production-readiness.md         本番リリース前チェックリスト
+  setup-harness.sh              ★ 新プロジェクト開始時に使うセットアップスクリプト
 
-  architectures/       プロジェクト種別ごとのディレクトリ構成パターン
-    web-frontend-large.md     FSD（機能が多いWebアプリ）
-    web-frontend-small.md     シンプル構成＋FSDへの移行タイミング
-    backend-api.md            レイヤードアーキテクチャ
-    monorepo.md               pnpm workspaces + Turborepo
-    data-pipeline.md          Python中心のデータ処理・スクリプト集
-    document-project.md       教材・ドキュメント（ナンバリング例外ルール含む）
+  principles/                   汎用原則（読む・参照する）
+    harness-engineering.md      ハーネスの全体像・5つの原則・タスク規模別構成
+    project-definition.md       フェーズ0：目的・要件・制約の定義
+    directory-structure.md      ディレクトリ設計の根本思想
+    naming-conventions.md       命名規則
+    file-size-and-cohesion.md   行数指針・凝集度
+    ssot-and-constants.md       SSOT管理
+    non-functional-requirements.md  非機能要件の定義
+    tdd-with-ai.md              AI協働TDDの手順
+    code-review.md              レビューの観点
+    subagents.md                サブエージェントの設計と活用
+    production-readiness.md     本番リリース前チェックリスト
+    production-deployment.md    本番移行ガイド（12因子・DDD・監視）
 
-  decisions/           ADR（Architecture Decision Records）：判断の記録
-    001-no-numbering-in-src.md
-    002-kebab-case-for-dirs.md
-    003-three-layer-knowledge-management.md
+  architectures/                プロジェクト種別ごとの構成パターン
+    web-frontend-large.md / web-frontend-small.md
+    backend-api.md / monorepo.md
+    data-pipeline.md / document-project.md
 
-  snippets/            コピペ用設定ファイル・テンプレート
-    ARCHITECTURE.md.template          各プロジェクトのARCHITECTURE.md雛形
-    tech-decision.md.template         技術選定の記録テンプレート
+  decisions/                    判断の記録（ADR・技術選定）
+    skill-candidates.md         スキル化候補（AIが自動追記）
+
+  snippets/                     テンプレート集（コピーして使う）
+    ARCHITECTURE.md.template
+    tech-decision.md.template
     .gitignore.template
     .env.example.template
     tsconfig.base.json
-    .claude/
-      project-context.md.template     AIへの指示用コンテキストファイル雛形
-      coding-conventions.md.template  AIへのコーディング規約ファイル雛形
+
+    agents/                     AGENTS.mdテンプレート（フェーズ別・60〜100行）
+      AGENTS.prototype.md       開発フェーズ用  ← 最初はこれ
+      AGENTS.production.md      本番移行フェーズ用
+      AGENTS.operation.md       運用フェーズ用
+      subagents/                サブエージェント定義ファイル
+        code-reviewer.md
+        security-auditor.md
+        test-generator.md
+        codebase-investigator.md
+
+    .claude/                    ハーネス雛形（setup-harness.shがコピーする）
+      rules/
+        _template.md            ルールファイルの書き方テンプレート
+      skills/
+        _template/SKILL.md      スキルファイルの書き方テンプレート
+      hooks/
+        README.md               Hooksの説明・ツール対応状況
+        post-skill-run.sh.example   スキル使用履歴の自動記録
+        pre-commit.sh.example       コミット前セキュリティチェック
+        post-session.sh.example     セッション終了時handoff生成
+      usage/
+        skill-usage.md          スキル使用履歴（Hooksが自動追記）
+        rule-hits.md            ルール参照履歴
+      project-context.md.template
+      coding-conventions.md.template
 ```
+
+---
+
+## 新プロジェクト開始時の手順
+
+```bash
+# 1. 新プロジェクトのルートで実行
+DEV_STANDARDS_PATH=/path/to/dev-standards ./setup-harness.sh [prototype|production|operation]
+
+# 2. 生成されたファイルを記入する（人間が行う）
+#    - AGENTS.md          プロジェクト名・目的・現在のタスク
+#    - ARCHITECTURE.md    技術スタック・層のルール・非機能要件
+
+# 3. 必要に応じてHooksを有効化する
+#    .claude/hooks/*.example の .example を外して修正
+#    chmod +x .claude/hooks/*.sh
+```
+
+---
 
 ## 開発フローとファイルの対応
 
 ```
 フェーズ0 プロジェクト定義    → principles/project-definition.md
 フェーズ1 技術選定            → snippets/tech-decision.md.template → decisions/
-フェーズ2 アーキテクチャ決定  → architectures/ → snippets/ARCHITECTURE.md.template
-フェーズ3 開発環境セットアップ → snippets/.gitignore・.env.example・tsconfig.base.json
-フェーズ4 実装               → principles/（命名規則・SSOT・凝集度）
-                               snippets/.claude/（AIへの文脈ファイル）
-フェーズ5 コードレビュー      → principles/code-review.md
-フェーズ6 本番リリース        → principles/production-readiness.md
-フェーズ7 判断の記録          → decisions/（ADR・技術選定）
+フェーズ2 アーキテクチャ決定  → architectures/ → ARCHITECTURE.md
+フェーズ3 ハーネスセットアップ → setup-harness.sh を実行
+フェーズ4 実装（TDD）         → principles/tdd-with-ai.md
+                               .claude/rules/（同じ指摘を2回したら追加）
+                               .claude/skills/（3回以上繰り返したら追加）
+フェーズ5 コードレビュー      → @code-reviewer / principles/code-review.md
+フェーズ6 本番移行            → AGENTS.mdをAGENTS.production.mdに切り替え
+                               principles/production-deployment.md
+フェーズ7 運用                → AGENTS.mdをAGENTS.operation.mdに切り替え
+フェーズ8 月次GC              → .claude/usage/ を参照してAIに診断を依頼
 ```
 
-## 使い方
+---
 
-### 新プロジェクト開始時
-
-1. `principles/project-definition.md` のテンプレートで目的・要件・制約を定義する
-2. `architectures/` から最も近いパターンを選ぶ
-3. `snippets/ARCHITECTURE.md.template` をプロジェクトルートにコピーして記入する
-4. `snippets/.claude/project-context.md.template` を `.claude/project-context.md` としてコピーして記入する
-5. `snippets/.claude/coding-conventions.md.template` を `.claude/coding-conventions.md` としてコピーする
-6. 技術選定の根拠を `snippets/tech-decision.md.template` で `decisions/` に記録する
-
-### 実装中
-
-- `principles/` の各原則をAIへの指示時に渡す
-- コードレビューは `principles/code-review.md` のテンプレートを使う
-
-### 本番リリース前
-
-`principles/production-readiness.md` のチェックリストを確認する。
-
-### AI（Claude等）への指示時
+## ハーネスの育て方
 
 ```
-以下のドキュメントに従ってコードを書いてください：
-- .claude/project-context.md      （プロジェクト概要・現在のタスク）
-- ARCHITECTURE.md                  （設計思想・層のルール・非機能要件）
-- .claude/coding-conventions.md   （コーディング規約）
+Day 1  ：setup-harness.sh → AGENTS.mdとARCHITECTURE.mdを記入
+Week 1 ：同じ指摘を2回した → .claude/rules/ に追加
+Week 2 ：3回以上繰り返した作業 → .claude/skills/ に追加
+Month 1：usage/ を見てGCを実施（使われないものを削除）
+以降   ：問題にぶつかるたびに追加・定期的に削除
 ```
+
+詳細は `principles/harness-engineering.md` を参照。
+
+---
 
 ## 更新ルール
 
-- `principles/` の原則は普遍的なため、変更する場合は理由をADRに記録する
+- `principles/` の原則を変更する場合は理由を `decisions/` に記録する
 - `architectures/` はプロジェクト経験に基づいて随時更新する
-- `decisions/` は削除しない。判断を覆したときも「覆した理由」を追記して残す
-- `snippets/` の設定ファイルは実際のプロジェクトで動作確認したものだけを入れる
+- `decisions/` は削除しない
+- `snippets/` の設定ファイルは動作確認したものだけを入れる
+- `decisions/skill-candidates.md` はAIが自動追記する

@@ -1,0 +1,43 @@
+#!/bin/bash
+# post-session.sh.example
+# セッション終了時にhandoff-artifact.mdを生成するHook
+# コンテキストリセット時に次のセッションへ状態を引き継ぐための仕組み
+#
+# セットアップ：
+#   1. このファイルを post-session.sh にコピー
+#   2. 実行権限を付与: chmod +x .claude/hooks/post-session.sh
+#   3. Claude Codeの設定でStopイベントに登録
+
+DATE=$(date +%Y-%m-%d\ %H:%M)
+HANDOFF_FILE=".claude/handoff-artifact.md"
+
+cat > "$HANDOFF_FILE" << EOF
+# Handoff Artifact
+# 生成日時: $DATE
+# このファイルは次のセッション開始時にコンテキストとして渡す
+
+## 前のセッションの状態
+
+<!-- AIが自動で記入 -->
+**取り組んでいた機能**:
+**完了した部分**:
+**途中で止まっている部分**:
+**次にやるべきこと**:
+
+## 重要な決定事項
+
+<!-- このセッションで行った設計上の判断 -->
+
+## 未解決の問題
+
+<!-- バグ・疑問点・要確認事項 -->
+
+## 変更したファイル
+
+<!-- git diff --name-only の出力 -->
+$(git diff --name-only 2>/dev/null || echo "git管理外")
+
+EOF
+
+echo "📝 Handoff Artifact を生成しました: $HANDOFF_FILE"
+echo "   次のセッション開始時にこのファイルをAIに渡してください"

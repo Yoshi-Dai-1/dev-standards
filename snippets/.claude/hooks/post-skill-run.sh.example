@@ -1,0 +1,33 @@
+#!/bin/bash
+# post-skill-run.sh.example
+# スキル実行後に使用履歴を自動記録するHook
+#
+# セットアップ：
+#   1. このファイルを post-skill-run.sh にコピー
+#   2. 実行権限を付与: chmod +x .claude/hooks/post-skill-run.sh
+#   3. Claude Codeの設定でPostToolUseイベントに登録
+#
+# 環境変数（Claude Codeが自動で渡す）：
+#   $SKILL_NAME  → 実行されたスキルの名前
+#   $SESSION_ID  → 現在のセッションID
+
+SKILL_NAME=${1:-$SKILL_NAME}
+DATE=$(date +%Y-%m-%d)
+USAGE_FILE=".claude/usage/skill-usage.md"
+SKILL_FILE=".claude/skills/$SKILL_NAME/SKILL.md"
+
+# 使用履歴ファイルに追記
+if [ -f "$USAGE_FILE" ]; then
+  echo "- $DATE: $SKILL_NAME" >> "$USAGE_FILE"
+fi
+
+# SKILL.mdのlast_usedを更新
+if [ -f "$SKILL_FILE" ]; then
+  # last_usedの日付を更新
+  sed -i "s/last_used: .*/last_used: $DATE/" "$SKILL_FILE"
+  
+  # use_countをインクリメント
+  CURRENT_COUNT=$(grep "use_count:" "$SKILL_FILE" | grep -o '[0-9]*')
+  NEW_COUNT=$((CURRENT_COUNT + 1))
+  sed -i "s/use_count: .*/use_count: $NEW_COUNT/" "$SKILL_FILE"
+fi
