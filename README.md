@@ -42,6 +42,7 @@ dev-standards/
     production-deployment.md    本番移行ガイド（12因子・DDD・監視）
 
   architectures/                プロジェクト種別ごとの構成パターン
+    _how-to-choose.md           ★ 種別の選び方（フローチャート）← まずここを読む
     web-frontend-large.md / web-frontend-small.md
     backend-api.md / monorepo.md
     data-pipeline.md / document-project.md
