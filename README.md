@@ -165,7 +165,9 @@ chmod +x .claude/hooks/*.sh
 ```
 フェーズ0 プロジェクト定義    → principles/project-definition.md
 フェーズ1 技術選定            → snippets/tech-decision.md.template → decisions/
-フェーズ2 アーキテクチャ決定  → architectures/ → ARCHITECTURE.md
+フェーズ2 アーキテクチャ決定  → architectures/_how-to-choose.md で種別を選ぶ
+                               → 該当の architectures/*.md を通読する
+                               → ARCHITECTURE.md に記入する
 フェーズ3 ハーネスセットアップ → setup-harness.sh を実行
 フェーズ4 実装（TDD）         → principles/tdd-with-ai.md
                                .claude/rules/（同じ指摘を2回したら追加）
