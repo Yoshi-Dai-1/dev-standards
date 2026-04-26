@@ -50,13 +50,35 @@ Phase: Production Operation
 以下を確認し、該当があれば人間に報告する：
 
 **DDD診断**：services/・features/のビジネスロジックを読んで、
-同じバリデーションの重複・ルールの意図の不明確化・変更波及の拡大が起きていないか確認する。
-→ 詳細はdev-standardsの `principles/production-deployment.md` のDDDセクション参照
-（セッション開始時にパスをAIに伝えるか、ファイルを直接渡す）。
+以下の症状が現在のコードに存在するか確認する（前回との比較は不要）。
+- 同じバリデーション・ビジネスルールが複数箇所に重複している
+- ビジネスルールの意図がコードから読み取りにくくなっている
+- 1つの条件を変えると複数ファイルの修正が必要になっている
+→ 詳細はdev-standardsの `principles/production-deployment.md` のDDDセクション参照。
 
-**スキル化候補**：同じ種類の作業が3回以上来た場合、
-dev-standardsの `decisions/skill-candidates.md` に記録して報告する
-（セッション開始時にパスをAIに伝えるか、ファイルを直接渡す）。
+**スキル化候補**：このセッション中に同じ種類の作業が3回以上発生した場合、
+dev-standardsの `decisions/skill-candidates.md` に記録して報告する。
+（セッションをまたぐカウントはHooksで自動記録されている場合のみ参照する）
+
+## Monthly Checklist（月次・明示的に依頼されたとき実行）
+
+以下のサブエージェントを順番に呼び出す：
+
+```
+@resilience-checker
+@code-quality-auditor
+```
+
+商用プロジェクトの場合は追加で：
+
+```
+principles/commercial-operations.md の月次確認項目を実施してください。
+```
+
+診断完了後、人間に報告する：
+- 総合評価（GREEN/YELLOW/RED + GOOD/CAUTION/ATTENTION）
+- 今月中に対処すべき最優先アクション
+- .claude/usage/ のGCが必要なものがあれば合わせて提案する
 
 ## TDD for Bug Fixes
 

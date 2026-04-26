@@ -47,6 +47,16 @@ Phase: Production Migration
 （セッション開始時にパスをAIに伝えるか、ファイルを直接渡す）。
 このフェーズではセキュリティ関連のテストケースを必ず含める。
 
+## Security Implementation
+
+認証・認可・入力バリデーション・エラーハンドリングを実装するとき：
+→ dev-standardsの `principles/security-implementation.md` のテンプレートを使う
+→ 実装後は必ず `@security-auditor` で監査する
+
+何を優先するか判断に迷ったとき：
+→ dev-standardsの `principles/risk-based-approach.md` のリスク4象限で判断する
+→ 「即死系」の項目（セキュリティ・法的要件）は妥協しない
+
 ## Current Task
 
 **Handling**: [production-readiness.mdの対応中項目]

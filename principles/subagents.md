@@ -77,6 +77,33 @@ AIは自分が書いたコードを同一コンテキスト内でレビューす
 スクリーニング機能に関連するファイルをすべて特定してください
 ```
 
+### 5. コード品質診断
+**使うサブエージェント**：`code-quality-auditor`
+**有効な理由**：コードベース全体を俯瞰する作業はメインのコンテキストを大量消費する。
+              独立コンテキストで俯瞰することで客観的な品質評価が得られる
+**使うタイミング**：月次GC時・「最近コードが複雑になってきた」と感じたとき・リファクタリング前
+
+```
+@code-quality-auditor
+src/ 以下のコードベースを対象に品質診断を実施してください。
+```
+
+→ 詳細は `principles/code-quality.md` を参照。
+
+### 6. レジリエンス診断
+**使うサブエージェント**：`resilience-checker`
+**有効な理由**：ドキュメント・設定ファイルを横断的に読む調査はメインのコンテキストに影響する。
+              読み取り専用ツールに制限することで誤操作のリスクもない
+**使うタイミング**：月次GC時・本番リリース前・インシデント後の振り返り
+
+```
+@resilience-checker
+現在のプロジェクト（ARCHITECTURE.md・docs/operations.md参照）の
+レジリエンスを診断してください。
+```
+
+→ 詳細は `principles/resilience.md` を参照。
+
 ---
 
 ## サブエージェントを使わなくてよいタスク
@@ -99,10 +126,12 @@ Claude Codeの場合：
   security-auditor.md
   test-generator.md
   codebase-investigator.md
+  code-quality-auditor.md     ← 月次品質診断
+  resilience-checker.md       ← 月次レジリエンス診断
 ```
 
 テンプレートは `dev-standards/snippets/agents/subagents/` にある。
-新プロジェクト開始時にプロジェクトの `.gemini/agents/` にコピーする。
+`setup-harness.sh` 実行時に自動でコピーされる。
 
 ---
 
