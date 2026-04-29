@@ -13,21 +13,37 @@
 ```
 以下のファイルを読んで、ARCHITECTURE.md を一緒に作ってください。
 
-参照ファイル：
+## Step 1：プロジェクトの把握
+
+まず以下を読む：
 - docs/project-definition.md（プロジェクトの目的・要件・制約）
-- dev-standards/architectures/_how-to-choose.md（アーキテクチャの選び方）
-- dev-standards/principles/non-functional-requirements.md（非機能要件の定義方法）
-- dev-standards/principles/security-implementation.md（セキュリティ要件の定め方）
-- dev-standards/snippets/ARCHITECTURE.md.template（記入するテンプレート）
 
-手順：
-1. project-definition.md を読んで、プロジェクトの概要を把握してください
-2. _how-to-choose.md のフローチャートに従って、適切なアーキテクチャを1つ提案してください
-3. テンプレートの各セクションを1つずつ確認しながら、私の回答を反映してください
-4. 非機能要件・セキュリティ要件は、プロジェクトの規模とリスクに合わせて提案してください
-5. すべて埋まったら、完成した ARCHITECTURE.md を出力してください
+読み終わったら、プロジェクトの概要を1〜2文で私に伝えてください。
+内容が正しければ「次へ」と答えます。
 
-ルール：
+## Step 2：アーキテクチャの選定
+
+次に以下を読む：
+- [DEV_STANDARDS_PATH]/architectures/_how-to-choose.md（アーキテクチャの選び方）
+
+_how-to-choose.md のフローチャートに従って、適切なアーキテクチャを1つ提案してください。
+選択肢が複数ある場合は理由とともに提示して私に選ばせてください。
+
+## Step 3：非機能要件・セキュリティ要件の定義
+
+次に以下を読む：
+- [DEV_STANDARDS_PATH]/principles/non-functional-requirements.md（非機能要件の定義方法）
+- [DEV_STANDARDS_PATH]/principles/security-implementation.md（セキュリティ要件の定め方）
+
+プロジェクトの規模・リスクに合わせた非機能要件とセキュリティ要件を提案してください。
+各項目を1つずつ確認して私の回答を反映してください。
+
+## Step 4：ARCHITECTURE.md への記入
+
+各セクションを1つずつ確認しながら記入してください。
+すべて埋まったら、完成した ARCHITECTURE.md を出力してください。
+
+共通ルール：
 - 「どちらがよいか」と迷う場面では選択肢を提示して私に選ばせてください
 - 私が「分からない」と答えたときは、プロジェクトの規模・目的から推奨値を提案してください
 - 質問は1つずつ。私が答えるまで次に進まないでください
@@ -41,7 +57,7 @@
 **目的**：[このプロジェクトが何をするものか1〜2文で]  
 **種別**：[Webフロントエンド / バックエンドAPI / モノリポ / データパイプライン / ドキュメント]  
 **採用アーキテクチャ**：[FSD / レイヤードアーキテクチャ / etc.]  
-**参照ドキュメント**：[dev-standards の該当ファイルへのリンク]
+**参照ドキュメント**：[DEV_STANDARDS_PATH]/architectures/
 
 ---
 
@@ -80,7 +96,7 @@
 
 ## 命名規則
 
-`dev-standards/principles/naming-conventions.md` に従う。
+`[DEV_STANDARDS_PATH]/principles/naming-conventions.md` に従う。
 プロジェクト固有の追加ルール：
 
 - [プロジェクト固有のルールがあれば記載]
@@ -98,7 +114,7 @@
 
 ## 非機能要件
 
-<!-- 詳細は dev-standards/principles/non-functional-requirements.md を参照 -->
+<!-- 詳細は [DEV_STANDARDS_PATH]/principles/non-functional-requirements.md を参照 -->
 
 ### パフォーマンス
 - 主要API応答：p95で ___ms 以内

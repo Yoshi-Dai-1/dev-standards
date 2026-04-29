@@ -59,6 +59,11 @@ fi
 
 # ===== ARCHITECTURE.md のコピー =====
 cp "$SNIPPETS/ARCHITECTURE.md.template" ARCHITECTURE.md
+if sed --version 2>/dev/null | grep -q "GNU"; then
+  sed -i "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" ARCHITECTURE.md
+else
+  sed -i '' "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" ARCHITECTURE.md
+fi
 echo "✅ ARCHITECTURE.md をコピーしました"
 
 # ===== .claude/ 内のファイルをコピー =====
