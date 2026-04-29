@@ -101,8 +101,9 @@ dev-standards/
 
 ```bash
 # GitHubからdev-standardsをダウンロードする（1回だけ実行）
-# 自分のPC上の任意の場所で実行する
-cd ~/Documents   # または好きな場所
+# ⚠️ プロジェクトを置く予定のフォルダと同じ場所にクローンすること
+# 例：プロジェクトを ~/Documents/ に作るなら dev-standards も ~/Documents/ にクローンする
+cd ~/Documents   # プロジェクトを置く場所と同じ親ディレクトリ
 git clone https://github.com/[あなたのユーザー名]/dev-standards.git
 ```
 
@@ -111,18 +112,25 @@ git clone https://github.com/[あなたのユーザー名]/dev-standards.git
 ### Step 1：新プロジェクトのフォルダを作る
 
 ```bash
-# dev-standards の隣にプロジェクトフォルダを作成する（推奨）
+# dev-standards の隣にプロジェクトフォルダを作成する（必須）
 cd ~/Documents
 mkdir my-new-project
 cd my-new-project
 ```
 
-**推奨配置：**
+**必須配置（dev-standardsとプロジェクトは必ず同じ親ディレクトリに置く）：**
 ```
 Documents/
   dev-standards/       ← 複数プロジェクトで共有する（ここには触らない）
   my-project-a/        ← 新しいプロジェクト
   my-project-b/
+```
+
+⚠️ **dev-standardsとプロジェクトが別の場所にある場合**（例：dev-standardsは `~/Documents/`、プロジェクトは `~/repos/`）、`../dev-standards` というデフォルトパスが機能しない。その場合は以下のように絶対パスで指定する：
+
+```bash
+DEV_STANDARDS_PATH=/Users/yourname/Documents/dev-standards \
+  bash /Users/yourname/Documents/dev-standards/setup-harness.sh prototype
 ```
 
 ### Step 2：セットアップスクリプトを実行する
