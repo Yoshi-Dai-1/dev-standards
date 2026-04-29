@@ -65,20 +65,20 @@
 
 ## TDD Cycle
 
-詳細はdev-standardsの `principles/tdd-with-ai.md` を参照。
+詳細は `[DEV_STANDARDS_PATH]/principles/tdd-with-ai.md` を参照。
 実装完了後の確認順序（tsc → ESLint → テスト → @code-reviewer → 人間レビュー）も同ファイルに定義。
 
 ## Security & Quality
 
 <!-- 実装中の参照（原則の確認） -->
 認証・機密データ・入力バリデーションを実装するとき：
-→ `principles/security-implementation.md` の実装テンプレートを使う
+→ `[DEV_STANDARDS_PATH]/principles/security-implementation.md` の実装テンプレートを使う
 
 優先度・投資水準の判断に迷ったとき：
-→ `principles/risk-based-approach.md` のリスク4象限で判断する
+→ `[DEV_STANDARDS_PATH]/principles/risk-based-approach.md` のリスク4象限で判断する
 
 実装中に「良いコードとは何か」を確認したいとき：
-→ `principles/code-quality.md` の6軸と設計原則を参照する
+→ `[DEV_STANDARDS_PATH]/principles/code-quality.md` の6軸と設計原則を参照する
 
 <!-- 実装後の診断（サブエージェントに委任） -->
 実装完了後：`@security-auditor` でセキュリティ監査
@@ -86,10 +86,18 @@
 
 ## Current Task
 
-<!-- 毎セッションで更新する唯一の動的セクション -->
+<!-- 毎セッション開始時に更新する。.claude/project-context.md の「現在のタスク」も同じ内容に合わせて更新する -->
 **Taking on**: [取り組んでいる機能]
 **Done**: [完了部分]
 **Next**: [次にやること]
+
+## Session Protocol
+
+**セッション開始時**：人間が `.claude/handoff-artifact.md` をAIに渡して前のセッションの文脈を復元する。
+その後、Current Task と `.claude/project-context.md` の「現在のタスク」を現在の状態に更新する。
+
+**セッション終了時**：`Stop` イベントのHook（`.claude/hooks/post-session.sh`）が自動で `.claude/handoff-artifact.md` を生成する。
+Hookを設定していない場合はAIに「handoff-artifact.mdを更新して」と依頼する。
 
 ## Report Format
 
@@ -103,11 +111,15 @@
             あれば decisions/ への記録を提案する。なければ「なし」]
 ```
 
-<!-- decisions/ テンプレート：dev-standards/snippets/tech-decision.md.template -->
+<!-- decisions/ テンプレート：[DEV_STANDARDS_PATH]/snippets/tech-decision.md.template -->
 <!-- 保存先：decisions/[連番]-[内容を表すslug].md -->
 
 ## Phase Transition
 
 以下を聞いたとき、本番移行の検討を提案する：
 「本番に出したい」「公開したい」「ユーザーに使ってもらいたい」
-→ dev-standardsの `snippets/agents/AGENTS.production.md` の内容でAGENTS.mdを上書きすることを提案する。
+→ プロジェクトルートで以下を実行してAGENTS.mdを本番フェーズ用に切り替えることを提案する：
+```
+DEV_STANDARDS_PATH=[dev-standardsのパス] bash [dev-standardsのパス]/setup-harness.sh production
+```
+実行後、AGENTS.md・ARCHITECTURE.md の内容を本番フェーズ用に記入し直す。

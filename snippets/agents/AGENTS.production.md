@@ -43,18 +43,18 @@ Phase: Production Migration
 
 ## TDD Cycle
 
-詳細はdev-standardsの `principles/tdd-with-ai.md` を参照
+詳細は `[DEV_STANDARDS_PATH]/principles/tdd-with-ai.md` を参照
 （セッション開始時にパスをAIに伝えるか、ファイルを直接渡す）。
 このフェーズではセキュリティ関連のテストケースを必ず含める。
 
 ## Security Implementation
 
 認証・認可・入力バリデーション・エラーハンドリングを実装するとき：
-→ dev-standardsの `principles/security-implementation.md` のテンプレートを使う
+→ `[DEV_STANDARDS_PATH]/principles/security-implementation.md` のテンプレートを使う
 → 実装後は必ず `@security-auditor` で監査する
 
 何を優先するか判断に迷ったとき：
-→ dev-standardsの `principles/risk-based-approach.md` のリスク4象限で判断する
+→ `[DEV_STANDARDS_PATH]/principles/risk-based-approach.md` のリスク4象限で判断する
 → 「即死系」の項目（セキュリティ・法的要件）は妥協しない
 
 ## Current Task
@@ -62,6 +62,16 @@ Phase: Production Migration
 **Handling**: [production-readiness.mdの対応中項目]
 **Done**: [完了項目]
 **Remaining required**: [残りの必須項目]
+
+## Session Protocol
+
+**セッション開始時**：人間が `.claude/handoff-artifact.md` をAIに渡して前のセッションの文脈を復元する。
+その後、Current Task と `.claude/project-context.md` の「現在のタスク」を現在の状態に更新する。
+
+**セッション終了時**：`Stop` イベントのHook（`.claude/hooks/post-session.sh`）が自動で `.claude/handoff-artifact.md` を生成する。
+Hookを設定していない場合はAIに「handoff-artifact.mdを更新して」と依頼する。
+
+**`docs/operations.md` の記入**：デプロイ方法・ロールバック手順・障害対応手順が決まった時点で、AIと対話しながら `docs/operations.md` に記入する。本番リリース前までに完成させる。
 
 ## Report Format
 
@@ -76,4 +86,8 @@ production-readiness対応：[該当項目と状態]
 ## Phase Transition
 
 production-readiness.mdの必須項目がすべて完了し初回リリースが完了したとき：
-→ dev-standardsの `snippets/agents/AGENTS.operation.md` の内容でAGENTS.mdを上書きすることを提案する。
+→ プロジェクトルートで以下を実行してAGENTS.mdを運用フェーズ用に切り替えることを提案する：
+```
+DEV_STANDARDS_PATH=[dev-standardsのパス] bash [dev-standardsのパス]/setup-harness.sh operation
+```
+実行後、AGENTS.md の Current Task・Pending を現在の状態に記入し直す。

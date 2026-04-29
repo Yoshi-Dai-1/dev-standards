@@ -104,6 +104,35 @@ src/ 以下のコードベースを対象に品質診断を実施してくださ
 
 → 詳細は `principles/resilience.md` を参照。
 
+### 7. 仕様策定
+**使うサブエージェント**：`planner`
+**有効な理由**：「何を作るか」の決定をメインエージェントに委ねると、
+              実装しやすい方向に仕様が歪みやすい。
+              独立したコンテキストで仕様を策定することで、実装都合に引きずられない設計ができる
+**使うタイミング**：中規模以上のタスク（数時間以上）開始時・フルアプリ構築の起点
+
+```
+@planner
+[1〜4文でやりたいことを書く]
+```
+
+→ 詳細は `principles/harness-engineering.md` のPlanner・Build・QA 3段階構成を参照。
+
+### 8. スプリントQA評価
+**使うサブエージェント**：`evaluator`
+**有効な理由**：実装エージェントは自分が作ったものを過大評価する。
+              独立したコンテキストで実際のコードを読み・動作を確認することで
+              客観的な品質評価が得られる
+**使うタイミング**：フルアプリ構築の各スプリント完了後・主観的品質（デザイン・UX）の検証
+
+```
+@evaluator
+Sprint [番号] の評価をしてください。
+仕様は docs/spec.md を参照してください。
+```
+
+→ 詳細は `principles/harness-engineering.md` のPlanner・Build・QA 3段階構成を参照。
+
 ---
 
 ## サブエージェントを使わなくてよいタスク
@@ -122,6 +151,8 @@ src/ 以下のコードベースを対象に品質診断を実施してくださ
 Claude Codeの場合：
 ```
 .gemini/agents/    または    .claude/agents/
+  planner.md
+  evaluator.md
   code-reviewer.md
   security-auditor.md
   test-generator.md

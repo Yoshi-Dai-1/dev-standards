@@ -36,6 +36,9 @@ SNIPPETS="$DEV_STANDARDS_PATH/snippets"
 # .claude/ ディレクトリ作成
 mkdir -p .claude/{rules,skills,agents,hooks,usage}
 
+# docs/ ディレクトリ作成
+mkdir -p docs
+
 # ===== AGENTS.md のコピー =====
 AGENTS_SRC="$SNIPPETS/agents/AGENTS.${PROJECT_PHASE}.md"
 if [ -f "$AGENTS_SRC" ]; then
@@ -46,6 +49,14 @@ else
   cp "$SNIPPETS/agents/AGENTS.prototype.md" AGENTS.md
 fi
 
+# [DEV_STANDARDS_PATH] プレースホルダーを実際のパスに置換する
+DEV_STANDARDS_ABS=$(cd "$DEV_STANDARDS_PATH" && pwd)
+if sed --version 2>/dev/null | grep -q "GNU"; then
+  sed -i "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" AGENTS.md
+else
+  sed -i '' "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" AGENTS.md
+fi
+
 # ===== ARCHITECTURE.md のコピー =====
 cp "$SNIPPETS/ARCHITECTURE.md.template" ARCHITECTURE.md
 echo "✅ ARCHITECTURE.md をコピーしました"
@@ -53,6 +64,11 @@ echo "✅ ARCHITECTURE.md をコピーしました"
 # ===== .claude/ 内のファイルをコピー =====
 # coding-conventions
 cp "$SNIPPETS/.claude/coding-conventions.md.template" .claude/coding-conventions.md
+if sed --version 2>/dev/null | grep -q "GNU"; then
+  sed -i "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" .claude/coding-conventions.md
+else
+  sed -i '' "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" .claude/coding-conventions.md
+fi
 echo "✅ .claude/coding-conventions.md をコピーしました"
 
 # project-context
@@ -74,7 +90,7 @@ for AGENT_FILE in "$SNIPPETS/agents/subagents/"*.md; do
   fi
 done
 echo "✅ .claude/agents/ にサブエージェント定義をコピーしました"
-echo "   （code-reviewer / security-auditor / test-generator / codebase-investigator / resilience-checker / code-quality-auditor）"
+echo "   （planner / evaluator / code-reviewer / security-auditor / test-generator / codebase-investigator / resilience-checker / code-quality-auditor）"
 
 # Hooks サンプルをコピー
 cp "$SNIPPETS/.claude/hooks/"* .claude/hooks/
@@ -103,6 +119,118 @@ cat > .claude/handoff-artifact.md << 'EOF'
 ## 未解決の問題
 EOF
 echo "✅ .claude/handoff-artifact.md を作成しました"
+
+# docs/ の雛形ファイルを作成
+if [ ! -f "docs/project-definition.md" ]; then
+  cat > docs/project-definition.md << 'DOCEOF'
+# プロジェクト定義
+
+<!-- このファイルをAIと対話しながら記入する -->
+<!-- 対話プロンプトは dev-standards の principles/project-definition.md を参照 -->
+
+## 目的（Why）
+
+
+## 対象ユーザー（Who）
+
+- 主なユーザー：
+- 技術レベル：
+- 主な使用環境：
+- 利用頻度：
+
+## 機能要件（What）
+
+### Must（これがなければ成立しない）
+-
+
+### Should（重要だが必須ではない）
+-
+
+### Could（あれば良い）
+-
+
+### Won't（今回はやらない・明示的な除外）
+-
+
+## 技術制約（Constraint）
+
+- 言語：
+- デプロイ先：
+- コスト上限：
+- ライセンス：
+
+## セキュリティ要件（Security Constraint）
+
+- プロジェクト種別：
+- 守るべき資産：
+- 認証：
+
+## リスク評価（Risk Assessment）
+
+### 即死系リスク
+-
+
+### 緩慢死系リスク
+-
+
+## 成功基準（Definition of Done）
+
+- [ ] Must要件がすべて動作する
+- [ ]
+DOCEOF
+  echo "✅ docs/project-definition.md の雛形を作成しました"
+fi
+
+if [ ! -f "docs/operations.md" ]; then
+  cat > docs/operations.md << 'OPSEOF'
+# 運用手順書
+
+<!-- 本番移行時にこのファイルを記入する -->
+<!-- 詳細は dev-standards の principles/resilience.md を参照 -->
+
+## 日常的な運用
+
+### デプロイ方法
+
+
+### ロールバック方法
+
+
+### DBバックアップの確認方法
+
+
+### バックアップからのリストア手順（月1回実施）
+
+最終実施日：（未実施）
+
+## 障害対応
+
+### サービスがダウンしたとき
+
+1.
+2.
+
+### データが壊れたとき
+
+1.
+2.
+
+### セキュリティインシデントが発生したとき
+
+1.
+2.
+3.
+
+## 月次チェックリスト
+
+- [ ] バックアップからのリストアテスト実施
+- [ ] npm audit / pip-audit 実行・脆弱性対応
+- [ ] 依存ライブラリの更新確認
+- [ ] @resilience-checker を実行して診断
+- [ ] モニタリング・アラートが正常に動作しているか確認
+OPSEOF
+  echo "✅ docs/operations.md の雛形を作成しました"
+fi
 
 # .gitignore に追加
 if [ -f ".gitignore" ]; then

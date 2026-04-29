@@ -1,20 +1,25 @@
-# スキルファイルのテンプレート
-
-<!-- このディレクトリをコピーして .claude/skills/[skill-name]/ として使う -->
-<!-- スキルは繰り返す定型作業から生まれる。最初から作らない -->
-<!-- 「同じ手順を3回以上実施した」がスキル化のトリガー -->
-
 ---
-name: skill-name                    # スキルの識別名（kebab-case）
-description: |                      # メインエージェントがいつ使うか判断する説明
+name: skill-name
+description: |
   このスキルが何をするか1〜2文で。
   いつ使うべきかも書く。
   例：「コードレビューを依頼されたとき、または実装完了後に使う」
 version: 1.0.0
-last_used: YYYY-MM-DD               # Hooksまたは手動で更新
-use_count: 0                        # Hooksまたは手動でインクリメント
-status: active                      # active / deprecated / candidate
+last_used: YYYY-MM-DD
+use_count: 0
+status: active
 ---
+
+<!-- このディレクトリをコピーして .claude/skills/[skill-name]/ として使う -->
+<!-- スキルは繰り返す定型作業から生まれる。最初から作らない -->
+<!-- 「同じ手順を3回以上実施した」がスキル化のトリガー -->
+<!--                                                        -->
+<!-- フロントマター（--- で囲まれた上部）の各フィールドの説明：  -->
+<!--   name       : スキルの識別名（kebab-case）              -->
+<!--   description: メインエージェントがいつ使うか判断する説明  -->
+<!--   last_used  : Hooksまたは手動で更新する日付              -->
+<!--   use_count  : Hooksまたは手動でインクリメントする使用回数 -->
+<!--   status     : active / deprecated / candidate          -->
 
 ## When to Use
 
