@@ -45,9 +45,19 @@ Phase: Production Operation
 - セキュリティ問題を後回しにしない
 - 1コミットに複数の目的の変更を混ぜない
 
-## Periodic Diagnosis（セッション開始時に自律実行）
+## Periodic Diagnosis（条件付き・セッション開始時）
 
-以下を確認し、該当があれば人間に報告する：
+**以下のいずれかに該当するときのみ実行する。該当しない場合はスキップして Current Task の確認に進む。**
+
+- `.claude/handoff-artifact.md` のタイムスタンプが7日以上前（または存在しない）
+- 直前のセッションでバグ修正・インシデント対応があった（handoff-artifactの「未解決の問題」に記載がある場合）
+- 人間から「診断して」と明示的に依頼された
+
+> Periodic Diagnosis と Monthly Checklist の違い：
+> Periodic Diagnosis は軽量な条件確認（コードを全量読まない）。
+> Monthly Checklist はサブエージェントを呼ぶ重い診断（明示的な依頼時のみ）。
+
+該当した場合、以下を確認し、問題があれば人間に報告する：
 
 **DDD診断**：services/・features/のビジネスロジックを読んで、
 以下の症状が現在のコードに存在するか確認する（前回との比較は不要）。
@@ -75,10 +85,22 @@ Phase: Production Operation
 principles/commercial-operations.md の月次確認項目を実施してください。
 ```
 
+**加えて以下をメインエージェントが直接実行する（毎月）：**
+
+```
+decisions/ の各ファイルを読んで、以下を確認してください：
+1. 判断の前提（使用技術・外部API・チーム構成など）が変わっているものがないか
+2. 「要確認」「未定」と記録されたまま放置されているものがないか
+3. 1年以上前のADRで現在の実装と矛盾しているものがないか
+
+問題があれば decisions/[連番]-review-YYYY-MM.md として記録してください。
+```
+
 診断完了後、人間に報告する：
 - 総合評価（GREEN/YELLOW/RED + GOOD/CAUTION/ATTENTION）
 - 今月中に対処すべき最優先アクション
 - .claude/usage/ のGCが必要なものがあれば合わせて提案する
+- decisions/ の要対応項目があれば合わせて報告する
 
 ## Subagents
 

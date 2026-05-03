@@ -5,7 +5,7 @@
 同じ作業が3回以上繰り返されたとき、スキル化を検討するための記録場所。
 
 記録されるタイミング：
-- AIがセッション中に同じ種類の作業を3回以上実施したとき（AGENTS.operation.mdのPeriodic Diagnosisから）
+- AIがセッション中に同じ種類の作業を3回以上実施したとき（.claude/skills/live-operation/ のPeriodic Diagnosisから）
 - HooksのPost-tool-useで自動記録されている場合（post-skill-run.sh.exampleを参照）
 - 人間が「これスキル化できそう」と気づいたとき（手動追記）
 

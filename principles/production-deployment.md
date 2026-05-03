@@ -3,7 +3,7 @@
 ## このファイルの目的
 
 「本番に出したい」と決めた瞬間から使うチェックリストと判断基準。
-AGENTS.md を AGENTS.production.md に切り替えた後、このファイルをAIに渡して対話する。
+`.claude/skills/release-prep/` のWorkflowと合わせて使う。このファイルをAIに渡して対話する。
 
 AIへの指示例：
 ```
@@ -212,9 +212,10 @@ AIが「症状1に該当します。ValueObjectを適用することを提案し
 
 ---
 
-### AGENTS.operation.md への組み込み
+### live-operation Skill への組み込み
 
-運用フェーズでは以下を定期的にAIに実行させることができる：
+運用フェーズでは `.claude/skills/live-operation/` のPeriodic Diagnosisとして、
+以下を定期的にAIに実行させることができる：
 
 ```
 現在のビジネスロジック（services/・features/）を読んで、

@@ -62,10 +62,8 @@ dev-standards/
     .env.example.template
     tsconfig.base.json
 
-    agents/                     AGENTS.mdテンプレート（フェーズ別・60〜100行）
-      AGENTS.prototype.md       開発フェーズ用  ← 最初はこれ
-      AGENTS.production.md      本番移行フェーズ用
-      AGENTS.operation.md       運用フェーズ用（★月次診断チェックリスト追加）
+    agents/                     AGENTS.mdテンプレート（単一・60〜100行）
+      AGENTS.md                 全プロジェクト共通（フェーズ問わず使う）
       subagents/                サブエージェント定義ファイル
         planner.md              仕様策定（1〜4文→詳細仕様書）
         evaluator.md            品質評価（Build後のQA・スプリント契約との照合）
@@ -81,6 +79,9 @@ dev-standards/
         _template.md            ルールファイルの書き方テンプレート
       skills/
         _template/SKILL.md      スキルファイルの書き方テンプレート
+        release-prep/SKILL.md   ★ 本番リリース準備（「本番に出したい」で自動参照）
+        live-operation/SKILL.md ★ 本番稼働中の変更・月次診断
+        project-transition/SKILL.md ★ 引き継ぎ・長期停止・再開
       hooks/
         README.md               Hooksの説明・ツール対応状況
         post-skill-run.sh.example   スキル使用履歴の自動記録
@@ -130,7 +131,7 @@ Documents/
 
 ```bash
 DEV_STANDARDS_PATH=/Users/yourname/Documents/dev-standards \
-  bash /Users/yourname/Documents/dev-standards/setup-harness.sh prototype
+  bash /Users/yourname/Documents/dev-standards/setup-harness.sh
 ```
 
 ### Step 2：セットアップスクリプトを実行する
@@ -138,11 +139,7 @@ DEV_STANDARDS_PATH=/Users/yourname/Documents/dev-standards \
 ```bash
 # my-new-project/ の中で実行する
 # DEV_STANDARDS_PATH = dev-standardsがどこにあるか
-# bash = シェルスクリプトを実行する命令
-# ../dev-standards/setup-harness.sh = 実行するスクリプトのパス
-# prototype = フェーズ指定（省略可・デフォルトはprototype）
-
-DEV_STANDARDS_PATH=../dev-standards bash ../dev-standards/setup-harness.sh prototype
+DEV_STANDARDS_PATH=../dev-standards bash ../dev-standards/setup-harness.sh
 ```
 
 実行するとハーネスのファイル構造が展開される（骨格のみ）。
@@ -193,6 +190,27 @@ cp .claude/hooks/post-skill-run.sh.example .claude/hooks/post-skill-run.sh
 chmod +x .claude/hooks/*.sh
 ```
 
+### Step 4.5：（任意）playwright-cli を設定する（@evaluator を使う場合）
+
+`@evaluator` サブエージェントはブラウザ操作に playwright-cli を使う。
+
+```bash
+# CLIとブラウザバイナリ：マシンに1回だけインストール（全プロジェクト共有）
+npm install -g @playwright/cli@latest
+playwright-cli install-browser
+
+# スキル：プロジェクトルートで1回実行（このプロジェクト内の .playwright-cli/ に配置）
+playwright-cli install --skills
+```
+
+| 対象 | 場所 | タイミング |
+|------|------|-----------|
+| CLIコマンド本体 | グローバル（全プロジェクト共有） | マシンに1回のみ |
+| ブラウザバイナリ | グローバル（~/.cache/ms-playwright/） | マシンに1回のみ |
+| スキル（SKILL.md等） | プロジェクト内（.playwright-cli/） | プロジェクトごとに1回 |
+
+`.playwright-cli/` はセッション固有のデータも含むため `.gitignore` への追加を推奨する。
+
 ### Step 5：AIとの最初のセッションで dev-standards のパスを伝える
 
 ```
@@ -200,6 +218,32 @@ chmod +x .claude/hooks/*.sh
 - AGENTS.md（このプロジェクトの作業指示）
 - ARCHITECTURE.md（設計の詳細）
 - dev-standardsの原則ファイル（パス：../dev-standards/principles/）
+```
+
+---
+
+### ハーネスの健全性を確認する（いつでも実行可能）
+
+セットアップ後や、しばらく開発が止まっていた後など、ハーネスが正しく機能しているか確認したいときに使う。以下の指示をAIにそのまま渡す：
+
+```
+以下のファイルを確認して、ハーネスの健全性を報告してください：
+
+1. AGENTS.md・ARCHITECTURE.md・.claude/coding-conventions.md に
+   [DEV_STANDARDS_PATH] などのプレースホルダーが残っていないか
+
+2. .claude/project-context.md の「現在のタスク」が最新の状態か
+   （「取り組んでいる機能」が完了済みのままになっていないか）
+
+3. .claude/handoff-artifact.md が存在するか
+   存在しない場合：Hooksが未設定なので「handoff-artifact.mdを更新して」と
+   セッション終了前に毎回依頼する運用が必要
+
+4. decisions/ に記録されている判断のうち、
+   前提（使用技術・外部API・チーム構成）が変わっているものがないか
+
+問題があれば修正方法を提案してください。
+問題がなければ「ハーネス正常」と報告してください。
 ```
 
 ---
@@ -223,11 +267,14 @@ chmod +x .claude/hooks/*.sh
                                .claude/skills/（3回以上繰り返したら追加）
 フェーズ5 コードレビュー      → @code-reviewer / principles/code-review.md
                                ★ @security-auditor（認証・機密データ実装後は必須）
-フェーズ6 本番移行            → AGENTS.mdをAGENTS.production.mdに切り替え
+本番リリース準備              → .claude/skills/release-prep/ が自動参照される
+                               （「本番に出したい」「リリースしたい」と伝えるだけ）
                                principles/production-deployment.md
                                principles/production-readiness.md（9カテゴリ確認）
-フェーズ7 運用                → AGENTS.mdをAGENTS.operation.mdに切り替え
-フェーズ8 月次GC              → @resilience-checker（★レジリエンス診断）
+本番稼働中の変更              → .claude/skills/live-operation/ が自動参照される
+月次GC                        → 「月次診断して」と依頼するだけ
+                               .claude/skills/live-operation/ のMonthly Checklistが実行される
+                               → @resilience-checker（★レジリエンス診断）
                                → @code-quality-auditor（★コード品質診断）
                                → .claude/usage/ を参照してGCを実施
 ```
@@ -258,12 +305,15 @@ rules/の育て方：同じ指摘をAIから2回受けたとき → 「これを
 skills/の育て方：同じ作業が3回以上発生したとき → AIが候補を報告する。
            人間が「スキル化して」と依頼したらAIがスキルファイルを作成する。
 
-本番移行時：setup-harness.sh production を実行してフェーズを切り替える。
+本番リリース準備：「本番に出したい」とAIに伝えるだけ。
+           .claude/skills/release-prep/ が自動参照され、
+           必要な手順をAIが順番に案内してくれる。
            デプロイ・ロールバック・障害対応の手順が決まったら
            AIと対話しながら docs/operations.md に記入する。
 
-Month 1：@resilience-checker と @code-quality-auditor を初回実行する。
-         .claude/usage/ を見てGCを実施（使われないものを削除）。
+Month 1：「月次診断して」とAIに依頼する。
+         .claude/skills/live-operation/ のMonthly Checklistが実行される。
+         @resilience-checker と @code-quality-auditor が呼び出され、診断結果を報告する。
 以降   ：月次で診断・定期的に削除。問題にぶつかるたびにrules/skills/を追加。
 ```
 

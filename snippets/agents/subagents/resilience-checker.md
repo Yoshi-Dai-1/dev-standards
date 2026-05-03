@@ -4,8 +4,8 @@ description: |
   レジリエンス（回復力）診断専門エージェント。
   コードではなくシステムの「壊れても死なない」設計を評価する。
   以下のシーンで使う：
-  - 月次の定期診断（AGENTS.operation.mdのmonthly checklistから呼び出す）
-  - 本番リリース前の最終確認
+  - 月次の定期診断（.claude/skills/live-operation/ のMonthly Checklistから呼び出す）
+  - 本番リリース前の最終確認（.claude/skills/release-prep/ のStep5から呼び出す）
   - インシデント発生後の振り返り
   - 「バックアップは大丈夫か」と不安になったとき
 kind: local

@@ -5,8 +5,7 @@ description: |
   セキュリティや設計ルールではなく、品質の劣化・技術的負債を診断する。
   security-auditorやcode-reviewerとは異なり、コードベース全体を俯瞰する。
   以下のシーンで使う：
-  - 月次の品質診断（AGENTS.operation.mdのmonthly checklistから呼び出す）
-  - 「最近コードが複雑になってきた気がする」と感じたとき
+  - 月次の品質診断（.claude/skills/live-operation/ のMonthly Checklistから呼び出す）
   - リファクタリング前の影響範囲調査
   - 新メンバーが参加する前の整備
 kind: local

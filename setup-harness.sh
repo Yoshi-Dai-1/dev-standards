@@ -16,12 +16,10 @@ set -e
 
 # ========== 設定 ==========
 DEV_STANDARDS_PATH="${DEV_STANDARDS_PATH:-../dev-standards}"
-PROJECT_PHASE="${1:-prototype}"  # prototype / production / operation
 # ==========================
 
 echo "🔧 ハーネスのセットアップを開始します..."
 echo "   dev-standards: $DEV_STANDARDS_PATH"
-echo "   フェーズ: $PROJECT_PHASE"
 echo ""
 
 # dev-standardsの存在確認
@@ -40,14 +38,7 @@ mkdir -p .claude/{rules,skills,agents,hooks,usage}
 mkdir -p docs
 
 # ===== AGENTS.md のコピー =====
-AGENTS_SRC="$SNIPPETS/agents/AGENTS.${PROJECT_PHASE}.md"
-if [ -f "$AGENTS_SRC" ]; then
-  cp "$AGENTS_SRC" AGENTS.md
-  echo "✅ AGENTS.md をコピーしました（フェーズ: $PROJECT_PHASE）"
-else
-  echo "⚠️  AGENTS.${PROJECT_PHASE}.md が見つかりません。prototype を使用します"
-  cp "$SNIPPETS/agents/AGENTS.prototype.md" AGENTS.md
-fi
+cp "$SNIPPETS/agents/AGENTS.md" AGENTS.md
 
 # [DEV_STANDARDS_PATH] プレースホルダーを実際のパスに置換する
 DEV_STANDARDS_ABS=$(cd "$DEV_STANDARDS_PATH" && pwd)
@@ -56,6 +47,7 @@ if sed --version 2>/dev/null | grep -q "GNU"; then
 else
   sed -i '' "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" AGENTS.md
 fi
+echo "✅ AGENTS.md をコピーしました"
 
 # ===== ARCHITECTURE.md のコピー =====
 cp "$SNIPPETS/ARCHITECTURE.md.template" ARCHITECTURE.md
@@ -87,6 +79,22 @@ echo "✅ .claude/rules/_template.md をコピーしました"
 # skills テンプレート
 cp -r "$SNIPPETS/.claude/skills/_template" .claude/skills/_template
 echo "✅ .claude/skills/_template/ をコピーしました"
+
+# 組み込みSkillsをコピー（release-prep / live-operation / project-transition）
+for SKILL_DIR in "$SNIPPETS/.claude/skills/"/*/; do
+  SKILL_NAME=$(basename "$SKILL_DIR")
+  if [ "$SKILL_NAME" != "_template" ]; then
+    cp -r "$SKILL_DIR" ".claude/skills/$SKILL_NAME/"
+    # [DEV_STANDARDS_PATH] プレースホルダーを置換
+    if sed --version 2>/dev/null | grep -q "GNU"; then
+      sed -i "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" ".claude/skills/$SKILL_NAME/SKILL.md"
+    else
+      sed -i '' "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" ".claude/skills/$SKILL_NAME/SKILL.md"
+    fi
+  fi
+done
+echo "✅ .claude/skills/ に組み込みSkillsをコピーしました"
+echo "   （release-prep / live-operation / project-transition）"
 
 # サブエージェント定義をコピー
 for AGENT_FILE in "$SNIPPETS/agents/subagents/"*.md; do
@@ -250,6 +258,35 @@ if [ -f ".gitignore" ]; then
 fi
 
 echo ""
+echo "🔍 セットアップの検証中..."
+VALIDATION_FAILED=0
+
+# プレースホルダーが残っていないか確認
+for FILE in AGENTS.md ARCHITECTURE.md .claude/coding-conventions.md; do
+  if [ -f "$FILE" ] && grep -q "\[DEV_STANDARDS_PATH\]" "$FILE" 2>/dev/null; then
+    echo "❌ $FILE に [DEV_STANDARDS_PATH] プレースホルダーが残っています"
+    VALIDATION_FAILED=1
+  fi
+done
+
+# 必須ファイルの存在確認
+for FILE in AGENTS.md ARCHITECTURE.md .claude/project-context.md \
+            .claude/coding-conventions.md .claude/handoff-artifact.md; do
+  if [ ! -f "$FILE" ]; then
+    echo "❌ $FILE が作成されていません"
+    VALIDATION_FAILED=1
+  fi
+done
+
+if [ $VALIDATION_FAILED -eq 0 ]; then
+  echo "✅ 検証通過：すべてのファイルが正常に配置されました"
+else
+  echo ""
+  echo "⚠️  上記の問題を修正してから次のステップに進んでください"
+  echo "   再実行: DEV_STANDARDS_PATH=$DEV_STANDARDS_PATH bash $DEV_STANDARDS_PATH/setup-harness.sh"
+fi
+
+echo ""
 echo "🎉 セットアップ完了！"
 echo ""
 echo "次に行うこと："
@@ -269,6 +306,14 @@ echo ""
 echo "  Step 4：（任意）Hooksを有効にする"
 echo "    → .claude/hooks/*.example の .example を外してプロジェクトに合わせて修正"
 echo "    → chmod +x .claude/hooks/*.sh"
+echo ""
+echo "  Step 4.5：（任意）playwright-cli を設定する（@evaluator を使う場合）"
+echo "    → CLIとブラウザ（全プロジェクト共有・マシンに1回のみ）："
+echo "       npm install -g @playwright/cli@latest"
+echo "       playwright-cli install-browser"
+echo "    → スキル（このプロジェクト内に配置・プロジェクトごとに1回）："
+echo "       playwright-cli install --skills"
+echo "    → .playwright-cli/ を .gitignore に追加することを推奨"
 echo ""
 echo "参考ドキュメント："
 echo "  $DEV_STANDARDS_PATH/principles/harness-engineering.md"
