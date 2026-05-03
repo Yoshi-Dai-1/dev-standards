@@ -81,7 +81,7 @@ AIは自分が書いたコードを同一コンテキスト内でレビューす
 **使うサブエージェント**：`code-quality-auditor`
 **有効な理由**：コードベース全体を俯瞰する作業はメインのコンテキストを大量消費する。
               独立コンテキストで俯瞰することで客観的な品質評価が得られる
-**使うタイミング**：月次GC時・「最近コードが複雑になってきた」と感じたとき・リファクタリング前
+**使うタイミング**：月次GC時（.claude/skills/live-operation/ のMonthly Checklistから呼び出す）・リファクタリング前・新メンバーが参加する前の整備
 
 ```
 @code-quality-auditor
@@ -150,7 +150,7 @@ Sprint [番号] の評価をしてください。
 
 Claude Codeの場合：
 ```
-.gemini/agents/    または    .claude/agents/
+.claude/agents/
   planner.md
   evaluator.md
   code-reviewer.md

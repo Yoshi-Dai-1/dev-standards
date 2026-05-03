@@ -29,7 +29,7 @@ dev-standards/
 
   principles/                   汎用原則（読む・参照する）
     harness-engineering.md      ハーネスの全体像・5つの原則・タスク規模別構成
-    project-definition.md       フェーズ0：目的・要件・制約・セキュリティ要件の定義
+    project-definition.md       プロジェクト開始時：目的・要件・制約・セキュリティ要件の定義
     directory-structure.md      ディレクトリ設計の根本思想
     naming-conventions.md       命名規則
     file-size-and-cohesion.md   行数指針・凝集度
@@ -81,12 +81,13 @@ dev-standards/
         _template/SKILL.md      スキルファイルの書き方テンプレート
         release-prep/SKILL.md   ★ 本番リリース準備（「本番に出したい」で自動参照）
         live-operation/SKILL.md ★ 本番稼働中の変更・月次診断
-        project-transition/SKILL.md ★ 引き継ぎ・長期停止・再開
+        handoff/SKILL.md        ★ 引き継ぎ・長期停止・再開時の状態保存
       hooks/
-        README.md               Hooksの説明・ツール対応状況
-        post-skill-run.sh.example   スキル使用履歴の自動記録
-        pre-commit.sh.example       コミット前セキュリティチェック
-        post-session.sh.example     セッション終了時handoff生成
+        README.md                                        Hooksの説明・命名規則・ツール対応状況
+        on-stop.generate-handoff.sh.example              Stopイベント：handoff生成
+        on-pre-tool-use.check-secrets.sh.example         PreToolUseイベント：機密情報チェック
+        on-post-tool-use.lint-and-typecheck.sh.example   PostToolUseイベント：lint・型チェック
+        on-post-tool-use.record-skill-usage.sh.example   PostToolUseイベント：スキル使用履歴記録
       usage/
         skill-usage.md          スキル使用履歴（Hooksが自動追記）
         rule-hits.md            ルール参照履歴
@@ -148,12 +149,13 @@ DEV_STANDARDS_PATH=../dev-standards bash ../dev-standards/setup-harness.sh
 
 **スクリプト実行直後は骨格だけが存在する状態。以下の順番でAIと対話しながら記入する。**
 
-#### 3-1：`docs/project-definition.md` を作る
+#### 3-1：`docs/project-definition.md` を記入する
 
 ```
+セットアップスクリプトが雛形を自動作成している。
 dev-standards/principles/project-definition.md にある対話プロンプトをAIに渡す。
 AIが質問を1つずつ投げかけるので答えていく。
-完成したら docs/project-definition.md として保存する。
+AIが docs/project-definition.md に記入してくれる。
 ```
 
 #### 3-2：`ARCHITECTURE.md` を記入する
@@ -182,12 +184,15 @@ AGENTS.md の記入が完了したら、同じ内容をもとに
 
 ### Step 4：（任意）Hooksを有効にする
 
+ファイル名は `on-[イベント名].[目的].sh.example` の形式になっている。
+使いたいHookの `.example` を外して、プロジェクトに合わせて修正する。
+
 ```bash
-# .claude/hooks/ に .example がついたファイルがある
-# .example を外してプロジェクトに合わせて修正する
-cp .claude/hooks/post-skill-run.sh.example .claude/hooks/post-skill-run.sh
-# ← ファイルを編集してプロジェクトのパスに合わせる
-chmod +x .claude/hooks/*.sh
+# 例：セッション終了時のhandoff自動生成を有効にする場合
+cp .claude/hooks/on-stop.generate-handoff.sh.example \
+   .claude/hooks/on-stop.generate-handoff.sh
+chmod +x .claude/hooks/on-stop.generate-handoff.sh
+# ← 必要に応じてファイル内の設定を書き換える
 ```
 
 ### Step 4.5：（任意）playwright-cli を設定する（@evaluator を使う場合）
@@ -251,21 +256,21 @@ playwright-cli install --skills
 ## 開発フローとファイルの対応
 
 ```
-フェーズ0 プロジェクト定義    → principles/project-definition.md
+プロジェクト定義              → principles/project-definition.md
                                ★ セキュリティ要件・リスク評価セクションを必ず記入
                                ★ 商用の場合は principles/commercial-operations.md を参照
-フェーズ1 技術選定            → snippets/tech-decision.md.template → decisions/
-フェーズ2 アーキテクチャ決定  → architectures/_how-to-choose.md で種別を選ぶ
+技術選定                      → snippets/tech-decision.md.template → decisions/
+アーキテクチャ決定            → architectures/_how-to-choose.md で種別を選ぶ
                                → 該当の architectures/*.md を通読する
                                → ARCHITECTURE.md を記入する
                                ★ セキュリティ・コード品質・依存関係リスクセクションも記入
-フェーズ3 ハーネスセットアップ → setup-harness.sh を実行
-フェーズ4 実装（TDD）         → principles/tdd-with-ai.md
+ハーネスセットアップ          → setup-harness.sh を実行
+実装（TDD）                   → principles/tdd-with-ai.md
                                → 認証・機密データを扱う実装は
                                  principles/security-implementation.md を参照
                                .claude/rules/（同じ指摘を2回したら追加）
                                .claude/skills/（3回以上繰り返したら追加）
-フェーズ5 コードレビュー      → @code-reviewer / principles/code-review.md
+コードレビュー                → @code-reviewer / principles/code-review.md
                                ★ @security-auditor（認証・機密データ実装後は必須）
 本番リリース準備              → .claude/skills/release-prep/ が自動参照される
                                （「本番に出したい」「リリースしたい」と伝えるだけ）

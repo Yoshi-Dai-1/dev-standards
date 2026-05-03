@@ -6,7 +6,7 @@
 
 記録されるタイミング：
 - AIがセッション中に同じ種類の作業を3回以上実施したとき（.claude/skills/live-operation/ のPeriodic Diagnosisから）
-- HooksのPost-tool-useで自動記録されている場合（post-skill-run.sh.exampleを参照）
+- HooksのPostToolUseで自動記録されている場合（on-post-tool-use.record-skill-usage.sh.exampleを参照）
 - 人間が「これスキル化できそう」と気づいたとき（手動追記）
 
 スキル化の判断基準：

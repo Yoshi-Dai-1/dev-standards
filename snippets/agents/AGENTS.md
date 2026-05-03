@@ -113,7 +113,7 @@
 **セッション開始時**：`.claude/handoff-artifact.md` を読んで前のセッションの文脈を復元する。
 その後、Current Task と `.claude/project-context.md` の「現在のタスク」を現在の状態に更新する。
 
-**セッション終了時**：`Stop` イベントのHook（`.claude/hooks/post-session.sh`）が自動で
+**セッション終了時**：`Stop` イベントのHook（`.claude/hooks/on-stop.generate-handoff.sh`）が自動で
 `.claude/handoff-artifact.md` を生成する。
 Hookを設定していない場合はAIに「handoff-artifact.mdを更新して」と依頼する。
 

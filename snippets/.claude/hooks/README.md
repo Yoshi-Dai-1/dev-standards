@@ -34,13 +34,16 @@ Hooks：コードによる強制実行
 
 ## このディレクトリのファイル
 
+ファイル名は `on-[イベント名].[目的].sh.example` の形式で統一している。
+見た瞬間に「いつ発火するか」と「何をするか」が分かる。
+
 ```
 hooks/
-  README.md                    ← このファイル
-  post-skill-run.sh.example    ← スキル実行後の使用履歴記録
-  pre-commit.sh.example        ← コミット前のセキュリティチェック
-  post-file-edit.sh.example    ← ファイル編集後のlint・型チェック
-  post-session.sh.example      ← セッション終了時のhandoff生成
+  README.md
+  on-stop.generate-handoff.sh.example          ← Stopイベント：handoff生成
+  on-pre-tool-use.check-secrets.sh.example     ← PreToolUseイベント：機密情報チェック
+  on-post-tool-use.lint-and-typecheck.sh.example  ← PostToolUseイベント：lint・型チェック
+  on-post-tool-use.record-skill-usage.sh.example  ← PostToolUseイベント：スキル使用履歴記録
 ```
 
 `.example` 拡張子を外してプロジェクト固有の設定に書き換えて使う。
