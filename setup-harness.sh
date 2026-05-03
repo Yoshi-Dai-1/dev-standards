@@ -59,6 +59,18 @@ else
 fi
 echo "✅ ARCHITECTURE.md をコピーしました"
 
+# ===== DESIGN.md のコピー（UIを持つプロジェクトのみ）=====
+echo ""
+read -r -p "このプロジェクトにWebフロントエンドのUIがありますか？ [y/N]: " HAS_UI
+if [[ "$HAS_UI" =~ ^[Yy]$ ]]; then
+  cp "$SNIPPETS/DESIGN.md.template" DESIGN.md
+  echo "✅ DESIGN.md をコピーしました"
+  HAS_UI_FLAG=true
+else
+  echo "ℹ️  DESIGN.md はスキップしました（UIなしプロジェクト）"
+  HAS_UI_FLAG=false
+fi
+
 # ===== .claude/ 内のファイルをコピー =====
 # coding-conventions
 cp "$SNIPPETS/.claude/coding-conventions.md.template" .claude/coding-conventions.md
@@ -279,6 +291,12 @@ for FILE in AGENTS.md ARCHITECTURE.md .claude/project-context.md \
   fi
 done
 
+# DESIGN.md の存在確認（UIありプロジェクトのみ）
+if [ "$HAS_UI_FLAG" = true ] && [ ! -f "DESIGN.md" ]; then
+  echo "❌ DESIGN.md が作成されていません"
+  VALIDATION_FAILED=1
+fi
+
 if [ $VALIDATION_FAILED -eq 0 ]; then
   echo "✅ 検証通過：すべてのファイルが正常に配置されました"
 else
@@ -299,7 +317,14 @@ echo ""
 echo "  Step 2：ARCHITECTURE.md を記入する（AIと対話）"
 echo "    → ARCHITECTURE.md の冒頭にある対話プロンプトをAIに渡す"
 echo "    → project-definition.md を参照しながらAIが一緒に埋めてくれる"
+echo "    → UIプロジェクトの場合、Step 2.5 で DESIGN.md 作成の要否を確認される"
 echo ""
+if [ "$HAS_UI_FLAG" = true ]; then
+  echo "  Step 2.5：DESIGN.md を記入する（AIと対話）"
+  echo "    → DESIGN.md の冒頭にある対話プロンプトをAIに渡す"
+  echo "    → ARCHITECTURE.md の内容をもとにAIが一緒に埋めてくれる"
+  echo ""
+fi
 echo "  Step 3：AGENTS.md を記入する（AIと対話）"
 echo "    → AGENTS.md の Project Overview のコメント内にある対話プロンプトを使う"
 echo "    → ARCHITECTURE.md の内容をもとにAIが一緒に埋めてくれる"

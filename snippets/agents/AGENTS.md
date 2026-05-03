@@ -36,6 +36,7 @@
 ## Architecture
 
 詳細は `ARCHITECTURE.md` を参照。
+UIデザイン仕様は `DESIGN.md` を参照。（UIなしプロジェクトはこの行を削除）
 
 依存の方向（変更禁止）：[層A] → [層B] → [層C]
 
