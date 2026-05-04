@@ -1,16 +1,28 @@
 ---
 name: release-prep
 description: |
-  本番リリースの準備をするとき。
-  以下の発言を検知したとき自動で参照する：
-  「本番に出したい」「公開したい」「リリースしたい」「ユーザーに使ってもらいたい」
-  「デプロイしたい」「本番環境に上げたい」
+  This skill should be used when preparing for a production release.
+  Use this skill whenever the user says: 「本番に出したい」「公開したい」「リリースしたい」
+  「ユーザーに使ってもらいたい」「デプロイしたい」「本番環境に上げたい」
+  Make sure to use this skill even when the codebase is not fully ready —
+  this skill identifies what is missing before going live.
+  Do NOT use after release (use live-operation instead).
+  Do NOT use for development-only deployments with no real users.
   優先順位：Security（即死系・省略不可）> The Twelve-Factor App > チェックリスト完了 > 新機能停止
 version: 1.0.0
-last_used: YYYY-MM-DD
-use_count: 0
 status: active
 ---
+
+## When to Use
+
+このスキルを使うべきタイミング：
+- 初めて本番環境にデプロイするとき
+- 大きな機能追加後のリリース準備
+- 「本番に出したい」「デプロイしたい」と伝えられたとき
+
+このスキルを使わないタイミング：
+- 本番リリース後の変更（→ live-operation を使う）
+- 開発専用環境へのデプロイ（実ユーザーがいない場合）
 
 ## Workflow
 

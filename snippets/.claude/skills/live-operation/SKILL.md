@@ -1,21 +1,35 @@
 ---
 name: live-operation
 description: |
-  本番環境が稼働中の状態でコードを変更するとき（バグ修正・機能追加・設定変更を問わない）。
-  「本番で動いている」「ユーザーが使っている」状態での作業すべてに適用する。
-  月次メンテナンスを依頼されたとき（「月次診断して」「月次チェックして」）にも参照する。
+  This skill should be used whenever modifying code while production is live —
+  bug fixes, feature additions, and configuration changes without exception.
+  Use this skill whenever the user mentions 「本番で動いている」「ユーザーが使っている」
+  or requests monthly maintenance: 「月次診断して」「月次チェックして」
+  Make sure to use this skill for ANY change to a running production system,
+  even when the user does not explicitly mention production.
+  Do NOT use for initial release preparation (use release-prep instead).
+  Do NOT use for development-only environments with no live users.
   優先順位：既存機能を壊さない > セキュリティ > バグ修正 > 改善 > 新機能追加
 version: 1.0.0
-last_used: YYYY-MM-DD
-use_count: 0
 status: active
 ---
+
+## When to Use
+
+このスキルを使うべきタイミング：
+- 本番環境が稼働中の状態でコードを変更するとき（種類を問わない）
+- バグ修正・機能追加・設定変更・依存関係の更新
+- 「月次診断して」「月次チェックして」と依頼されたとき
+
+このスキルを使わないタイミング：
+- 初回の本番リリース準備（→ release-prep を使う）
+- ユーザーがいない開発専用環境での作業
 
 ## Pre-Change Checklist（変更前に必ず実行）
 
 以下を確認してから変更に進む。確認せずに変更しない。
 
-- [ ] この変更は既存のテストを壊すか → `pnpm test` を実行して確認
+- [ ] この変更は既存のテストを壊すか → AGENTS.md の Test コマンドを実行して確認
 - [ ] 影響範囲はどこか → 依存ファイルを列挙する
       （広い場合は `@codebase-investigator` を呼び出す）
 - [ ] ロールバック手順はあるか → git revertで戻せる状態か確認
@@ -65,4 +79,23 @@ decisions/ の各ファイルを読んで以下を確認する：
 - 総合評価（GREEN/YELLOW/RED）
 - 今月中に対処すべき最優先アクション
 - decisions/ の要対応項目
-- .claude/usage/ のGCが必要なものがあれば合わせて提案する
+- スキルGCレポート：`.claude/usage/skill-usage.md` を読み、各スキルの出現回数と
+  最終使用日を集計して報告する。.claude/skills/ に存在するが当月0回のスキルを
+  削除候補として提案する。find-skills・skill-creator はグローバルスキルのため除外する。
+
+## Output Format
+
+```
+## live-operation 完了
+
+### 変更内容
+[変更したファイルと概要]
+
+### Pre-Change Checklist
+- [x] テスト確認：[結果]
+- [x] 影響範囲：[列挙]
+- [x] ロールバック：git revert [コミットID]
+
+### 懸念点
+[あれば記載。なければ「なし」]
+```

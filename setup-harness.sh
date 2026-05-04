@@ -38,6 +38,11 @@ mkdir -p .claude/{rules,skills,agents,hooks,usage}
 # docs/ ディレクトリ作成
 mkdir -p docs
 
+# decisions/ ディレクトリ作成（ADR・技術選定・スキル化候補の記録先）
+mkdir -p decisions
+cp "$DEV_STANDARDS_DIR/decisions/skill-candidates.md" decisions/skill-candidates.md
+echo "✅ decisions/skill-candidates.md をコピーしました"
+
 # ===== AGENTS.md のコピー =====
 cp "$SNIPPETS/agents/AGENTS.md" AGENTS.md
 
@@ -89,25 +94,38 @@ echo "✅ .claude/project-context.md をコピーしました"
 cp "$SNIPPETS/.claude/rules/_template.md" .claude/rules/_template.md
 echo "✅ .claude/rules/_template.md をコピーしました"
 
-# skills テンプレート
-cp -r "$SNIPPETS/.claude/skills/_template" .claude/skills/_template
-echo "✅ .claude/skills/_template/ をコピーしました"
-
 # 組み込みSkillsをコピー（release-prep / live-operation / handoff）
+# ※ find-skills・skill-creator は ~/.claude/skills/ にインストールされるため含まない
 for SKILL_DIR in "$SNIPPETS/.claude/skills/"/*/; do
   SKILL_NAME=$(basename "$SKILL_DIR")
-  if [ "$SKILL_NAME" != "_template" ]; then
-    cp -r "$SKILL_DIR" ".claude/skills/$SKILL_NAME/"
-    # [DEV_STANDARDS_PATH] プレースホルダーを置換
-    if sed --version 2>/dev/null | grep -q "GNU"; then
-      sed -i "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" ".claude/skills/$SKILL_NAME/SKILL.md"
-    else
-      sed -i '' "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" ".claude/skills/$SKILL_NAME/SKILL.md"
-    fi
+  cp -r "$SKILL_DIR" ".claude/skills/$SKILL_NAME/"
+  # [DEV_STANDARDS_PATH] プレースホルダーを置換
+  if sed --version 2>/dev/null | grep -q "GNU"; then
+    sed -i "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" ".claude/skills/$SKILL_NAME/SKILL.md"
+  else
+    sed -i '' "s|\[DEV_STANDARDS_PATH\]|$DEV_STANDARDS_ABS|g" ".claude/skills/$SKILL_NAME/SKILL.md"
   fi
 done
-echo "✅ .claude/skills/ に組み込みSkillsをコピーしました"
-echo "   （release-prep / live-operation / handoff）"
+echo "✅ .claude/skills/ に組み込みSkillsをコピーしました（release-prep / live-operation / handoff）"
+
+# find-skills をインストール（外部スキル発見・インストールの自律判断を担う）
+echo ""
+echo "📦 find-skills をインストールしています..."
+if command -v npx &>/dev/null; then
+  npx skills add vercel-labs/skills --skill find-skills -a claude-code -y 2>/dev/null && \
+    echo "✅ find-skills をインストールしました" || \
+    echo "⚠️  find-skills のインストールをスキップしました（後で手動実行：npx skills add vercel-labs/skills --skill find-skills）"
+
+  echo ""
+  echo "📦 skill-creator をインストールしています..."
+  npx skills add anthropics/skills --skill skill-creator -a claude-code -y 2>/dev/null && \
+    echo "✅ skill-creator をインストールしました" || \
+    echo "⚠️  skill-creator のインストールをスキップしました（後で手動実行：npx skills add anthropics/skills --skill skill-creator）"
+else
+  echo "⚠️  npx が見つかりません。Node.js をインストール後に手動実行してください："
+  echo "     npx skills add vercel-labs/skills --skill find-skills"
+  echo "     npx skills add anthropics/skills --skill skill-creator"
+fi
 
 # サブエージェント定義をコピー
 for AGENT_FILE in "$SNIPPETS/agents/subagents/"*.md; do
@@ -260,13 +278,34 @@ fi
 
 # .gitignore に追加
 if [ -f ".gitignore" ]; then
-  # handoff-artifact はセッション固有なのでgitignore推奨
   if ! grep -q "handoff-artifact.md" .gitignore; then
+    # handoff-artifact は必ずgitignore（セッション固有・個人の引き継ぎ情報）
     echo "" >> .gitignore
     echo "# ハーネス（セッション固有）" >> .gitignore
     echo ".claude/handoff-artifact.md" >> .gitignore
-    echo ".claude/usage/" >> .gitignore
-    echo "✅ .gitignore を更新しました"
+
+    # .claude/usage/ のgitignoreはプロジェクト性質による
+    echo ""
+    echo "📋 .claude/usage/ の管理方法を選択してください："
+    echo "   .claude/usage/skill-usage.md はスキルの使用履歴ログです。"
+    echo ""
+    echo "   [1] gitignoreに追加する（推奨：個人開発 / 作業ログをチームと共有しない）"
+    echo "       → 各自のローカルに蓄積。チーム間で共有されない。"
+    echo "       → Hookの差分がgitに混入しない。"
+    echo ""
+    echo "   [2] gitignoreに追加しない（チーム開発 / スキル使用状況をチームで共有する）"
+    echo "       → 全員の使用履歴がgitに記録される。月次GCの判断精度が上がる。"
+    echo "       → Hookが毎セッション追記するため、コミット前に差分を確認する運用が必要。"
+    echo ""
+    read -r -p "選択 [1/2] (デフォルト: 1): " USAGE_GIT_CHOICE
+    USAGE_GIT_CHOICE="${USAGE_GIT_CHOICE:-1}"
+
+    if [ "$USAGE_GIT_CHOICE" = "1" ]; then
+      echo ".claude/usage/" >> .gitignore
+      echo "✅ .gitignore を更新しました（handoff-artifact.md・usage/ を追加）"
+    else
+      echo "✅ .gitignore を更新しました（handoff-artifact.md のみ追加。usage/ はgit管理）"
+    fi
   fi
 fi
 

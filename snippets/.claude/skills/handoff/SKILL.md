@@ -1,21 +1,34 @@
 ---
 name: handoff
 description: |
-  引き継ぎ・長期停止・再開時に現在の作業状態を保存し、次のセッションへ確実に引き継ぐSkill。
-  以下の発言を検知したとき自動で参照する：
-  「本番に出した」「リリースできた」「公開できた」
+  This skill should be used when handing off work between sessions, pausing
+  development long-term, or resuming after a break. Use this skill whenever
+  the user says: 「本番に出した」「リリースできた」「公開できた」
   「長期間開発を止める」「別の人に引き継ぐ」「しばらく触らない」
-  「再開したい」（長期停止後の再開時）
+  「再開したい」「続きをやりたい」「前回の続きから」
+  Make sure to use this skill even when the user does not say "handoff"
+  explicitly — any context reset, development pause, or session resumption
+  qualifies. Do NOT use for release preparation (use release-prep instead).
 version: 1.0.0
-last_used: YYYY-MM-DD
-use_count: 0
 status: active
 ---
+
+## When to Use
+
+このスキルを使うべきタイミング：
+- セッションをまたいで作業を引き継ぐとき
+- 長期停止・別の人への引き継ぎ前
+- 「再開したい」「前回の続きから」など、前セッションの文脈を復元するとき
+- 本番リリース後（状態の記録として）
+
+このスキルを使わないタイミング：
+- 本番リリースの準備中（→ release-prep を使う）
+- 単純な質問・調査タスク（状態保存が不要なとき）
 
 ## Workflow
 
 1. **現在の状態を保存する**
-   `handoff-artifact.md` を現在の状態に更新する。以下を必ず含める：
+   `.claude/handoff-artifact.md` を現在の状態に更新する。以下を必ず含める：
    - 完了していること・未完了のこと
    - 重要な判断とその理由
    - 次に取り組むべきこと

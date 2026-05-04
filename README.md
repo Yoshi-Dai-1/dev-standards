@@ -77,22 +77,33 @@ dev-standards/
     .claude/                    ハーネス雛形（setup-harness.shがコピーする）
       rules/
         _template.md            ルールファイルの書き方テンプレート
-      skills/
-        _template/SKILL.md      スキルファイルの書き方テンプレート
+      skills/                   プロジェクトスコープのスキル（.claude/skills/に配置・gitで共有）
         release-prep/SKILL.md   ★ 本番リリース準備（「本番に出したい」で自動参照）
         live-operation/SKILL.md ★ 本番稼働中の変更・月次診断
         handoff/SKILL.md        ★ 引き継ぎ・長期停止・再開時の状態保存
       hooks/
-        README.md                                        Hooksの説明・命名規則・ツール対応状況
-        on-stop.generate-handoff.sh.example              Stopイベント：handoff生成
-        on-pre-tool-use.check-secrets.sh.example         PreToolUseイベント：機密情報チェック
-        on-post-tool-use.lint-and-typecheck.sh.example   PostToolUseイベント：lint・型チェック
-        on-post-tool-use.record-skill-usage.sh.example   PostToolUseイベント：スキル使用履歴記録
+        README.md                                                  Hooksの説明・命名規則・ツール対応状況
+        on-stop.generate-handoff.sh.example                        Stopイベント：handoff生成
+        on-pre-tool-use.check-secrets.sh.example                   PreToolUseイベント：機密情報チェック
+        on-post-tool-use.lint-and-typecheck.sh.example             PostToolUseイベント：lint・型チェック
+        on-post-tool-use.record-skill-usage.sh.example             PostToolUseイベント：スキル使用履歴記録
+        on-post-tool-use.architecture-skill-check.sh.example       PostToolUseイベント：外部スキル診断
       usage/
         skill-usage.md          スキル使用履歴（Hooksが自動追記）
         rule-hits.md            ルール参照履歴
       project-context.md.template
       coding-conventions.md.template
+
+# setup-harness.sh 実行時に ~/.claude/skills/ にインストールされるスキル（グローバルスコープ）
+# ※ ~/.claude/skills/ はすべてのプロジェクトで有効。gitには含まれない。
+# ※ Node.js が未インストールの場合は setup 後に手動実行：
+#     npx skills add vercel-labs/skills --skill find-skills
+#     npx skills add anthropics/skills --skill skill-creator
+  find-skills  （vercel-labs/skills）  外部スキルの検索・インストール
+  skill-creator（anthropics/skills）  スキルの新規作成・改善・eval・description最適化
+
+# .claude/usage/ のgitignoreはsetup-harness.sh実行時にユーザーが選択する
+# 個人開発→gitignore推奨、チーム開発→git管理推奨（詳細はsetup時の案内を参照）
 ```
 
 ---
@@ -308,7 +319,8 @@ rules/の育て方：同じ指摘をAIから2回受けたとき → 「これを
            AIがルールファイルを作成して .claude/rules/ に保存する。
 
 skills/の育て方：同じ作業が3回以上発生したとき → AIが候補を報告する。
-           人間が「スキル化して」と依頼したらAIがスキルファイルを作成する。
+           人間が承認したら `/skill-creator` を起動してスキルを作成する。
+           （skill-creator は setup-harness.sh 実行時に ~/.claude/skills/ にインストール済み）
 
 本番リリース準備：「本番に出したい」とAIに伝えるだけ。
            .claude/skills/release-prep/ が自動参照され、
