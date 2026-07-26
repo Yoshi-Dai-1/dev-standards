@@ -37,7 +37,7 @@ After setup, open the project in OpenCode and start a session. The AI will autom
 
 | Category | Count | Description |
 |---|---|---|
-| Principles | 23 | Universal principles: harness engineering, security, code quality, test strategy, etc. |
+| Principles | 24 | Universal principles: harness engineering, security, code quality, test strategy, cognitive load design, etc. |
 | Architectures | 13 | Architecture patterns by project type (Web API / CLI / monorepo / mobile / etc.) |
 | Plugins | 17 | TypeScript event-driven guardrails (secrets prevention, diagnostics, env check, lint, skill tracking, etc.) |
 | Instructions | 11 | Rule files injected on session events |

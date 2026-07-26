@@ -36,7 +36,7 @@ bash <(curl -s https://raw.githubusercontent.com/Yoshi-Dai-1/yori/main/opencode/
 
 | カテゴリ | 数量 | 説明 |
 |---|---|---|
-| Principles | 23 | ハーネス工学・セキュリティ・コード品質・テスト戦略などの汎用原則 |
+| Principles | 24 | ハーネス工学・セキュリティ・コード品質・テスト戦略・認知負荷設計などの汎用原則 |
 | Architectures | 13 | プロジェクト種別ごとの構成パターン（Web API / CLI / library 等） |
 | Plugins | 17 | TypeScript によるイベント駆動ガードレール（秘密情報防止・診断・環境チェック・lint・スキル自動記録 等） |
 | Instructions | 11 | セッションイベントに応じて注入されるルールファイル |

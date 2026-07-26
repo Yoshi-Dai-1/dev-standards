@@ -237,8 +237,10 @@ function calculateLegacyScore(value: number): number {
 
 ### 品質チェックの確認順序（毎実装後）
 
-実装完了後の確認順序（型チェック → lint → テスト → @code-reviewer → 人間レビュー）は
+実装完了後の確認順序（型チェック → lint → ユニットテスト → @code-reviewer → 人間レビュー）は
 `.opencode/standards/principles/tdd-with-ai.md` の「TDDと他のツールの組み合わせ」セクションに定義している。
 このファイルでは重複して定義しない。
+
+コード品質の各軸を統一する認知負荷の枠組みについては `.opencode/standards/principles/cognitive-load-design.md` を参照。
 
 
