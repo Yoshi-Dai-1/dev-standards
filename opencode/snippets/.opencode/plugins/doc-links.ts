@@ -60,7 +60,7 @@ export const DocLinksPlugin: Plugin = async ({ client }) => ({
     await client.tui.showToast({
       body: {
         message: `doc-links: ${broken.length} 件の壊れたリンクを検出（${fp}）`,
-        variant: "error",
+        variant: "warning",
       },
     })
 

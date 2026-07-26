@@ -21,8 +21,8 @@ AIがプロジェクト定義を読んでセキュリティ対応レベル（Lv.
 判断結果を以下の順番で自律的に反映する：
 
 1. プロジェクト固有の制約（個人情報・決済・GDPR等の有無に応じたもの）を
-   `AGENTS.md` の `## Security Boundaries` に追記する
-   （セクションが存在しない場合は `## Boundaries` の直後に追記する）
+   `AGENTS.md` の `## Security Boundaries` の末尾に追記する
+    （セクションが存在しない場合は `## Boundaries（禁止事項）` の直後に追記する）
 2. `ARCHITECTURE.md` のセキュリティセクションに法的要件を追記する
    （ARCHITECTURE.md が未記入の場合はスキップし、記入後に再実行する）
 3. 依存ライブラリの自動監視が未設定の場合、設定ファイルの作成を提案する
@@ -168,24 +168,18 @@ EC・電子商取引 → 特定商取引法（日本）/ 消費者契約法（�
 ```markdown
 ## Security Boundaries
 
-<!-- プロジェクト性質に応じて自動更新される -->
-
-### 全プロジェクト共通（変更禁止）
 - 認証・認可を実装したとき → 実装前に `@security-designer` を呼び出す
 - 外部入力を受け取るエンドポイントを実装したとき → バックエンドバリデーションを確認する
-- 環境変数を追加したとき → `.env.example` に反映し secrets スキャンを実行する
+- 環境変数を追加したとき → `.env.example` に反映しシークレットスキャンを実行する
 - package.json / requirements.txt / requirements-dev.txt / pyproject.toml / go.mod / Cargo.toml / pom.xml / build.gradle / build.gradle.kts / Gemfile / composer.json / pubspec.yaml / *.csproj / packages.config を編集したとき → `.opencode/instructions/security.md` の言語別コマンド対応表に従いauditを実行する。対応表にない言語の場合は人間に確認を促す
 - 実装完了後 → `@security-auditor` を呼び出す
-
-### このプロジェクト固有の制約
-<!-- 以下は docs/project-definition.md の内容から自動生成。手動変更可 -->
+【以下は project-definition.md の内容から記入する。該当しない行は削除する】
 [個人情報あり]   - 収集・保存・削除のすべてにプライバシーポリシーの根拠が必要
 [決済あり]       - カード番号をサーバーに保持しない（Stripe等のトークン化を使う）
 [EU展開あり]     - ユーザー同意なしにCookieを設定しない・削除要求に72時間以内に対応
 [医療データあり] - アクセスログを改ざん不可な形式で保存する
 [GDPR適用]       - データ処理の法的根拠を実装前に明確にする
 [PCI DSS]        - 年次のセキュリティレビュー計画を docs/operations.md に記録する
-<!-- 該当しない行は削除する -->
 ```
 
 ---

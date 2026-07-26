@@ -7,14 +7,13 @@
 > **コミットメッセージ言語**:（初回セットアップ時に記入する。書式: subject=<言語>, body=<言語>）
 > **SSoT**: このファイルが全エージェント・全自動化ツールの共通規範。詳細ルールは `.opencode/instructions/` に分離し、Plugin がイベント駆動で注入する。
 
-<!-- 記入方法: .opencode/instructions/agents-fill-guide.md を読む -->
-
 ## 初期セットアップ（初回セッションのみ）
 
 <!-- このセクションが存在することが「初回セッション」のシグナル。完了後は全文を削除する -->
 <!-- 注意: このセクション実行中は「## Session Protocol」のセッション開始時手順を実行しない。このセクションの手順を最優先する -->
 
 `docs/project-definition.md` が未記入（空セクションが多い）の場合のみ実行する。
+記入方法は `.opencode/instructions/agents-fill-guide.md` を参照する。
 
 ### 0-a. 状況確認（CLI 状態確認のみ）
 
@@ -31,11 +30,11 @@ CLI で外部リソース（DB・API・クラウドサービス等）の状態�
 ### 0-b. プロジェクト定義の作成（対話）
 
 `.opencode/standards/principles/project-definition-guide.md` の
-5項目（Why → Who → What Must/Won't → Constraint → Security/Risk → DoD）を
+全セクション（Why → Who → What → Constraint → Security Constraint → Risk Assessment → DoD）を
 1つずつ質問し、回答を `docs/project-definition.md` に記入する。
 
-- Won't は必ず1つ以上引き出す
-- Security/Risk はスキップしない
+- What は Must/Won't を必ず引き出し、Should/Could も自然に尋ねる
+- Security Constraint / Risk Assessment はスキップしない
 
 ### 0-c. 自己検証（ゲート）
 
@@ -46,24 +45,31 @@ CLI で外部リソース（DB・API・クラウドサービス等）の状態�
 ### 0-d. アーキテクチャ選定 → ARCHITECTURE.md 記入
 
 1. `.opencode/standards/architectures/_how-to-choose.md` でアーキテクチャを選定する
-2. `ARCHITECTURE.md` の**テンプレート全文を先に読んでから**、一回の編集で記入する
+2. セクション間の一貫性を保つため、`ARCHITECTURE.md` の**テンプレート全文を先に読んでから**記入を開始する。
 3. テンプレート内のコメント指示（「削除する」「該当セクションのみ記入」等）に従い、不要なセクションや未使用のコメントアウトブロックを削除する。プレースホルダーを残さない
 4. アーキテクチャ選定の理由を `decisions/001-choose-[アーキテクチャ名].md` として作成する（`decisions/000-template.md` をコピーして使用する）
 
-### 0-e. AGENTS.md の Project Overview / Commands / コミットメッセージ言語 / Subagents を更新
+### 0-e. AGENTS.md の Project Overview / Commands / コミットメッセージ言語を更新
 
 `docs/project-definition.md` と `ARCHITECTURE.md` を参照して、
 プロジェクト名・目的・コマンドを記入する。
 **対話言語**を会話から判断して記入する。
 **コミットメッセージ言語**は `.opencode/instructions/agents-fill-guide.md` の手順に従って決定し、記入する。
-Subagents のプレースホルダーコメントが解決済みなら削除する。
 
 ### 0-f. 完了処理
 
-1. handoff スキルを実行する（`skill({ name: "handoff" })`）
-2. この「## 初期セットアップ（初回セッションのみ）」セクション全文を削除する
-3. 人間に「新規セッションを開始してください」と促す
-4. 以降の実作業は新規セッションで継続する
+1. 初期セットアップの全手順（0-a〜0-e）が完了していることを確認する。未完了の手順がある場合は完了させてから次に進む
+2. 記述・作成した全ファイルを読み込み、内容に矛盾がないか総合的に確認する：
+   - `docs/project-definition.md`
+   - `ARCHITECTURE.md`
+   - `AGENTS.md`
+   - `DESIGN.md`（作成された場合のみ）
+   矛盾を発見した場合は人間に報告し、修正方針の指示を仰ぐ。
+   修正が完了するまで次のステップに進まない
+3. handoff スキルを実行する（`skill({ name: "handoff" })`）
+4. この「## 初期セットアップ（初回セッションのみ）」セクション全文を削除する
+5. 人間に「新規セッションを開始してください」と促す
+6. 以降の実作業は新規セッションで継続する
 
 <!-- 注意: Report Format（後述）はコード実装の完了時に使用する。
      初期セットアップ完了時はこの手順のみ実行し、Report Format はスキップする。 -->
@@ -132,14 +138,11 @@ git add -A && git commit -m "[生成したメッセージ]"
 
 ## Security Boundaries
 
-<!-- 判断基準：.opencode/standards/principles/security-requirements.md / event-injected rule: .opencode/instructions/security.md -->
-
 - 認証・決済・個人情報・外部APIの実装依頼を受けたとき → 実装前に `@security-designer` を呼び出す
 - 認証・認可・機密データ・入力バリデーションを実装したとき → 完了後に `@security-auditor` を呼び出す
 - 外部入力を受け取るエンドポイントを実装したとき → バックエンドバリデーションを確認する
 - 環境変数を追加したとき → `.env.example` に反映しシークレットスキャンを実行する
 - 依存関係ファイル編集時 → `.opencode/instructions/security.md` の言語別audit対応表に従う
-<!-- このプロジェクト固有の制約（project-definition.md + security-requirements.md から自動生成）-->
 
 ## TDD Cycle
 
@@ -148,8 +151,6 @@ git add -A && git commit -m "[生成したメッセージ]"
 テストドリフト（ソース編集後にテスト未更新の検出）: `.opencode/instructions/tdd-cycle.md` 参照。
 
 ## Subagents
-
-<!-- [プロジェクト名]・依存の方向・Taking on がプレースホルダーのままなら、ARCHITECTURE.mdの記入を先に促す -->
 
 - 複数ファイル・複数タスクの実装 → `@planner`（spec.md + tasks.json 生成。作業ディレクトリ判断基準は `.opencode/standards/principles/harness-engineering.md`）
 - スプリント開始前 → `@evaluator`（Sprint Contract レビュー。承認まで繰り返す）
@@ -179,6 +180,8 @@ git add -A && git commit -m "[生成したメッセージ]"
 
 **セッション中**：
 - 要件変更の検出と反映：人間が目標変更を示した場合、または指示が `docs/project-definition.md` の Must/Won't と矛盾する場合、`.opencode/instructions/requirements-change.md` の手順に従う。変更の適用は必ず人間の承認を得てから行う
+- 触ったファイルは来た時より少しきれいにする（ボーイスカウトルール）
+- 技術的負債は TODO コメントで見える化する（放置しない・隠さない）
 
 ## Report Format
 
@@ -191,8 +194,8 @@ git add -A && git commit -m "[生成したメッセージ]"
 ロールバック：git revert [コミットID]（本番稼働中の場合のみ記載）
  懸念点：[あれば記載。なければ「なし」]
  要記録判断：[ライブラリ選定・データモデル・認証方式・方針変更があれば decisions/ への記録を提案する。なければ「なし」]
- 所感：[変更の意図と影響を技術知識の有無にかかわらず理解できる平易な日本語で1〜2文]
+ 所感：[変更の意図と影響を技術知識の有無にかかわらず理解できる平易な言葉で1〜2文]
 ```
 
-<!-- テンプレート：decisions/000-template.md（ADR・技術選定兼用） -->
-<!-- 保存先：decisions/[連番]-[内容を表すslug].md -->
+【テンプレート：decisions/000-template.md（ADR・技術選定兼用）】
+【保存先：decisions/[連番]-[内容を表すslug].md】

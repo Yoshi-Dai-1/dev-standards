@@ -1,11 +1,16 @@
 ---
 name: find-skills
 description: |
-  This skill searches for and installs community skills from GitHub
-  repositories. Install autonomously, with confirmation, or not at all
-  depending on the project's expansion level setting.
-status: not-installed
-expansion-level: auto / confirm / none（project-context.md の設定に従う）
+  Helps users discover and install agent skills when they ask questions
+  like "how do I do X", "find a skill for X", "is there a skill that
+  can...", or express interest in extending capabilities. This skill
+  should be used when the user is looking for functionality that might
+  exist as an installable skill.
+license: MIT
+compatibility: Designed for OpenCode (and similar agent products that support Agent Skills)
+metadata:
+  status: not-installed
+  expansion-level: auto / confirm / none
 ---
 
 ## Purpose

@@ -1,11 +1,16 @@
 ---
 name: skill-creator
 description: |
-  This skill creates, improves, evaluates, and optimizes skill definitions.
-  Install autonomously, with confirmation, or not at all depending on the
-  project's expansion level setting.
-status: not-installed
-expansion-level: auto / confirm / none（project-context.md の設定に従う）
+  Create new skills, modify and improve existing skills, and measure
+  skill performance. Use when users want to create a skill from scratch,
+  edit, or optimize an existing skill, run evals to test a skill,
+  benchmark skill performance with variance analysis, or optimize a
+  skill's description for better triggering accuracy.
+license: MIT
+compatibility: Designed for OpenCode (and similar agent products that support Agent Skills)
+metadata:
+  status: not-installed
+  expansion-level: auto / confirm / none
 ---
 
 ## Purpose

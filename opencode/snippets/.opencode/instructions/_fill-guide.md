@@ -7,6 +7,8 @@ AIがこのファイルを読み、以下の記入手順に従って人間と対
 
 ## AGENTS.md の記入手順
 
+**注意：write_file で AGENTS.md を保存するときは、削除が指示されているコメント（`## 初期セットアップ` セクション内のもの等）を除き、HTML コメント（`<!-- ... -->`）をそのまま維持すること。これらのコメントは次回の記入・更新時に AI が参照する指示である。**
+
 以下の手順で、Project Overview / Commands / コミットメッセージ言語 / Subagents を決定して記入する。
 `docs/project-definition.md` と `ARCHITECTURE.md` を参照しながら、以下を1つずつ人間に質問して埋めてください：
 
@@ -47,13 +49,14 @@ AIがこのファイルを読み、以下の記入手順に従って人間と対
 - 設定がない場合は「AI が提案・人間が実行」として動作する
 
 ### Security Boundaries
-- `project-definition.md + security-requirements.md` から自動生成される
+- 先頭5行は全プロジェクト共通。編集しない
+- 6行目以降は ARCHITECTURE.md Step 3 で追記する。データ源: project-definition.md + security-requirements.md
 
 ### TDD Cycle
 - テストドリフト検知の詳細は `.opencode/instructions/tdd-cycle.md` を参照
 
 ### Subagents
-- [プロジェクト名]・依存の方向・Taking on がプレースホルダーのままなら、ARCHITECTURE.mdの記入を先に促す
+- そのまま維持する（全プロジェクト共通）
 
 ### Session Protocol
 - そのまま維持する（全プロジェクト共通）

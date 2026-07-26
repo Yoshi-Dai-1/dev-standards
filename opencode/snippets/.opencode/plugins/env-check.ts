@@ -52,6 +52,12 @@ export const EnvCheckPlugin: Plugin = async ({ client, $ }) => ({
         const nvmrcVer = (await $`cat .nvmrc`.nothrow().quiet()).text.trim().replace(/^v/, "")
         const currentMajor = nodeVer.replace(/^v/, "").split(".")[0]
         if (!nvmrcVer.startsWith(currentMajor)) {
+          await client.tui.showToast({
+            body: {
+              message: `env-check: Node.js version mismatch (.nvmrc expects ${nvmrcVer}, current is ${nodeVer})`,
+              variant: "warning",
+            },
+          })
           await client.session.prompt({
             path: { id: sessionId },
             body: {

@@ -10,9 +10,12 @@ description: |
   Do NOT use for initial release preparation (use release-prep instead).
   Do NOT use for development-only environments with no live users.
   優先順位：既存機能を壊さない > セキュリティ > バグ修正 > 改善 > 新機能追加
+license: MIT
+compatibility: Designed for OpenCode (and similar agent products that support Agent Skills)
+metadata:
+  template-version: 1.0.0
+  template-status: active
 ---
-
-<!-- template-version: 1.0.0, template-status: active -->
 
 ## When to Use
 

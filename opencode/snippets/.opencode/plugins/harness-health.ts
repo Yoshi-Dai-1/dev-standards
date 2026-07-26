@@ -44,7 +44,7 @@ const sessionStats = new Map<string, SessionStats>()
 const EDIT_VOLUME_WINDOW_MS = 10 * 60 * 1000  // 10分
 const EDIT_VOLUME_THRESHOLD = 20  // 10分で 20 回
 const LOOP_WINDOW_MS = 5 * 60 * 1000  // 5分
-const LOOP_THRESHOLD = 3  // 同一ファイルを5分以内に3回編集
+const LOOP_THRESHOLD = 6  // 同一ファイルを5分以内に6回編集（3→6: 通常編集との分離のため緩和）
 
 // 初期セットアップ中に反復編集されるファイル群
 // 自己修正ループではなくワークフロー起因の編集なので LOOP 検出から除外する

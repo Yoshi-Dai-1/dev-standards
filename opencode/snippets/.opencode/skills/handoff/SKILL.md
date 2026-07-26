@@ -10,9 +10,12 @@ description: |
   "handoff" — any context reset, development pause, or session end qualifies.
   Also trigger when all OpenCode Todos are completed
   (the AI knows from its own todowrite tool calls that all Todos are done).
+license: MIT
+compatibility: Designed for OpenCode (and similar agent products that support Agent Skills)
+metadata:
+  template-version: 2.0.0
+  template-status: active
 ---
-
-<!-- template-version: 2.0.0, template-status: active -->
 
 ## When to Use
 
@@ -36,7 +39,8 @@ description: |
 
 1. **現在の状態を保存する**
    `.opencode/handoff-artifact.md` を以下のフォーマットで write_file で保存する
-   （既存の内容は上書きしてよい。毎回最新のスナップショットを保存する）：
+   （既存の内容は上書きしてよい。毎回最新のスナップショットを保存する。
+   ファイル内の HTML コメントは維持すること。）：
    対応レベルと適用される規制・標準は、`docs/project-definition.md` のプロジェクト性質と
    `.opencode/standards/principles/security-requirements.md` の判断基準
    （Step 2：対応レベルの決定・Step 3：適用される法令・標準の特定）から都度導出すること。
@@ -60,39 +64,39 @@ description: |
 
    [バグ・疑問点・要確認事項。なければ「なし」]
 
-    ## Security Status
+   ## Security Status
 
-    対応レベル: [Lv.1 / Lv.2 / Lv.3 / Lv.4]
+   対応レベル: [Lv.1 / Lv.2 / Lv.3 / Lv.4]
 
-    適用される規制・標準:
-    - [個人情報保護法 / GDPR / PCI DSS / HIPAA / ISMAP / なし]
+   適用される規制・標準:
+   - [個人情報保護法 / GDPR / PCI DSS / HIPAA / ISMAP / なし]
 
-    未対応のセキュリティ要件:
-    - [ ] [要件名]：[理由・対応方法・担当スプリント]
-    （なければ「なし」）
+   未対応のセキュリティ要件:
+   - [ ] [要件名]：[理由・対応方法・担当スプリント]
+   （なければ「なし」）
 
-    完了したセキュリティ実装:
-    - [x] [実装内容]：decisions/[連番]-[slug].md に記録済み
-    （なければ「なし」）
+   完了したセキュリティ実装:
+   - [x] [実装内容]：decisions/[連番]-[slug].md に記録済み
+   （なければ「なし」）
 
-    依存ライブラリの脆弱性状態:
-    - 最終スキャン：[YYYY-MM-DD] / 結果：[クリーン / HIGH N件 / CRITICAL N件]
-    - 自動監視：
-      - Dependabot / Renovate: [設定済み / 未設定]
-      - CI/CD スキャン（npm audit等）: [組み込み済み / 未設定]
+   依存ライブラリの脆弱性状態:
+   - 最終スキャン：[YYYY-MM-DD] / 結果：[クリーン / HIGH N件 / CRITICAL N件]
+   - 自動監視：
+     - Dependabot / Renovate: [設定済み / 未設定]
+     - CI/CD スキャン（npm audit等）: [組み込み済み / 未設定]
 
-    ## 変更したファイル
+   ## 変更したファイル
 
-    [Git status に表示された変更ファイル一覧。なければ「なし」]
+   [Git status に表示された変更ファイル一覧。なければ「なし」]
 
-     注意：
-     - 上記フォーマットのセクション名（`## ` で始まる行）は変更・削除・追加しないこと。
-     - 「依存ライブラリの脆弱性状態」の最終スキャン日付は、セッション中にスキャンした場合は
-       新しい日付に更新し、スキャンしなかった場合は旧 artifact の値を引き継ぐこと。
+   注意：
+   - 上記フォーマットのセクション名（`## ` で始まる行）は変更・削除・追加しないこと。
+   - 「依存ライブラリの脆弱性状態」の最終スキャン日付は、セッション中にスキャンした場合は
+     新しい日付に更新し、スキャンしなかった場合は旧 artifact の値を引き継ぐこと。
 
 2. **Build Log に行を追記する**
    `docs/build-log.md` が存在しない場合は作成してから、末尾に新しい行を追記する
-   （追記のみ。既存の行は変更しない）：
+   （追記のみ。既存の行は変更しない。ファイル内の HTML コメントは維持すること）：
    ```
    | YYYY-MM-DD | [完了した内容の概要] | [未解決があれば記載。なければ「なし」] |
    ```

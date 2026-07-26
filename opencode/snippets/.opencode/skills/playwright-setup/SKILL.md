@@ -1,15 +1,16 @@
 ---
 name: playwright-setup
 description: |
-  playwright-cli のセットアップ確認・インストールを行うスキル。
-  @evaluator が評価を始める前に必ず呼び出す。
   Make sure to use this skill whenever the user mentions 「テスト」「E2E」「ブラウザテスト」
   「ビジュアルリグレッション」「スナップショットテスト」「playwright」— even if the user
   only wants to run a single test or check if tests are configured.
   Do NOT use for unit tests or API tests (those don't need a browser).
+license: MIT
+compatibility: Designed for OpenCode (and similar agent products that support Agent Skills)
+metadata:
+  template-version: 1.1.0
+  template-status: active
 ---
-
-<!-- template-version: 1.0.0, template-status: active -->
 
 # playwright-cli セットアップ
 
@@ -92,3 +93,14 @@ playwright-cli をスキップした場合、コードレビューベースで�
 - ビジュアル品質（Design Quality）は「コード上の実装」から推定する
 - エラーハンドリングはコードを読んで確認する
 - ユーザーフローはコードの遷移図から確認する
+
+## セットアップ完了後処理
+
+playwright-cli とそのスキルの準備が完了した（または使用しない判断をした）ため、
+このスキルは役割を終えた。自身を削除する：
+
+```bash
+rm -rf .opencode/skills/playwright-setup/
+```
+
+削除に失敗した場合は人間に「.opencode/skills/playwright-setup/ の手動削除をお願いします（不要になったスキルです）」と伝える。

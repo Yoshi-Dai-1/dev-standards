@@ -9,9 +9,12 @@ description: |
   Do NOT use after release (use live-operation instead).
   Do NOT use for development-only deployments with no real users.
   優先順位：Security（即死系・省略不可）> The Twelve-Factor App > チェックリスト完了 > 新機能停止
+license: MIT
+compatibility: Designed for OpenCode (and similar agent products that support Agent Skills)
+metadata:
+  template-version: 1.0.0
+  template-status: active
 ---
-
-<!-- template-version: 1.0.0, template-status: active -->
 
 ## When to Use
 
@@ -27,8 +30,9 @@ description: |
 ## Workflow
 
 **開始前の確認（必須）**
-新機能の追加を停止する。このSkillが参照されている間、
-新機能の要求を受けた場合は「リリース後に対応」と提案し、`.opencode/project-context.md` の「現在のタスク」に Next として記録する。
+このスキルの実行中は新機能の追加を行わない。
+ユーザーから新機能の要求を受けた場合は「リリース後に対応します」と提案し、
+`.opencode/project-context.md` の「現在のタスク」に Next として記録する。
 「機能が動く」と「本番で安全に動かせる」は別のことである。
 
 1. **未対応項目の列挙**
