@@ -1,7 +1,6 @@
 # DESIGN.md
 
-<!-- このファイルはプロジェクトルートに置く。UI実装の入口。正本は token-ssot.json。 -->
-<!-- DESIGN.md は設計の索引であり、値を持たない。値はすべて design/token-ssot.json が正本。 -->
+【このファイルはUI実装の入口。DESIGN.md は設計の索引であり、値を持たない。値はすべて design/token-ssot.json が正本。】
 
 ---
 

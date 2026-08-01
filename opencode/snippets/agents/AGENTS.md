@@ -66,10 +66,11 @@ CLI で外部リソース（DB・API・クラウドサービス等）の状態�
    - `DESIGN.md`（作成された場合のみ）
    矛盾を発見した場合は人間に報告し、修正方針の指示を仰ぐ。
    修正が完了するまで次のステップに進まない
-3. handoff スキルを実行する（`skill({ name: "handoff" })`）
-4. この「## 初期セットアップ（初回セッションのみ）」セクション全文を削除する
-5. 人間に「新規セッションを開始してください」と促す
-6. 以降の実作業は新規セッションで継続する
+3. `docs/project-definition.md` / `ARCHITECTURE.md` に HTMLコメント（`<!-- ... -->`）が残っていないか確認し、残っていれば削除する
+4. handoff スキルを実行する（`skill({ name: "handoff" })`）
+5. この「## 初期セットアップ（初回セッションのみ）」セクション全文を削除する
+6. 人間に「新規セッションを開始してください」と促す
+7. 以降の実作業は新規セッションで継続する
 
 <!-- 注意: Report Format（後述）はコード実装の完了時に使用する。
      初期セットアップ完了時はこの手順のみ実行し、Report Format はスキップする。 -->
@@ -179,7 +180,7 @@ git add -A && git commit -m "[生成したメッセージ]"
 8. **月次診断期限チェック**: `docs/quality-scorecard.md` の最終診断日が30日以上前（または不存在）なら診断実施を提案
 
 **セッション中**：
-- 要件変更の検出と反映：人間が目標変更を示した場合、または指示が `docs/project-definition.md` の Must/Won't と矛盾する場合、`.opencode/instructions/requirements-change.md` の手順に従う。変更の適用は必ず人間の承認を得てから行う
+- 人間が目標変更を示した場合、または指示が `docs/project-definition.md` の Must/Won't と矛盾する場合、および `docs/project-definition.md`/`ARCHITECTURE.md`/`AGENTS.md` の編集時は `.opencode/instructions/requirements-change.md` の手順に従う。変更の適用は必ず人間の承認を得てから行う
 - 触ったファイルは来た時より少しきれいにする（ボーイスカウトルール）
 - 技術的負債は TODO コメントで見える化する（放置しない・隠さない）
 
