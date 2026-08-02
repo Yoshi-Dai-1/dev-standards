@@ -41,7 +41,7 @@ metadata:
 
 1.5 **バージョニングと CHANGELOG の準備**
 
-   ARCHITECTURE.md の「開発プロセス」セクションを read_file で読んで以下を実行する。
+   ARCHITECTURE.md の「開発プロセス」セクションを読んで以下を実行する。
    「開発プロセス」セクションが存在しない場合は ARCHITECTURE.md の記入が未完了なので、完了させるよう人間に伝える。
 
    **SemVer の適用判断：**
@@ -97,12 +97,12 @@ metadata:
    - [セキュリティ関連の変更（ない場合はこの行ごと削除）]
    ```
 
-   存在する場合 → read_file で読み込んで以下を実行する：
+   存在する場合 → 読んで以下を実行する：
    - `## [Unreleased]` セクションが空の場合：git log から Added / Fixed の内容を生成して記入する
    - `## [Unreleased]` セクションに内容がある場合：その内容をそのまま使う
    - `## [Unreleased]` を `## [バージョン番号] - YYYY-MM-DD` に書き換える
    - 先頭に空の `## [Unreleased]` セクションを追加する（次のリリースに向けて）
-   - write_file で保存する
+   - 保存する
 
 2. **セキュリティ対応**（必須・省略不可）
    `.opencode/standards/principles/security-implementation.md` を使って

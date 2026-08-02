@@ -75,7 +75,7 @@ metadata:
 - エージェントが非同期・並列で常時PRを生成する → Continuous
 
 Scheduled・Continuous の設定例は `.opencode/plugins/README.md` を参照。
-戦略は `ARCHITECTURE.md` の「品質診断戦略」フィールドを read_file で確認する。
+戦略は `ARCHITECTURE.md` の「品質診断戦略」フィールドを確認する。
 未記入の場合は Reactive として動作する。変更が必要な場合は `ARCHITECTURE.md` を更新する。
 
 ---

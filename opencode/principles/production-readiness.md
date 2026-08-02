@@ -182,7 +182,7 @@ AIが自律的に `@security-auditor` を呼び出した後、
 
 ### ユーザーテスト
 
-以下の条件判定を実行する（推測しない。docs/project-definition.md を read_file で読んで確認する）：
+以下の条件判定を実行する（推測しない。docs/project-definition.md を読んで確認する）：
 
 条件：docs/project-definition.md の「対象ユーザー」が「自分のみ」または「内部利用」である
 → 該当する：このセクションを完全にスキップする
@@ -206,7 +206,7 @@ AIが自律的に `@security-auditor` を呼び出した後、
 ### 負荷テスト
 
 以下の条件を順番に確認する
-（ARCHITECTURE.md の非機能要件セクションを read_file で読む）：
+（ARCHITECTURE.md の非機能要件セクションを読む）：
 
 条件A：「スケーリング方針：スケーリング不要（個人利用・社内限定）」と記載されている
 → 該当する：このセクションを完全にスキップする。条件Bは確認しない。
@@ -226,7 +226,7 @@ AIが自律的に `@security-auditor` を呼び出した後、
 ```
 
 負荷テストツールの選定：
-ARCHITECTURE.md の「技術スタック」の「負荷テスト」行を read_file で確認する。
+ARCHITECTURE.md の「技術スタック」の「負荷テスト」行を確認する。
 - 「未選定」と記録されている場合：以下の検索クエリでツールを選定し、
   ARCHITECTURE.md の「負荷テスト」行を選定したツール名に更新する：
   `[ARCHITECTURE.md の「言語」値] load testing tool [現在年]`
@@ -284,7 +284,7 @@ GraphQL（GraphQLを使用している場合）：
 
 ### OSS として公開する場合
 
-以下の条件判定を実行する（推測しない。docs/project-definition.md を read_file で読んで確認する）：
+以下の条件判定を実行する（推測しない。docs/project-definition.md を読んで確認する）：
 
 条件：docs/project-definition.md の「ライセンス」が「商用利用あり」または「一般公開」である
 → 該当しない：このセクションを完全にスキップする

@@ -211,7 +211,7 @@ ARCHITECTURE.md が途中で変更されたときも、変更後に必ずこの�
 `setup-harness.sh` によって lint・フォーマット Plugin と品質診断戦略はすでに設定済みである。
 技術スタックに言語が記入されている場合、以下を自動で実行する：
 
-`.opencode/plugins/lint-and-typecheck.ts` を read_file で読み込み、
+`.opencode/plugins/lint-and-typecheck.ts` を読み、
 設定変数セクションの言語フラグを、ARCHITECTURE.md の「言語」に合わせて自動調整する：
 
 - TypeScript/JavaScript でない場合 → `ENABLE_TYPECHECK=false` / `ENABLE_JS_LINT=false` / `ENABLE_JS_FORMAT=false`
@@ -220,7 +220,7 @@ ARCHITECTURE.md が途中で変更されたときも、変更後に必ずこの�
 - Go でない場合 → `ENABLE_GO_LINT=false` / `ENABLE_GO_FORMAT=false`
 - Ruby でない場合 → `ENABLE_RUBY_LINT=false` / `ENABLE_RUBY_FORMAT=false`
 
-使用する言語のフラグは `true` のまま維持する。調整後にファイルを write_file で保存する。
+使用する言語のフラグは `true` のまま維持する。調整後にファイルを保存する。
 
 #### Step 5-B2：アーキテクチャ違反検出設定の生成
 
@@ -305,7 +305,7 @@ Python の場合、Ruff の `TID251` は import 元のモジュールパスを�
 生成した設定ファイルの内容を表示し、以下を確認する：
 - 層名・ディレクトリパスが正しいか
 - エラーメッセージが分かりやすいか
-- 承認が得られたら write_file で保存する
+- 承認が得られたら保存する
 
 #### Step 5-C：次のドキュメントへ案内する
 

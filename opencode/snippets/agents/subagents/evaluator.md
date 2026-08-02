@@ -39,7 +39,7 @@ CLI優先: 確認・操作には CLI ツールを使用する。ブラウザ操�
 ## Sprint Contract レビュー（スプリント開始前に実行）
 
 「Sprint N の Contract をレビューしてください」という呼び出しを受けたとき、
-`docs/spec.md` の Sprint N Contract を read_file で読み、以下を確認する：
+`docs/spec.md` の Sprint N Contract を読み、以下を確認する：
 
 - [ ] 完了基準が操作手順として**検証可能な形式**で記述されているか
       （「動いていれば OK」ではなく「○○ボタンを押すと△△が表示される」という形式）
@@ -49,10 +49,10 @@ CLI優先: 確認・操作には CLI ツールを使用する。ブラウザ操�
       （「高速に」ではなく「p95 ≤ 500ms」の形式。省略されている場合はこのチェックをスキップ）
 
 **承認する場合**：
-1. `docs/spec.md` を read_file で読み込む
+1. `docs/spec.md` を読む
 2. 該当スプリントの Contract の「承認」欄の `（スプリント開始前に Evaluator が記入）` を
    `Evaluator / YYYY-MM-DD` の形式に書き換える（他のスプリントの記述は変更しない）
-3. 変更後の全文を write_file で `docs/spec.md` に保存する
+3. 変更後の全文を `docs/spec.md` に保存する
 4. 結果として「承認済み」を返答する。
 
 **差し戻す場合**：
