@@ -247,13 +247,30 @@ export const LintAndTypecheckPlugin: Plugin = async ({ $, client }) => {
         if (e2) errors.push("csLint: " + e2)
       }
 
-      if (errors.length === 0 && attempt.n === 0) {
+      if (errors.length === 0 && attempt.n === 0 && lang !== "") {
         await client.tui.showToast({
           body: {
             message: `lint-and-typecheck: no tools found for ${lang} — install via stack-setup.md`,
             variant: "warning",
           },
         })
+        if (sessionId) {
+          await client.session.prompt({
+            path: { id: sessionId },
+            body: {
+              noReply: true,
+              parts: [
+                {
+                  type: "text",
+                  text:
+                    `${lang} 用の lint・フォーマットツールが見つかりません。\n` +
+                    `stack-setup.md の手順に従って必要なツールをインストールしてください。\n` +
+                    `インストール後、コード編集のたびに lint-and-typecheck Plugin が自動で品質チェックを実行します。`,
+                },
+              ],
+            },
+          })
+        }
         return
       }
 

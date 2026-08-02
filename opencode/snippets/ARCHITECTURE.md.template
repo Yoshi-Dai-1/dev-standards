@@ -206,23 +206,10 @@ find-skills スキルのワークフローに従い外部スキルを検索・�
 
 ARCHITECTURE.md が途中で変更されたときも、変更後に必ずこの診断を実行する。
 
-#### Step 5-B：lint 設定変数の自動調整
+#### Step 5-B：アーキテクチャ違反検出設定の生成
 
-`setup-harness.sh` によって lint・フォーマット Plugin と品質診断戦略はすでに設定済みである。
-技術スタックに言語が記入されている場合、以下を自動で実行する：
-
-`.opencode/plugins/lint-and-typecheck.ts` を読み、
-設定変数セクションの言語フラグを、ARCHITECTURE.md の「言語」に合わせて自動調整する：
-
-- TypeScript/JavaScript でない場合 → `ENABLE_TYPECHECK=false` / `ENABLE_JS_LINT=false` / `ENABLE_JS_FORMAT=false`
-- Python でない場合 → `ENABLE_PY_LINT=false` / `ENABLE_PY_FORMAT=false`
-- Rust でない場合 → `ENABLE_RUST_LINT=false` / `ENABLE_RUST_FORMAT=false`
-- Go でない場合 → `ENABLE_GO_LINT=false` / `ENABLE_GO_FORMAT=false`
-- Ruby でない場合 → `ENABLE_RUBY_LINT=false` / `ENABLE_RUBY_FORMAT=false`
-
-使用する言語のフラグは `true` のまま維持する。調整後にファイルを保存する。
-
-#### Step 5-B2：アーキテクチャ違反検出設定の生成
+このステップでは lint・フォーマット用の設定ファイルは作成・変更しない。
+対象とするのは依存方向の違反検出（アーキテクチャ違反検出）の設定のみである。
 
 「層のルール」セクションのプレースホルダーが実際の層名に置き換えられている場合に実行する。
 （`[層A]` のようなプレースホルダーが残っている場合はスキップする）

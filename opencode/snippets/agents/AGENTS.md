@@ -3,7 +3,7 @@
 > **行動原則**: Think Before Coding > Simplicity First > Surgical Changes > Goal-Driven Execution
 > **優先順位**: SSoT > 安全 > 品質。迷ったらこの順に従う。
 > **安全原則**: 推測禁止 / 検証の明示 / 破壊的Git操作の禁止
-> **対話言語**:（AI との会話に使う言語。初回セットアップ時に会話から自動 mirror して記入する）
+> **対話言語**:（AI との会話に使う言語。初回セットアップ時に会話から確認・記入する）
 > **コミットメッセージ言語**:（初回セットアップ時に記入する。書式: subject=<言語>, body=<言語>）
 > **SSoT**: このファイルが全エージェント・全自動化ツールの共通規範。詳細ルールは `.opencode/instructions/` に分離し、Plugin がイベント駆動で注入する。
 

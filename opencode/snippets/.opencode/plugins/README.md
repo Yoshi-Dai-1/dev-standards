@@ -99,10 +99,10 @@ Java/PHP には lint-and-typecheck の全言語に共通して採用している
    - 対応するテストファイル（JS/TS: `.test.*` / `.spec.*`、Python: `test_*.py` / `*_test.py` / `*.test.py`、Ruby: `*_spec.rb` / `*_test.rb`）が存在する場合のみ実行
    - タイムアウト60秒。失敗時は先頭4000文字を収集
    - ツール不在時はサイレントスキップ（JS/TS: pm の test script、Python: `.venv/bin/pytest`、Ruby: `bundle exec` 経由 or bare）
-5. 結果に応じて Toast 通知：
-   - 🟢 `all checks passed` — すべてのツールが正常終了
-   - 🟡 `no tools found for [lang]` — 1つもツールが見つからなかった（インストールが必要）
-   - 🔴 `${N} check(s) failed` — エラーあり（AI に自動通知して修正させる）
+5. 結果に応じて通知（人間向け Toast + コード対象の場合は AI への noReply 注入）：
+   - 🟢 `all checks passed` — すべてのツールが正常終了（Toast のみ）
+   - 🟡 `no tools found for [lang]` — 1つもツールが見つからなかった。Toast とともに AI に「stack-setup.md でインストール」を通知して促す（`lang` が特定できた場合のみ）
+   - 🔴 `${N} check(s) failed` — エラーあり。Toast とともに AI に修正対象を通知させる
 
 ### 責任境界
 
