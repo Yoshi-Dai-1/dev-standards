@@ -3,6 +3,9 @@ import type { Plugin } from "@opencode-ai/plugin"
 let venvChecked = false
 let venvExists = false
 
+// .nvmrc 不一致警告の通知済みセッション（セッション内1回に抑制）
+const nvmWarnedSessions = new Set<string>()
+
 export const EnvCheckPlugin: Plugin = async ({ client, $ }) => ({
   "tool.execute.before": async (input, output) => {
     if (input.tool !== "bash") return
@@ -48,10 +51,12 @@ export const EnvCheckPlugin: Plugin = async ({ client, $ }) => ({
     if (isNodeInstall && sessionId) {
       const nvmrcResult = await $`test -f .nvmrc`.nothrow().quiet()
       if (nvmrcResult.exitCode === 0) {
-        const nodeVer = (await $`node --version 2>/dev/null`.nothrow().quiet()).text.trim()
-        const nvmrcVer = (await $`cat .nvmrc`.nothrow().quiet()).text.trim().replace(/^v/, "")
+        const nodeVer = (await $`node --version 2>/dev/null`.nothrow().quiet()).text().trim()
+        const nvmrcVer = (await $`cat .nvmrc`.nothrow().quiet()).text().trim().replace(/^v/, "")
         const currentMajor = nodeVer.replace(/^v/, "").split(".")[0]
-        if (!nvmrcVer.startsWith(currentMajor)) {
+        // セッション内1回に抑制（恒常状態の連続警告を防ぐ）
+        if (!nvmrcVer.startsWith(currentMajor) && !nvmWarnedSessions.has(sessionId)) {
+          nvmWarnedSessions.add(sessionId)
           await client.tui.showToast({
             body: {
               message: `env-check: Node.js version mismatch (.nvmrc expects ${nvmrcVer}, current is ${nodeVer})`,
@@ -73,6 +78,22 @@ export const EnvCheckPlugin: Plugin = async ({ client, $ }) => ({
           })
         }
       }
+    }
+  },
+  // コンパクション検知：AI の記憶喪失に合わせて per-session 警告をリセット
+  // （arch-diag.ts / rule-injector.ts と同型の対策）
+  "experimental.session.compacting": async (input) => {
+    const sessionId = (input as any)?.sessionID
+    if (sessionId) nvmWarnedSessions.delete(sessionId)
+  },
+  // 安定APIフォールバック：session.compacted イベントでもリセット。session.deleted で状態を破棄する
+  event: async (input) => {
+    const ev = input.event
+    if (!ev) return
+    const sessionId = (ev as any).properties?.sessionID
+    if (!sessionId) return
+    if (ev.type === "session.compacted" || ev.type === "session.deleted") {
+      nvmWarnedSessions.delete(sessionId)
     }
   },
 })

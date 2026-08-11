@@ -18,9 +18,10 @@ import type { Plugin } from "@opencode-ai/plugin"
  *   - 最悪ケース（subagent が親と sessionID 共有）でも現状と同じ
  *
  * 検知する3つのシグナル：
- *   1. 編集頻度の閾値超過（セッション単位、直近 EDIT_VOLUME_WINDOW_MS 内に EDIT_VOLUME_THRESHOLD 件）
+ *   1. 編集頻度の閾値超過（セッション単位、直近 EDIT_VOLUME_WINDOW_MS 内に EDIT_VOLUME_THRESHOLD 件。`>=` 判定＋発火済みフラグで閾値超過ごとに1回）
  *   2. 同一ファイルの連続編集（セッション単位、直近 LOOP_WINDOW_MS 内に LOOP_THRESHOLD 件）
- *   3. tasks.json の pass 率が 50% 未満（session.idle 時、project-wide）
+ *   3. tasks.json の pass 率が 50% 未満（session.idle 時、project-wide。
+ *      購読は公式の `event` フックで `session.idle` をフィルタして行う）
  *
  * 設計原則「Plugin は AI と対話する」に従い、警告は Toast + AI への prompt 通知を行う。
  * ただし通知は「トリガー時点の事実」のみ。AI に判断を委ねない。
@@ -34,6 +35,7 @@ interface EditEvent {
 interface SessionStats {
   edits: EditEvent[]
   lastActivity: number
+  volumeAlerted: boolean
 }
 
 // セッション毎の sliding window を保持
@@ -60,7 +62,7 @@ const SESSION_TTL_MS = 30 * 60 * 1000  // 30分無操作で stale 判定
 function getOrCreateStats(sessionId: string): SessionStats {
   let stats = sessionStats.get(sessionId)
   if (!stats) {
-    stats = { edits: [], lastActivity: 0 }
+    stats = { edits: [], lastActivity: 0, volumeAlerted: false }
     sessionStats.set(sessionId, stats)
   }
   return stats
@@ -70,6 +72,10 @@ function pruneSessionEdits(stats: SessionStats, now: number): void {
   stats.lastActivity = now
   while (stats.edits.length > 0 && now - stats.edits[0].timestamp > EDIT_VOLUME_WINDOW_MS) {
     stats.edits.shift()
+  }
+  // 閾値未満に戻ったら発火済みフラグを解除する（次の閾値超過で再発火できるように）
+  if (stats.edits.length < EDIT_VOLUME_THRESHOLD) {
+    stats.volumeAlerted = false
   }
 }
 
@@ -96,6 +102,16 @@ async function notifyAI(
   })
 }
 
+// multiedit は operations[] 配列なので、write/edit と同様に全パスを抽出する
+function extractPaths(tool: string, args: Record<string, any>): string[] {
+  if (tool === "multiedit") {
+    return (args.operations || [])
+      .map((op: any) => op.filePath || op.path || "")
+      .filter(Boolean)
+  }
+  return [args.filePath || args.path || ""].filter(Boolean)
+}
+
 async function checkTasksPassRate(): Promise<{
   total: number
   passed: number
@@ -115,8 +131,8 @@ export const HarnessHealthPlugin: Plugin = async ({ client }) => {
     "tool.execute.after": async (input) => {
       if (!["write", "edit", "multiedit"].includes(input.tool)) return
 
-      const fp: string = input.args?.filePath || input.args?.path || ""
-      if (!fp) return
+      const fps = extractPaths(input.tool, input.args || {})
+      if (fps.length === 0) return
 
       const sessionId = input.sessionID
       if (!sessionId) return  // sessionID 不明ならスキップ（既存 Plugin と統一）
@@ -125,10 +141,15 @@ export const HarnessHealthPlugin: Plugin = async ({ client }) => {
       const stats = getOrCreateStats(sessionId)
       pruneSessionEdits(stats, now)
       pruneStaleSessions(now)  // 古いセッションを掃除（メモリリーク防止）
-      stats.edits.push({ fp, timestamp: now })
+      for (const fp of [...new Set(fps)]) {
+        stats.edits.push({ fp, timestamp: now })
+      }
 
       // シグナル1：編集頻度の閾値超過（セッション単位）
-      if (stats.edits.length === EDIT_VOLUME_THRESHOLD) {
+      // `>=` 判定（multiedit は一度に複数ファイルを push するため `===` では
+      // 閾値を飛び越えて発火しないことがある）＋ 発火済みフラグで1回だけ通知
+      if (stats.edits.length >= EDIT_VOLUME_THRESHOLD && !stats.volumeAlerted) {
+        stats.volumeAlerted = true
         const windowMin = EDIT_VOLUME_WINDOW_MS / 60000
         await client.tui.showToast({
           body: {
@@ -142,7 +163,7 @@ export const HarnessHealthPlugin: Plugin = async ({ client }) => {
           `harness-health: 直近 ${windowMin} 分間で ${stats.edits.length} 回の編集を検知。` +
             `閾値 ${EDIT_VOLUME_THRESHOLD}/${windowMin}分 に達しました。` +
             `編集ペースが異常に高いため、Context Reset を強く推奨します。` +
-            `（「今日はここまで」と伝える、または `.opencode/handoff-artifact.md` を生成して新規セッションを開始）`,
+            `（「今日はここまで」と伝える、または \`.opencode/handoff-artifact.md\` を生成して新規セッションを開始）`,
         )
       }
 
@@ -150,40 +171,48 @@ export const HarnessHealthPlugin: Plugin = async ({ client }) => {
       // セッション単位なので、親セッションの編集がサブエージェントの
       // 同一ファイル検知を巻き込むことはない
       // 初期セットアップ中のファイルはワークフロー起因の編集として除外
-      if (SETUP_PATHS.some((p) => fp.includes(p))) return
-      const sameFileRecent = stats.edits.filter(
-        (e) => e.fp === fp && now - e.timestamp < LOOP_WINDOW_MS,
-      )
-      if (sameFileRecent.length === LOOP_THRESHOLD) {
-        const loopMin = LOOP_WINDOW_MS / 60000
-        await client.tui.showToast({
-          body: {
-            message: `harness-health: ${fp} を ${loopMin} 分以内に ${LOOP_THRESHOLD} 回編集（ループ検知）`,
-            variant: "warning",
-          },
-        })
-        await notifyAI(
-          client,
-          sessionId,
-          `harness-health: ${fp} を ${loopMin} 分以内に ${LOOP_THRESHOLD} 回編集しました。` +
-            `これは「自己修正ループ」の兆候です。` +
-            `考えられる原因：\n` +
-            `1. 問題の本質が把握できていない（同じ修正を繰り返し適用）\n` +
-            `2. テストが不足している（修正の正しさを検証できない）\n` +
-            `3. 設計自体に問題がある（構造的問題で局所修正が効かない）\n` +
-            `推奨：作業を停止し、根本原因を再分析してください。`,
+      for (const fp of [...new Set(fps)]) {
+        if (SETUP_PATHS.some((p) => fp.includes(p))) continue
+        const sameFileRecent = stats.edits.filter(
+          (e) => e.fp === fp && now - e.timestamp < LOOP_WINDOW_MS,
         )
+        if (sameFileRecent.length === LOOP_THRESHOLD) {
+          const loopMin = LOOP_WINDOW_MS / 60000
+          await client.tui.showToast({
+            body: {
+              message: `harness-health: ${fp} を ${loopMin} 分以内に ${LOOP_THRESHOLD} 回編集（ループ検知）`,
+              variant: "warning",
+            },
+          })
+          await notifyAI(
+            client,
+            sessionId,
+            `harness-health: ${fp} を ${loopMin} 分以内に ${LOOP_THRESHOLD} 回編集しました。` +
+              `これは「自己修正ループ」の兆候です。` +
+              `考えられる原因：\n` +
+              `1. 問題の本質が把握できていない（同じ修正を繰り返し適用）\n` +
+              `2. テストが不足している（修正の正しさを検証できない）\n` +
+              `3. 設計自体に問題がある（構造的問題で局所修正が効かない）\n` +
+              `推奨：作業を停止し、根本原因を再分析してください。`,
+          )
+        }
       }
     },
 
-    "session.idle": async (input) => {
+    // セッションのアイドル検知は公式の `event` フックで行う
+    // （`session.idle` は Hooks 型に未宣言のため、フック名としてのディスパッチは保証されない）。
+    // ここでは tasks.json の pass 率閾値超過（シグナル3）を通知する。
+    event: async (input) => {
+      const ev = input.event
+      if (!ev || ev.type !== "session.idle") return
+      const sessionId = (ev as any).properties?.sessionID
+
       const result = await checkTasksPassRate()
       if (!result) return
       if (result.total < MIN_TASKS_FOR_ALERT) return
       if (result.rate >= PASS_RATE_THRESHOLD) return
 
       const passRate = (result.rate * 100).toFixed(0)
-      const sessionId = input?.sessionID
 
       await client.tui.showToast({
         body: {

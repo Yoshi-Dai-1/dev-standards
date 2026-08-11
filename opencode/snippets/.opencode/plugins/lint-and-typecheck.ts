@@ -38,7 +38,7 @@ async function typecheck(
   if (!(await exists($, cmd.split(/\s+/)[0]))) return null
   if (tracker) tracker.n++
   const r = await $`${cmd}`.nothrow().quiet()
-  return r.exitCode === 0 ? null : r.text.substring(0, 4000)
+  return r.exitCode === 0 ? null : r.text().substring(0, 4000)
 }
 
 async function lintFile(
@@ -50,7 +50,7 @@ async function lintFile(
   if (!(await exists($, cmd.split(/\s+/)[0]))) return null
   if (tracker) tracker.n++
   const r = await $`${cmd} ${fp}`.nothrow().quiet()
-  return r.exitCode === 0 ? null : r.text.substring(0, 4000)
+  return r.exitCode === 0 ? null : r.text().substring(0, 4000)
 }
 
 async function formatFile(
@@ -62,7 +62,7 @@ async function formatFile(
   if (!(await exists($, cmd.split(/\s+/)[0]))) return null
   if (tracker) tracker.n++
   const r = await $`${cmd} ${fp}`.nothrow().quiet()
-  return r.exitCode === 0 ? null : r.text.substring(0, 2000)
+  return r.exitCode === 0 ? null : r.text().substring(0, 2000)
 }
 
 async function runTest(
@@ -74,7 +74,7 @@ async function runTest(
   if (name && !name.includes("/") && !(await exists($, name))) return null
   if (tracker) tracker.n++
   const r = await $`timeout 60 ${cmd}`.nothrow().quiet()
-  return r.exitCode === 0 ? null : r.text.substring(0, 4000)
+  return r.exitCode === 0 ? null : r.text().substring(0, 4000)
 }
 
 export const LintAndTypecheckPlugin: Plugin = async ({ $, client }) => {
@@ -138,15 +138,15 @@ export const LintAndTypecheckPlugin: Plugin = async ({ $, client }) => {
         if (pyRuff) {
           attempt.n++
           const r1 = await $`${pyRuff} format ${fp}`.nothrow().quiet()
-          if (r1.exitCode !== 0) errors.push("pyFormat: " + r1.text.substring(0, 2000))
+          if (r1.exitCode !== 0) errors.push("pyFormat: " + r1.text().substring(0, 2000))
           attempt.n++
           const r2 = await $`${pyRuff} check ${fp}`.nothrow().quiet()
-          if (r2.exitCode !== 0) errors.push("pyLint: " + r2.text.substring(0, 4000))
+          if (r2.exitCode !== 0) errors.push("pyLint: " + r2.text().substring(0, 4000))
         }
         if (await $`test -f .venv/bin/mypy`.nothrow().quiet().then(r => r.exitCode === 0)) {
           attempt.n++
           const r3 = await $`.venv/bin/mypy --follow-imports=silent --no-incremental ${fp}`.nothrow().quiet()
-          if (r3.exitCode !== 0) errors.push("pyType: " + r3.text.substring(0, 4000))
+          if (r3.exitCode !== 0) errors.push("pyType: " + r3.text().substring(0, 4000))
         }
         // test (single file)
         const pyDir = fp.includes("/") ? fp.substring(0, fp.lastIndexOf("/") + 1) : ""
@@ -186,7 +186,7 @@ export const LintAndTypecheckPlugin: Plugin = async ({ $, client }) => {
         const pkg = fp.startsWith("/") ? `${dir}/...` : dir === "." ? "./..." : `./${dir}/...`
         attempt.n++
         const r2 = await $`go vet ${pkg}`.nothrow().quiet()
-        if (r2.exitCode > 0) errors.push(`goVet: ${r2.text.substring(0, 4000)}`)
+        if (r2.exitCode > 0) errors.push(`goVet: ${r2.text().substring(0, 4000)}`)
       }
 
       // --- Ruby ---

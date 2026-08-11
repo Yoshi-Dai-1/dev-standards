@@ -53,6 +53,20 @@ const TASKS_JSON_RULES = `
 `.trim()
 
 const INJECTED_SESSIONS = new Set<string>()
+// セッションIDとファイルパスを並べる際の区切り。バックスラッシュゼロはパスに現れない。
+// これを使うことで「ID が前方一致する別セッションのキー」を誤削除しない（例: "S1" が "S12" を巻き込む）。
+const KEY_SEP = "\u0000"
+
+// コンパクション後の AI 記憶喪失に合わせて、Read 初回注入キャッシュをクリアして
+// ルールを再注入できるようにする（arch-diag.ts / rule-injector.ts と同型の対策）。
+function resetAfterCompaction(sessionId: string) {
+  const prefix = sessionId + KEY_SEP
+  for (const key of INJECTED_SESSIONS) {
+    if (key.startsWith(prefix)) {
+      INJECTED_SESSIONS.delete(key)
+    }
+  }
+}
 
 export const WorkingDirGuidePlugin: Plugin = async ({ client }) => ({
   "tool.execute.before": async (input, output) => {
@@ -79,8 +93,9 @@ export const WorkingDirGuidePlugin: Plugin = async ({ client }) => ({
     }
 
     if (input.tool === "read") {
-      if (INJECTED_SESSIONS.has(sessionId + fp)) return
-      INJECTED_SESSIONS.add(sessionId + fp)
+      const key = sessionId + KEY_SEP + fp
+      if (INJECTED_SESSIONS.has(key)) return
+      INJECTED_SESSIONS.add(key)
     }
 
     if (!sessionId) return
@@ -91,5 +106,20 @@ export const WorkingDirGuidePlugin: Plugin = async ({ client }) => ({
         parts: [{ type: "text", text: rules }],
       },
     })
+  },
+  // コンパクション検知：Read 初回注入キャッシュをリセット（記憶喪失後の再注入を可能にする）
+  "experimental.session.compacting": async (input) => {
+    const sessionId = (input as any)?.sessionID
+    if (sessionId) resetAfterCompaction(sessionId)
+  },
+  // 安定APIフォールバック：session.compacted イベントでもリセット。session.deleted で状態を破棄する
+  event: async (input) => {
+    const ev = input.event
+    if (!ev) return
+    const sessionId = (ev as any).properties?.sessionID
+    if (!sessionId) return
+    if (ev.type === "session.compacted" || ev.type === "session.deleted") {
+      resetAfterCompaction(sessionId)
+    }
   },
 })

@@ -5,7 +5,7 @@ import type { Plugin } from "@opencode-ai/plugin"
  *
  * 作業ディレクトリ（docs/working/<group>/）の自動アーカイブ提案。
  *
- * session.idle 検知時に：
+ * セッションアイドル時（`event` フックで `session.idle` を購読）に：
  *   1. docs/tasks.json を読み group フィールドを持つタスクを確認
  *   2. docs/working/ と group フィールドの対応関係を特定
  *   3. 各作業ディレクトリに属する全タスクの passes が true なら提案
@@ -33,7 +33,7 @@ async function readTasksJson(): Promise<Task[] | null> {
 }
 
 async function listWorkingDirs(): Promise<string[]> {
-  const dir = Bun.dir("docs/working")
+  const dir = "docs/working"
   if (!dir) return []
 
   const entries: string[] = []
@@ -96,7 +96,13 @@ async function notifyAI(
 }
 
 export const TaskArchivePlugin: Plugin = async ({ client }) => ({
-  "session.idle": async (input) => {
+  // セッションのアイドル検知は公式の `event` フックで行う
+  // （`session.idle` は Hooks 型に未宣言のため、フック名としてのディスパッチは保証されない）
+  event: async (input) => {
+    const ev = input.event
+    if (!ev || ev.type !== "session.idle") return
+    const sessionId = (ev as any).properties?.sessionID
+
     const tasks = await readTasksJson()
     if (!tasks) return
 
@@ -125,8 +131,6 @@ export const TaskArchivePlugin: Plugin = async ({ client }) => ({
 
     // アーカイブ提案がない場合は何もしない
     if (candidates.length === 0) return
-
-    const sessionId = input?.sessionID
 
     for (const candidate of candidates) {
       await archiveDir(client, sessionId, candidate)

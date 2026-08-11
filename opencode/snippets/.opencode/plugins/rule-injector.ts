@@ -103,6 +103,20 @@ function getRuleState(session: SessionState, ruleName: string): RuleSessionState
   return rs
 }
 
+// コンパクション後に呼ぶ。AI の記憶喪失に合わせて注入系フラグをリセットし、
+// ルールの再注入・再リマインドを可能にする（arch-diag.ts と同型の対策）。
+function resetAfterCompaction(sessionId: string) {
+  const s = sessions.get(sessionId)
+  if (!s) return
+  for (const rs of s.rules.values()) {
+    rs.injected = false
+    rs.readByAI = false
+    rs.reminded = false
+    rs.lastInjectedAt = 0
+  }
+  s.securityAuditInjected = false
+}
+
 function extractFileAndContent(
   tool: string,
   args: Record<string, any>,
@@ -257,25 +271,45 @@ export const RuleInjectorPlugin: Plugin = async ({ client }) => ({
       }
     }
   },
-  "session.idle": async (input) => {
+  // コンパクション検知：AI の記憶喪失に合わせて注入系フラグをリセット
+  "experimental.session.compacting": async (input) => {
     const sessionId = (input as any)?.sessionID
-    if (!sessionId) return
-    const s = sessions.get(sessionId)
-    if (!s) return
-    if (s.securityContentMatched && !s.securityAuditInjected) {
-      s.securityAuditInjected = true
-      await client.session.prompt({
-        path: { id: sessionId },
-        body: {
-          noReply: true,
-          parts: [
-            {
-              type: "text",
-              text: `[rule-injector] security: このターンでセキュリティ関連コードを検出しました。@security-auditorを呼び出してセキュリティレビューを実施してください。これは必須手順です。`,
-            },
-          ],
-        },
-      })
+    if (sessionId) resetAfterCompaction(sessionId)
+  },
+  // 安定APIフォールバック：session.compacted イベントでもリセット
+  // あわせて session.idle でセキュリティレビュー催促、session.deleted で状態破棄を行う
+  event: async (input) => {
+    const ev = input.event
+    if (!ev) return
+    const sessionId = (ev as any).properties?.sessionID
+    if (ev.type === "session.compacted") {
+      if (sessionId) resetAfterCompaction(sessionId)
+      return
+    }
+    if (ev.type === "session.deleted") {
+      // セッション削除時に状態を破棄（メモリリーク防止）
+      if (sessionId) sessions.delete(sessionId)
+      return
+    }
+    if (ev.type === "session.idle") {
+      if (!sessionId) return
+      const s = sessions.get(sessionId)
+      if (!s) return
+      if (s.securityContentMatched && !s.securityAuditInjected) {
+        s.securityAuditInjected = true
+        await client.session.prompt({
+          path: { id: sessionId },
+          body: {
+            noReply: true,
+            parts: [
+              {
+                type: "text",
+                text: `[rule-injector] security: このターンでセキュリティ関連コードを検出しました。@security-auditorを呼び出してセキュリティレビューを実施してください。これは必須手順です。`,
+              },
+            ],
+          },
+        })
+      }
     }
   },
 })

@@ -81,9 +81,9 @@ function formatLabel(result: string | null, i: number): string | null {
 }
 
 export const CommitReviewPlugin: Plugin = async ({ client, $, worktree }) => ({
-  "tool.execute.before": async (input) => {
+  "tool.execute.before": async (input, output) => {
     if (input.tool !== "bash") return
-    const cmd = input.args?.command || ""
+    const cmd = output.args?.command || ""
     if (!isGitCommit(cmd)) return
 
     const sessionId = input.sessionID
@@ -94,7 +94,7 @@ export const CommitReviewPlugin: Plugin = async ({ client, $, worktree }) => ({
       await $`git add -A`.nothrow().quiet()
     }
     const diffResult = await $`git diff --cached`.nothrow().quiet()
-    const diff = (diffResult as any).text
+    const diff = (diffResult as any).text()
     if (!diff || !diff.trim()) return
 
     // 2. 両方のプロンプトを並列読み込み

@@ -39,7 +39,7 @@ async function scanWorkingDirs(): Promise<
   const results: Array<{ name: string; tasks: string[]; passes: boolean[] }> = []
 
   try {
-    const dir = Bun.dir("docs/working")
+    const dir = "docs/working"
     if (!dir) return results
 
     const tasks = await readTasksJson()
@@ -86,7 +86,7 @@ export const CompactionContextPlugin: Plugin = async () => ({
 
     context += "\n作業ディレクトリの詳細は docs/working/<id>/plan.md を参照してください。\n"
     context += "完了条件：全タスクの passes が true（@evaluator のみが更新可能）\n"
-    context += "アーカイブ：task-archive.ts が session.idle で提案"
+    context += "アーカイブ：task-archive.ts がアイドル時に提案"
 
     output.context.push(context)
   },

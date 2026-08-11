@@ -302,7 +302,7 @@ for SRC_FILE in "$YORI_SRC/principles/"*.md; do
   elif ! diff -q "$SRC_FILE" "$TARGET" > /dev/null 2>&1; then
     DIFF_COUNT=$((DIFF_COUNT + 1))
     echo "--- principles/$FNAME ---" >> "$SETUP_DIFF_LOG"
-    diff "$SRC_FILE" "$TARGET" >> "$SETUP_DIFF_LOG" 2>&1
+    diff "$SRC_FILE" "$TARGET" >> "$SETUP_DIFF_LOG" 2>&1 || true
     echo "" >> "$SETUP_DIFF_LOG"
   fi
 done
@@ -319,7 +319,7 @@ for SRC_FILE in "$YORI_SRC/architectures/"*.md; do
   elif ! diff -q "$SRC_FILE" "$TARGET" > /dev/null 2>&1; then
     DIFF_COUNT=$((DIFF_COUNT + 1))
     echo "--- architectures/$FNAME ---" >> "$SETUP_DIFF_LOG"
-    diff "$SRC_FILE" "$TARGET" >> "$SETUP_DIFF_LOG" 2>&1
+    diff "$SRC_FILE" "$TARGET" >> "$SETUP_DIFF_LOG" 2>&1 || true
     echo "" >> "$SETUP_DIFF_LOG"
   fi
 done
@@ -728,6 +728,14 @@ if [ -f ".gitignore" ]; then
     echo ".opencode/.setup-diff.log" >> .gitignore
 
 
+  fi
+
+  # bun.lock（配布先で bun install が生成する依存ロックファイル）は自動生成物なので
+  # git 管理対象外にする。yori リポジトリ側では bun.lock をコミットする（開発の再現性担保）
+  # が、配布先で生成される bun.lock を初心者がうっかりコミットしてしまうのを防ぐ。
+  if ! grep -q "\.opencode/bun.lock" .gitignore; then
+    echo ".opencode/bun.lock" >> .gitignore
+    echo "✅ .gitignore に .opencode/bun.lock を追記しました（配布先の自動生成物）"
   fi
 
   # .opencode/standards/ の追記（handoff 処理とは独立して確実に設定する）

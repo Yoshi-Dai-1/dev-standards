@@ -10,18 +10,18 @@ AGENTS.md への言語指示と異なり、エージェントの意思に関わ�
 | `secrets-guard.ts` | `tool.execute.before` | 機密ファイル・パターンの書き込み防止（P1-1 修正：SSoT 化） |
 | `tasks-guard.ts` | `tool.execute.before` | tasks.json passes 保護 |
 | `lint-and-typecheck.ts` | `tool.execute.after` | ファイル編集後の lint・format・typecheck・単一テスト自動実行（P1-2 修正：性能改善） |
-| `doc-links.ts` | `tool.execute.after` | ドキュメントリンクの整合性チェック（P1-3 修正：AI 通知パターン） |
-| `adr-prompt.ts` | `tool.execute.after` + noReply | Write/Edit 3回検出 → ADR 記録を促す（冗長発火防止） |
-| `arch-diag.ts` | `tool.execute.after` | アーキテクチャ変更検知・スキル診断推奨（P1-3 修正：AI 通知パターン） |
+| `doc-links.ts` | `tool.execute.after` | ドキュメントリンクの整合性チェック（P1-3 修正：AI 通知パターン。multiedit 対応） |
+| `adr-prompt.ts` | `tool.execute.after` + noReply / `experimental.session.compacting` / `event` | Write/Edit 3回検出 → ADR 記録を促す（per-session 化・コンパクションリセット） |
+| `arch-diag.ts` | `tool.execute.after` / `experimental.session.compacting` / `event` | アーキテクチャ変更検知・スキル診断推奨（記入中抑制・変更検知・ENF セッション内1回） |
 | `skill-tracker.ts` | `tool.execute.after` | スキル使用履歴の記録 |
 | `lockfile-record.ts` | `tool.execute.after` | 外部スキルインストール検出・skills.lock.yaml への自動記録 |
-| `harness-health.ts` | `tool.execute.after` / `session.idle` | Context Anxiety 兆候の検知（P0-3 per-session sliding window + TTL cleanup） |
-| `task-archive.ts` | `session.idle` | 作業ディレクトリの自動アーカイブ提案（全タスク完了時） |
-| `working-dir-guide.ts` | `tool.execute.before` | `docs/working/` ファイル Read/Write/Edit 検知時のルール注入 |
+| `harness-health.ts` | `tool.execute.after` / `event` | Context Anxiety 兆候の検知（P0-3 per-session sliding window + TTL cleanup、multiedit 対応。pass 率は `event` 内で `session.idle` を購読） |
+| `task-archive.ts` | `event` | 作業ディレクトリの自動アーカイブ提案（全タスク完了時。`event` 内で `session.idle` を購読） |
+| `working-dir-guide.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | `docs/working/` ファイル Read/Write/Edit 検知時のルール注入 |
 | `evaluator-tools.ts` | `tool`（カスタムツール） | `evaluator-passed` / `evaluator-failed` ツール定義 |
 | `compaction-context.ts` | `experimental.session.compacting` | コンパクション時に作業ディレクトリの状態を維持 |
-| `env-check.ts` | `tool.execute.before` | Python/Node.js 環境パス自動書き換え + .nvmrc 不一致警告 |
-| `rule-injector.ts` | `tool.execute.before` | ファイル種別・内容に応じてルールファイルの参照を注入（AGENTS.md 肥大化防止） |
+| `env-check.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | Python/Node.js 環境パス自動書き換え + .nvmrc 不一致警告（セッション内1回） |
+| `rule-injector.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | ファイル種別・内容に応じてルールファイルの参照を注入（AGENTS.md 肥大化防止） |
 | `destructive-op-guard.ts` | `tool.execute.before` | 破壊的Git操作（reset --hard / rebase / push --force / rm -rf 等）のブロック |
 | `commit-review.ts` | `tool.execute.before` | git commit 検出 → 子セッションで @code-reviewer + @security-auditor を並列実行 → 問題ありならブロック |
 
@@ -35,9 +35,18 @@ AGENTS.md への言語指示と異なり、エージェントの意思に関わ�
 - 引数: `(input: ToolCall, output: ToolResult)`
 - ログ: `client.app.log({ body: { service, level, message } })`
 
-**`session.idle`**: セッションがアイドル状態（AI 応答完了）に遷移したときに発火。
-- 引数: `(event: { sessionID?: string })`
-- 用途: Context Anxiety 検知（要内部デバウンス）
+**`session.idle`（`event` 経由で購読）**: セッションがアイドル状態（AI 応答完了）に遷移したときに発火。
+- 引数: フック名としての `session.idle` はスキーマ未宣言のため、`event` フック内で `event.type === "session.idle"` をフィルタして購読する。`sessionID` は `event.properties.sessionID` から取得
+- 用途: Context Anxiety 検知（harness-health.ts）・アーカイブ提案（task-archive.ts）・セキュリティレビュー催促（rule-injector.ts）
+
+**`experimental.session.compacting`**: セッションコンパクション開始時に発火。
+- 引数: `(input: { sessionID: string }, output: { context: string[] })`
+- 用途: コンパクション時の文脈注入（compaction-context.ts）。arch-diag.ts / rule-injector.ts / adr-prompt.ts / working-dir-guide.ts / env-check.ts はこれを利用して per-session フラグをリセットする（実験的API。将来変更される可能性あり）
+- 安定APIフォールバック: `event` フックで `session.compacted` イベント（`properties.sessionID`）を検知してもリセットする
+
+**`event`**: 全サーバーイベントの購読フック。
+- 引数: `(input: { event: Event })`（`Event` は `@opencode-ai/sdk` のイベントユニオン）
+- 用途: 型付きフックを持たないイベント（`session.compacted` / `session.idle` / `session.deleted` など）を購読する汎用フック。`session.deleted` で各 Plugin は per-session 状態を破棄する（メモリリーク防止）
 
 ## セットアップ
 
@@ -50,6 +59,17 @@ opencode.json への登録は不要（auto-loading）。
 cd .opencode
 bun install
 ```
+
+### 型チェック（開発時）
+
+Plugin は TS で書かれている。`@types/bun`（Bun グローバルと `Bun.$`）・`@opencode-ai/plugin`（Hooks 型）を devDependencies に含め、以下で全 Plugin を検査できる：
+
+```bash
+cd .opencode
+for f in plugins/*.ts; do bunx --bun tsc --noEmit --strict --skipLibCheck --types bun "$f"; done
+```
+
+`--types bun` を付けないと `Bun` グローバルが解決できない（ファイル直指定時は自動 include が効かないため）。
 
 ## `lint-and-typecheck.ts` 詳細
 
@@ -252,7 +272,7 @@ AI が自己回復し、規約を読んでから再試行する。
 **動作**: `session.conventionsOffered = true` を設定後、未読の規約ファイルのパスを列挙して `throw new Error()`
 **再試行**: AI が規約を読み、全ての読了が確認されると以降のコードファイル書き込みはブロックしない
 **事前読了**: AI が最初の書き込みより前に規約ファイルを自発的に読んでいた場合、ブロックは発生しない
-**コンパクション**: セッションコンパクションで Plugin のメモリ状態は消失するが、最悪1回の再ブロックが発生するのみ。AI は会話履歴から規約内容を把握しており、即座に再試行する
+**コンパクション**: セッションコンパクションで AI の記憶が失われても、`experimental.session.compacting` / `session.compacted` 検知で `injected` / `reminded` フラグをリセットするため、ルールの再注入・再リマインドが再開される（arch-diag.ts と同型の対策）。コンパクション後にルールを再読させることで、記憶喪失によるルール逸脱を防ぐ
 
 ### 再注入の条件（個別ルール、per-session state 管理）
 
@@ -265,3 +285,32 @@ AI が自己回復し、規約を読んでから再試行する。
 `opencode.json` の `instructions` フィールドは 4ファイル（`AGENTS.md` / `.opencode/instructions/cli-first.md` / `ARCHITECTURE.md` / `docs/project-definition.md`）を読み込む。
 `cli-first.md` を除く `instructions/` 配下のルールファイル（および `.opencode/coding-conventions.md`）はセッション開始時には読み込まれず、
 この Plugin が初回ブロックまたは noReply 注入でイベント駆動する。
+
+## `arch-diag.ts` 詳細
+
+ARCHITECTURE.md の技術スタック変更を検知し、スキルの追加検討を促す。
+あわせて、層のルールが定義されているのにアーキテクチャ違反検出が未設定の場合（ENF）に設定を促す。
+
+### 過剰発火対策（2026-08）
+
+初回セッションで 37件（TECH 23 / ENF 14）のノイズ注入を観測したため、以下の対策を実装した。
+
+1. **記入中抑制**: `## 人間とAIが対話しながら記入する手順` / `<!--`（HTMLコメント） / `[...]`（プレースホルダー）が残っている間は通知しない（セットアップ記入プロセス中）
+2. **変更検知**: 技術スタックセクションを抽出し、セッション毎の直前内容（`techBaseline`）と比較して実際に変わったときだけ通知する。無関係セクションの編集では発火しない
+3. **ENF セッション内1回**: アーキテクチャ違反検出未設定の警告はセッション中1回のみ
+4. **10分クールダウン**: TECH 通知専用。技術スタックの変更通知を10分に1回に抑制する（rule-injector の `RULE_COOLDOWN_MS` と同型）。ENF はセッション内1回フラグのみで制御されクールダウンは使わない
+5. **コンパクションリセット**: `experimental.session.compacting` / `session.compacted` 検知で ENF フラグとクールダウンをリセット。コンパクション後に条件が一致すれば ENF が1回だけ再発火する（技術スタックの `techBaseline` はリセットしない → 同値での再発火を防ぐ）
+
+なお、手法が異なるのは通知対象の性質の違いによる。TECH は変化イベントなので複数回の発火を認めつつ10分クールダウンで抑制し、ENF は恒常的な「未設定」状態なのでクールダウンでは10分ごとに再発火してしまうため、セッション内1回＋コンパクションリセットで制御する。
+
+### 発火条件（TECH）
+
+- 対象ファイル: `ARCHITECTURE.md`（パス末尾一致）
+- 技術スタックセクション（`## 技術スタック` / `## Tech Stack` など）の内容がセッション内で実際に変化した場合
+- 初回観測時はベースラインを設定するだけで通知しない（ノイズ抑制）
+
+### 発火条件（ENF）
+
+- 層のルールが具体的に記入されている（`[層A]` のようなプレースホルダーがない）
+- アーキテクチャ違反検出設定が存在しない（eslint の `no-restricted-imports` / `boundaries`、pyproject.toml の `TID` など）
+- セッション内1回のみ（コンパクションでリセットされる）

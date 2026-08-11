@@ -162,8 +162,8 @@ Planner がスプリント計画と同時に生成する機能追跡ファイル
 | `group` | string | `docs/working/<group>/` との対応（省略可） |
 
 `group` フィールドは **作業ディレクトリ パターン** 使用時に必須。
-`task-archive.ts` Plugin が `session.idle` 検知時にこのフィールドで
-各作業ディレクトリの全タスクの `passes` が `true` かを確認し、
+セッションのアイドル検知（`session.idle` イベント購読）時に `task-archive.ts` Plugin が
+このフィールドで各作業ディレクトリの全タスクの `passes` が `true` かを確認し、
 完了したタスクを自動アーカイブする。
 `group` フィールドがないタスクはアーカイブ対象外（手動で対応する）。
 
@@ -360,7 +360,7 @@ docs/
 
 1. **タスク開始時**：`@planner` が `docs/working/<group>/` を作成し `plan.md` を書く
 2. **タスク実装中**：メインエージェントは作業ディレクトリ内で計画・メモを管理
-3. **タスク完了時**：`task-archive.ts` Plugin（`session.idle`）が `tasks.json` を確認する。
+3. **タスク完了時**：`task-archive.ts` Plugin がアイドル検知（`session.idle` イベント購読）時に `tasks.json` を確認する。
    同一 `group` フィールドを持つ全タスクの `passes` が `true`（= `@evaluator` が
    完了と判定）の場合、当該作業ディレクトリをアーカイブ対象として提案する
 4. **アーカイブ時**：AI が `docs/working/<group>/` の内容を
