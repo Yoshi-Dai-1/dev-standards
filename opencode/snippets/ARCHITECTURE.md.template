@@ -406,7 +406,8 @@ project-root/
 <!-- stack-setup.md Step 3.5 ブロックAが言語確定時に以下の確定値を記入する -->
 <!-- 「展開なし」モードの場合は以下を参考に手動で記入する -->
 
-ベースルール：`.opencode/standards/principles/naming-conventions.md` に従う。
+ベースルール：`.opencode/instructions/naming-conventions.md`（常時読込）に従う。
+詳細・深掘りは `.opencode/standards/principles/naming-conventions.md` を参照。
 
 | 対象 | 規則 |
 |------|------|

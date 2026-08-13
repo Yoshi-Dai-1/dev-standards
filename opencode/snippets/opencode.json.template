@@ -3,6 +3,7 @@
   "instructions": [
     "AGENTS.md",
     ".opencode/instructions/cli-first.md",
+    ".opencode/instructions/naming-conventions.md",
     "ARCHITECTURE.md",
     "docs/project-definition.md"
   ]

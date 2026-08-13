@@ -2,8 +2,14 @@ import type { Plugin } from "@opencode-ai/plugin"
 
 const CODE_FILE_PATTERN = /\.(ts|js|tsx|jsx|py|go|rs|java|kt|c|cpp|cs|rb|swift|php|css|scss)$/
 
+const TEST_FILE_PATTERN = /\.test\.(ts|js|tsx|jsx|py|go|rs|cpp|c|rb)$|_test\.(go|py|rs|cpp|c|rb)$|test_.*\.(py|rs|c|cpp)$|(\.|_)spec\.(ts|js|tsx|jsx|py|rb)$|(Test|Tests|Spec)\.(java|kt|cs|swift|php|c|cpp)$/i
+
+// bash コマンドでのディレクトリ作成検知（scaffold・手動 mkdir の両方を対象）
+const MKDIR_PATTERN = /\bmkdir\b/
+
+// 初回コード書き込み時に読了を要求する規約ファイル。
+// naming-conventions.md は opencode.json の instructions で常時読込されるためゲート対象外。
 const CONVENTION_FILES = [
-  { name: "naming-conventions", filePath: ".opencode/instructions/naming-conventions.md" },
   { name: "directory-structure", filePath: ".opencode/instructions/directory-structure.md" },
   { name: "coding-conventions", filePath: ".opencode/coding-conventions.md" },
 ]
@@ -55,7 +61,7 @@ const RULES: RuleDef[] = [
   {
     name: "tdd-cycle",
     filePath: ".opencode/instructions/tdd-cycle.md",
-    filePattern: /\.test\.(ts|js|tsx|jsx|py|go|rs|cpp|c|rb)$|_test\.(go|py|rs|cpp|c|rb)$|test_.*\.(py|rs|c|cpp)$|(\.|_)spec\.(ts|js|tsx|jsx|py|rb)$|(Test|Tests|Spec)\.(java|kt|cs|swift|php|c|cpp)$/i,
+    filePattern: TEST_FILE_PATTERN,
     contentPatterns: [/test/i, /spec/i, /tdd/i, /describe\(/i, /it\(/i, /assert/i, /expect/i, /func Test/i, /#\[test\]/i],
   },
 ]
@@ -105,6 +111,7 @@ function getRuleState(session: SessionState, ruleName: string): RuleSessionState
 
 // コンパクション後に呼ぶ。AI の記憶喪失に合わせて注入系フラグをリセットし、
 // ルールの再注入・再リマインドを可能にする（arch-diag.ts と同型の対策）。
+// コンパクション後は単発ハードゲート（規約未読ブロック）も再起動する。
 function resetAfterCompaction(sessionId: string) {
   const s = sessions.get(sessionId)
   if (!s) return
@@ -115,6 +122,8 @@ function resetAfterCompaction(sessionId: string) {
     rs.lastInjectedAt = 0
   }
   s.securityAuditInjected = false
+  s.conventionsOffered = false
+  s.conventionsRead.clear()
 }
 
 function extractFileAndContent(
@@ -173,6 +182,19 @@ export const RuleInjectorPlugin: Plugin = async ({ client }) => ({
       return
     }
 
+    // === bash: mkdir 検知（ディレクトリ名の無防備な作成を防ぐ） ===
+    if (input.tool === "bash") {
+      const command = (output.args.command as string) || ""
+      if (!MKDIR_PATTERN.test(command)) return
+      const session = getSession(sessionId)
+      if (!session.conventionsRead.has("directory-structure")) {
+        throw new Error(
+          `[rule-injector] ディレクトリ作成（mkdir）を検出しました。先に .opencode/instructions/directory-structure.md を読んでから作成してください。`,
+        )
+      }
+      return
+    }
+
     // === Write/edit/multiedit handling ===
     if (!["write", "edit", "multiedit"].includes(input.tool)) return
 
@@ -183,8 +205,9 @@ export const RuleInjectorPlugin: Plugin = async ({ client }) => ({
       if (!fp) continue
 
       // === First-write block for conventions ===
+      // リトライバイパス修正：conventionsOffered は「全規約読了済み」を意味する。
+      // 未読がある間はフラグを立てず throw し続ける（未読のまま再試行しても再度ブロックする）。
       if (!session.conventionsOffered && CODE_FILE_PATTERN.test(fp)) {
-        session.conventionsOffered = true
         const unread = CONVENTION_FILES.filter((cf) => !session.conventionsRead.has(cf.name))
         if (unread.length > 0) {
           throw new Error(
@@ -192,9 +215,19 @@ export const RuleInjectorPlugin: Plugin = async ({ client }) => ({
               unread.map((cf) => `  - ${cf.filePath}`).join("\n"),
           )
         }
+        session.conventionsOffered = true
       }
 
-      // === Individual rule injection ===
+      // === tdd-cycle hard gate（テストファイル書き込み時） ===
+      // テストファイルの作成・編集は tdd-cycle.md を読了するまでブロックする。
+      if (TEST_FILE_PATTERN.test(fp) && !getRuleState(session, "tdd-cycle").readByAI) {
+        throw new Error(
+          `[rule-injector] テストファイルの書き込みを検出しました。先に .opencode/instructions/tdd-cycle.md を読んでから作成してください。`,
+        )
+      }
+
+      // === Individual rule injection（バッチ化：複数該当時は1回の noReply に列挙） ===
+      const messages: string[] = []
       for (const rule of RULES) {
         if (!rule.filePattern?.test(fp)) continue
 
@@ -209,65 +242,34 @@ export const RuleInjectorPlugin: Plugin = async ({ client }) => ({
           state.lastInjectedAt = now
           state.readByAI = false
           const tag = rule.contentPatterns ? "（内容依存・該当時のみ）" : ""
-          await client.session.prompt({
-            path: { id: sessionId },
-            body: {
-              noReply: true,
-              parts: [
-                {
-                  type: "text",
-                  text: `[rule-injector] ${rule.name}: ${rule.filePath} を確認してください${tag}`,
-                },
-              ],
-            },
-          })
+          messages.push(`[rule-injector] ${rule.name}: ${rule.filePath} を確認してください${tag}`)
         } else if (!state.readByAI && !state.reminded) {
           state.reminded = true
           state.lastInjectedAt = now
-          await client.session.prompt({
-            path: { id: sessionId },
-            body: {
-              noReply: true,
-              parts: [
-                {
-                  type: "text",
-                  text: `[rule-injector] ${rule.name}: ${rule.filePath} が未読です — read して確認してください`,
-                },
-              ],
-            },
-          })
+          messages.push(`[rule-injector] ${rule.name}: ${rule.filePath} が未読です — read して確認してください`)
         } else if (rule.contentPatterns && content && contentMatchesAny(content, rule.contentPatterns)) {
           state.readByAI = false
           state.lastInjectedAt = now
           if (rule.name === "security") {
             session.securityContentMatched = true
-            await client.session.prompt({
-              path: { id: sessionId },
-              body: {
-                noReply: true,
-                parts: [
-                  {
-                    type: "text",
-                    text: `[rule-injector] security: セキュリティ関連コード（login/auth/token/password 等）を検出しました。実装完了後は必ず @security-auditorを呼び出してレビューを受けてください。これは必須手順です。`,
-                  },
-                ],
-              },
-            })
+            messages.push(
+              `[rule-injector] security: セキュリティ関連コード（login/auth/token/password 等）を検出しました。実装完了後は必ず @security-auditorを呼び出してレビューを受けてください。これは必須手順です。`,
+            )
           } else {
-            await client.session.prompt({
-              path: { id: sessionId },
-              body: {
-                noReply: true,
-                parts: [
-                  {
-                    type: "text",
-                    text: `[rule-injector] ${rule.name}: ${rule.filePath} で定義されたパターンに該当するコードを検出しました — 該当ルールを再読してください`,
-                  },
-                ],
-              },
-            })
+            messages.push(
+              `[rule-injector] ${rule.name}: ${rule.filePath} で定義されたパターンに該当するコードを検出しました — 該当ルールを再読してください`,
+            )
           }
         }
+      }
+      if (messages.length > 0) {
+        await client.session.prompt({
+          path: { id: sessionId },
+          body: {
+            noReply: true,
+            parts: messages.map((text) => ({ type: "text", text })),
+          },
+        })
       }
     }
   },

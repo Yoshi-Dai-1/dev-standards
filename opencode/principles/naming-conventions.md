@@ -1,5 +1,9 @@
 # 命名規則
 
+> **基本コア表（ケーススタイル一覧・ディレクトリ名・ファイル名・テストファイル命名規則）は
+> `.opencode/instructions/naming-conventions.md`（常時読込）が SSOT。このファイルは言語別の詳細・
+> フレームワーク固有ルール・深掘り手順のみを扱う。**
+
 ---
 
 ## このファイルの使い方（AIへの指示）
@@ -10,11 +14,16 @@
 1. ARCHITECTURE.md の「命名規則」セクションに確定値が記載されている
    → そちらを SSOT として従う。このファイルは参照しない。
 
-2. ARCHITECTURE.md に記載がない
-   → このファイルの「言語別」セクションを確認する。
-     言語が確定している場合、言語別ルールが以下の基本ルールを上書きする。
+2. 言語別ルール（言語別のテストファイル命名・テスト種別）が確定している
+   → このファイルの「テスト種別の命名規則」表と
+     `.opencode/instructions/naming-conventions.md` の「テストファイル命名規則」表を確認する。
+     言語別ルールは基本コア表の基底規則を上書きする。
 
-3. 言語別セクションにも記載がない
+3. 言語別ルールがない・該当しない
+   → 基本コア表（ケーススタイル一覧・ディレクトリ名・ファイル名・テストファイル命名規則）を
+     `.opencode/instructions/naming-conventions.md`（常時読込）で参照する。
+
+4. 基本コア表にも記載がない
    → 「命名規則の確定手順」セクションに従い、
      フレームワーク固有の追加命名規則を検索して確定させてから適用する。
 ```
@@ -25,76 +34,22 @@ Python プロジェクトでは「snake_case」が言語別ルールとして上
 
 ---
 
-## ケーススタイル一覧（基本ルール・JS/TS プロジェクトに適用）
+## 基本コア表（SSOT は instructions/naming-conventions.md）
 
-| スタイル | 書き方 | 主な用途 |
-|---------|--------|---------|
-| `kebab-case` | `stock-detail` | ディレクトリ名・URLパス・CSSクラス・HTMLカスタム属性 |
-| `camelCase` | `stockDetail` | JS/TS変数・関数名・オブジェクトキー |
-| `PascalCase` | `StockDetail` | クラス名・Reactコンポーネント名・型名・インターフェース名 |
-| `snake_case` | `stock_detail` | Python変数・DB列名・SQLカラム |
-| `UPPER_SNAKE_CASE` | `STOCK_DETAIL` | 定数・環境変数名 |
+以下の基本ルールは `.opencode/instructions/naming-conventions.md`（常時読込）が SSOT。
 
----
+| セクション | 内容 |
+|-----------|------|
+| ケーススタイル一覧 | kebab-case / camelCase / PascalCase / snake_case / UPPER_SNAKE_CASE |
+| ディレクトリ名 | JS/TS は kebab-case、Python/Go/Rust は snake_case |
+| ファイル名 | React コンポーネント・hooks・型定義・定数ファイル等の命名 |
+| テストファイル命名規則 | 言語別の標準パターン（`*.test.ts` / `test_*.py` / `*_test.go` 等） |
 
-## ディレクトリ名
-
-**JS/TS プロジェクト：kebab-case を使う**
-**Python / Go / Rust プロジェクト：snake_case を使う（言語別ルールが上書きする）**
-
-```
-features/stock-detail/
-features/user-auth/
-shared/form-components/
-```
-
-理由：
-- 大文字小文字を区別しないOS（macOS）と区別するOS（Linux）の両方で安全
-- URLパスと対称性がある
-- スペースを含まないため `cd` コマンドや `import` パスで引用符不要
+このファイル（principle）は上記の「詳細・深掘り」のみを扱う。
 
 ---
 
-## ファイル名
-
-| 対象 | 規則 | 例 |
-|------|------|----|
-| Reactコンポーネント | `PascalCase.tsx` | `StockCard.tsx` |
-| カスタムhooks | `camelCase.ts`（`use` prefix必須） | `useStockData.ts` |
-| ユーティリティ関数 | `camelCase.ts` | `formatNumber.ts` |
-| サービス | `camelCase.ts`（`Service` suffix推奨） | `stockService.ts` |
-| リポジトリ | `camelCase.ts`（`Repository` suffix推奨） | `stockRepository.ts` |
-| 型定義ファイル | `*.types.ts` | `stock.types.ts` |
-| 定数ファイル | `*.constants.ts` | `api.constants.ts` |
-| テストファイル | 各言語の標準規約に従う（下記「テストファイル命名規則」参照） | `useStockData.test.ts` |
-| 設定ファイル | ツールの規約に従う | `jest.config.ts` |
-| スタイル（CSS Modules） | `*.module.css` | `stockCard.module.css` |
-
----
-
-## テストファイル命名規則
-
-テストファイルは原則として各言語の標準規約に従う。ARCHITECTURE.md に確定値がある場合はそちらを優先する。
-
-| 言語 | 標準パターン | 例 |
-|------|-------------|----|
-| JavaScript / TypeScript | `*.test.ts` / `*.spec.ts` | `useLogin.test.ts` |
-| React (JSX/TSX) | `*.test.tsx` / `*.spec.tsx` | `HomeScreen.test.tsx` |
-| Python | `test_*.py` / `*_test.py` / `*.test.py` | `test_auth.py` |
-| Go | `*_test.go`（Goコンパイラが強制） | `handler_test.go` |
-| Rust | `*_test.rs`（`tests/` ディレクトリも可） | `lib_test.rs` |
-| Java | `*Test.java` / `*Tests.java` / `*Spec.java` | `UserServiceTest.java` |
-| Kotlin | `*Test.kt` / `*Spec.kt` | `AuthSpec.kt` |
-| C# | `*Tests.cs` / `*Test.cs` | `ShoppingCartTests.cs` |
-| Ruby | `*_spec.rb`（RSpec） / `*_test.rb`（Minitest） | `user_spec.rb` |
-| Swift | `*Tests.swift` | `LoginTests.swift` |
-| C / C++ | `*_test.cpp` / `*_test.c` / `*Test.cpp` / `*Test.c` | `calculator_test.cpp` |
-| PHP | `*Test.php` / `*Tests.php` | `PaymentGatewayTest.php` |
-
-言語別表にない言語は、その言語の標準テスティングフレームワークの規約に従う。
-ARCHITECTURE.md の「命名規則」セクションが常に最優先される。
-
-### テスト種別の命名規則
+## テスト種別の命名規則
 
 テストファイルがユニット・結合・E2Eのいずれに該当するかをファイル名またはディレクトリ配置で区別する。
 **ユニットテストがデフォルト**であり、結合テスト・E2Eテストのみ明示的なマーカーを付ける。
@@ -521,17 +476,17 @@ JWT_SECRET            → JWT署名用シークレット
 
 ---
 
-## 命名規則の確定手順（`.opencode/instructions/stack-setup.md` Step 3.5 ブロックA（命名規則の確定）から呼び出される）
+## 命名規則の確定手順（`.opencode/instructions/stack-setup/_step-35.md` Step 3.5 ブロックA（命名規則の確定）から呼び出される）
 
-このセクションは `.opencode/instructions/stack-setup.md` の Step 3.5 ブロックA（命名規則の確定）が呼び出したときのみ実行する。
-トリガーと実行タイミングは `.opencode/instructions/stack-setup.md` が管理する。このファイルは手順のみを定義する。
+このセクションは `.opencode/instructions/stack-setup/_step-35.md` の Step 3.5 ブロックA（命名規則の確定）が呼び出したときのみ実行する。
+トリガーと実行タイミングは `.opencode/instructions/stack-setup.md`（Step 3.5 は `_step-35.md`）が管理する。このファイルは手順のみを定義する。
 
 ### 実行内容
 
 **Step 1：フレームワーク固有の追加命名規則をWeb検索で確認する**
 
 **検索対象はケーススタイル（camelCase / snake_case 等の原則）ではない。**
-ケーススタイルは変化しない情報であり、このファイルの冒頭「ケーススタイル一覧」と各言語別セクションを参照すれば足りる。
+ケーススタイルは変化しない情報であり、`.opencode/instructions/naming-conventions.md` の「ケーススタイル一覧」と各言語別セクションを参照すれば足りる。
 検索対象は「フレームワークが強制する追加の命名規則」に限定する。
 
 フレームワークが ARCHITECTURE.md に記載されている場合のみ以下を実行する。

@@ -27,7 +27,7 @@ CLI優先: 確認・操作には CLI ツールを使用する。ブラウザ操�
 1. **正確性**：エッジケース・null・空配列・最大値（配列長10000件以上、数値のMAX_SAFE_INTEGER、文字列長1000文字以上）が考慮されているか
 2. **セキュリティ**：CRITICALレベルのみ（認証欠如・機密情報ハードコード・HTTPSなし）。HIGH以下の詳細は@security-auditorに委ねる
 3. **設計の整合性**：ARCHITECTURE.mdの層のルールへの準拠・依存の方向
-4. **命名規則**：naming-conventions.mdへの準拠
+4. **命名規則**：`.opencode/instructions/naming-conventions.md`（常時読込・コア表 SSOT）への準拠
 5. **SSOT**：同じ情報が複数箇所にないか・マジックナンバーがないか
 6. **可読性**：関数名で責務が分かるか・コメントが「なぜ」を説明しているか
 

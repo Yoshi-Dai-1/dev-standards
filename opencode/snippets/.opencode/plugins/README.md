@@ -21,7 +21,7 @@ AGENTS.md への言語指示と異なり、エージェントの意思に関わ�
 | `evaluator-tools.ts` | `tool`（カスタムツール） | `evaluator-passed` / `evaluator-failed` ツール定義 |
 | `compaction-context.ts` | `experimental.session.compacting` | コンパクション時に作業ディレクトリの状態を維持 |
 | `env-check.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | Python/Node.js 環境パス自動書き換え + .nvmrc 不一致警告（セッション内1回） |
-| `rule-injector.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | ファイル種別・内容に応じてルールファイルの参照を注入（AGENTS.md 肥大化防止） |
+| `rule-injector.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | ファイル種別・内容に応じてルールファイルの参照を注入（AGENTS.md 肥大化防止。規約未読ブロック・mkdir ゲート・tdd ハードゲート付き） |
 | `destructive-op-guard.ts` | `tool.execute.before` | 破壊的Git操作（reset --hard / rebase / push --force / rm -rf 等）のブロック |
 | `commit-review.ts` | `tool.execute.before` | git commit 検出 → 子セッションで @code-reviewer + @security-auditor を並列実行 → 問題ありならブロック |
 
@@ -236,43 +236,59 @@ AGENTS.md を軽量に保つための仕組み。
 ### 作用の流れ
 
 ```
-Session開始（instructions: AGENTS.md / cli-first.md / ARCHITECTURE.md / project-definition.md）
+Session開始（instructions: AGENTS.md / cli-first.md / naming-conventions.md / ARCHITECTURE.md / project-definition.md）
   ↓
 AI: アーキテクチャ設計・プロジェクト設定（コードは未記述）
   ↓
 AI: 最初のコードファイルを作成しようとする
   ↓
-Plugin: コードファイル検出 + 規約未読 → throw new Error() で書き込みを BLOCK
+Plugin: コードファイル検出 + 規約未読 → throw new Error() で書き込みを BLOCK（リトライしても読了まで再ブロック）
   ↓
-AI: エラーを確認 → 規約ファイル（naming-conventions / directory-structure / coding-conventions）を読む
+AI: エラーを確認 → 規約ファイル（directory-structure / coding-conventions）を読む
   ↓
 AI: 規約に従って正しいコードを書く
   ↓
-通常の編集フェーズ：Plugin が個別ルールを noReply 注入
+通常の編集フェーズ：Plugin が個別ルールを noReply 注入（複数該当時は1回に列挙）
 ```
 
 `throw new Error()` は AI に tool result として返り、人間には表示されない。
 AI が自己回復し、規約を読んでから再試行する。
+naming-conventions.md は `opencode.json` の `instructions` で常時読込されるため、BLOCK 対象外（セッション開始時点で文脈に存在する）。
 
 ### 検出と注入のルール
 
 | 作用 | トリガー | 内容 |
 |------|----------|------|
-| **BLOCK**（初回のみ） | コードファイル（`.ts/.js/.py/.css/.scss/...`）の初回 write/edit | 3つの規約ファイル（naming-conventions / directory-structure / coding-conventions）を読むよう要求。書き込みを中断 |
+| **BLOCK**（読了まで） | コードファイル（`.ts/.js/.py/.css/.scss/...`）の write/edit | 2つの規約ファイル（directory-structure / coding-conventions）を読むよう要求。書き込みを中断。未読のまま再試行しても再ブロック（リトライバイパス対策） |
+| **BLOCK**（読了まで） | テストファイル（`.test.*` / `_test.*` / `test_*.*` / `*Test.java` 等）の write/edit | `tdd-cycle.md` を読むよう要求。書き込みを中断 |
+| **BLOCK**（読了まで） | bash の `mkdir` コマンド | `directory-structure.md` を読むよう要求。実行を中断 |
 | **noReply 注入** | コードファイル編集 | `code-quality.md` の参照を推奨 |
 | **noReply 注入** | コードファイル + 非コードファイル（`package.json` / `docs/project-definition.md` / `AGENTS.md` / 依存関係ファイル 等） | `security.md` の確認を推奨。内容キーワード（login/auth/token/stripe/payment 等）に合致すると再注入 |
 | **noReply 注入** | コードファイル + `ARCHITECTURE.md` + `docs/project-definition.md` | `network-resilience.md` の確認を推奨。内容キーワード（fetch/axios/retry/timeout/redis 等）に合致すると再注入 |
 | **noReply 注入** | `.tsx/.jsx/.css/.scss` + `DESIGN.md` + `design/*.json` | `design-contract.md` の確認を推奨 |
 | **noReply 注入** | `ARCHITECTURE.md` 編集 | `stack-setup.md` の確認を推奨 |
-| **noReply 注入** | テストファイル（`.test.*` / `_test.*` / `test_*.*` / `*Test.java` 等）の write/edit | `tdd-cycle.md` の確認を推奨。内容キーワード（test/spec/tdd/describe/it/assert/expect/func Test/#[test]）に合致すると再注入 |
+| **noReply 注入** | テストファイルの write/edit | `tdd-cycle.md` の確認を推奨（読了後）。内容キーワード（test/spec/tdd/describe/it/assert/expect/func Test/#[test]）に合致すると再注入 |
 
-### 初回ブロックの詳細
+注入通知はバッチ化されている：1回のツール実行で複数ルールに該当した場合、複数回の prompt を送らず1回の noReply に全ルールを列挙する。
 
-**条件**: `conventionsOffered === false` かつ `CODE_FILE_PATTERN` に一致
-**動作**: `session.conventionsOffered = true` を設定後、未読の規約ファイルのパスを列挙して `throw new Error()`
+### BLOCK の詳細
+
+**規約ゲート（コードファイル）**: `conventionsOffered === false` かつ `CODE_FILE_PATTERN` に一致
+- 未読の規約ファイルのパスを列挙して `throw new Error()`
+- `conventionsOffered` は「全規約読了済み」を意味し、読了が確認できた場合のみ true になる。未読のまま再試行しても再ブロックする（リトライバイパス修正）
+- `naming-conventions.md` は常時読込（instructions）のためゲート対象外
+
+**tdd ゲート（テストファイル）**: `TEST_FILE_PATTERN` に一致かつ `tdd-cycle.md` 未読
+- テストファイルの作成・編集は `tdd-cycle.md` を読了するまでブロックする
+- 読了後（`readByAI`）は通常の noReply 注入に移行する
+
+**mkdir ゲート（bash）**: bash コマンドに `mkdir` が含まれ、`directory-structure.md` 未読
+- ディレクトリ作成は `directory-structure.md` を読了するまでブロックする
+- 読了後はブロックしない
+
 **再試行**: AI が規約を読み、全ての読了が確認されると以降のコードファイル書き込みはブロックしない
 **事前読了**: AI が最初の書き込みより前に規約ファイルを自発的に読んでいた場合、ブロックは発生しない
-**コンパクション**: セッションコンパクションで AI の記憶が失われても、`experimental.session.compacting` / `session.compacted` 検知で `injected` / `reminded` フラグをリセットするため、ルールの再注入・再リマインドが再開される（arch-diag.ts と同型の対策）。コンパクション後にルールを再読させることで、記憶喪失によるルール逸脱を防ぐ
+**コンパクション**: セッションコンパクションで AI の記憶が失われても、`experimental.session.compacting` / `session.compacted` 検知で `injected` / `reminded` / `readByAI` フラグに加えて規約ゲート（`conventionsOffered` / `conventionsRead`）をリセットする。コンパクション後は単発ハードゲートが再起動し、次に作成操作をしたときに再度ゲートが効く（arch-diag.ts と同型の対策）。
 
 ### 再注入の条件（個別ルール、per-session state 管理）
 
@@ -282,9 +298,10 @@ AI が自己回復し、規約を読んでから再試行する。
 
 ### 初期状態
 
-`opencode.json` の `instructions` フィールドは 4ファイル（`AGENTS.md` / `.opencode/instructions/cli-first.md` / `ARCHITECTURE.md` / `docs/project-definition.md`）を読み込む。
-`cli-first.md` を除く `instructions/` 配下のルールファイル（および `.opencode/coding-conventions.md`）はセッション開始時には読み込まれず、
-この Plugin が初回ブロックまたは noReply 注入でイベント駆動する。
+`opencode.json` の `instructions` フィールドは 5ファイル（`AGENTS.md` / `.opencode/instructions/cli-first.md` / `.opencode/instructions/naming-conventions.md` / `ARCHITECTURE.md` / `docs/project-definition.md`）を読み込む。
+`cli-first.md`・`naming-conventions.md` を除く `instructions/` 配下のルールファイル（および `.opencode/coding-conventions.md`）はセッション開始時には読み込まれず、
+この Plugin が BLOCK または noReply 注入でイベント駆動する。
+`naming-conventions.md` は常時読み込まれるため「作成・命名前に欠かさず読む」ことを保証し、`directory-structure.md` は mkdir ゲート、`coding-conventions.md` はコード書き込みゲートでそれぞれ読了を強制する。
 
 ## `arch-diag.ts` 詳細
 
