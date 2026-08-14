@@ -13,7 +13,7 @@ export const EnvCheckPlugin: Plugin = async ({ client, $ }) => ({
     const command = output.args.command as string
     if (!command) return
     if (/\.venv\/bin\//.test(command)) return
-    const sessionId = (input as any).sessionID
+    const sessionId = input.sessionID
 
     // ── Python 環境チェック ────────────────────────────────
     const isPythonCommand = /\b(python3?|pip3?)\b/.test(command)
@@ -83,17 +83,20 @@ export const EnvCheckPlugin: Plugin = async ({ client, $ }) => ({
   // コンパクション検知：AI の記憶喪失に合わせて per-session 警告をリセット
   // （arch-diag.ts / rule-injector.ts と同型の対策）
   "experimental.session.compacting": async (input) => {
-    const sessionId = (input as any)?.sessionID
+    const sessionId = input.sessionID
     if (sessionId) nvmWarnedSessions.delete(sessionId)
   },
   // 安定APIフォールバック：session.compacted イベントでもリセット。session.deleted で状態を破棄する
   event: async (input) => {
     const ev = input.event
     if (!ev) return
-    const sessionId = (ev as any).properties?.sessionID
-    if (!sessionId) return
-    if (ev.type === "session.compacted" || ev.type === "session.deleted") {
-      nvmWarnedSessions.delete(sessionId)
+    if (ev.type === "session.compacted") {
+      nvmWarnedSessions.delete(ev.properties.sessionID)
+      return
+    }
+    if (ev.type === "session.deleted") {
+      // セッション削除時は警告状態を破棄（メモリリーク防止）
+      nvmWarnedSessions.delete(ev.properties.info.id)
     }
   },
 })

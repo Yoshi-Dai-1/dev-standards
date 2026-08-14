@@ -77,7 +77,7 @@ export const WorkingDirGuidePlugin: Plugin = async ({ client }) => ({
     const isTasksJson = fp.includes("docs/tasks.json")
     if (!isWorkingDir && !isTasksJson) return
 
-    const sessionId = (input as any).sessionID
+    const sessionId = input.sessionID
     let rules = isTasksJson ? TASKS_JSON_RULES : WORKING_DIR_RULES
 
     // review-checklist.md の Read 時に FAIL マーカーを検知
@@ -109,17 +109,20 @@ export const WorkingDirGuidePlugin: Plugin = async ({ client }) => ({
   },
   // コンパクション検知：Read 初回注入キャッシュをリセット（記憶喪失後の再注入を可能にする）
   "experimental.session.compacting": async (input) => {
-    const sessionId = (input as any)?.sessionID
+    const sessionId = input.sessionID
     if (sessionId) resetAfterCompaction(sessionId)
   },
   // 安定APIフォールバック：session.compacted イベントでもリセット。session.deleted で状態を破棄する
   event: async (input) => {
     const ev = input.event
     if (!ev) return
-    const sessionId = (ev as any).properties?.sessionID
-    if (!sessionId) return
-    if (ev.type === "session.compacted" || ev.type === "session.deleted") {
-      resetAfterCompaction(sessionId)
+    if (ev.type === "session.compacted") {
+      resetAfterCompaction(ev.properties.sessionID)
+      return
+    }
+    if (ev.type === "session.deleted") {
+      // セッション削除時は Read 初回注入キャッシュを破棄（メモリリーク防止）
+      resetAfterCompaction(ev.properties.info.id)
     }
   },
 })

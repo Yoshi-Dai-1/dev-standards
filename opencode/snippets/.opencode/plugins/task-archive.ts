@@ -101,7 +101,7 @@ export const TaskArchivePlugin: Plugin = async ({ client }) => ({
   event: async (input) => {
     const ev = input.event
     if (!ev || ev.type !== "session.idle") return
-    const sessionId = (ev as any).properties?.sessionID
+    const sessionId = ev.properties.sessionID
 
     const tasks = await readTasksJson()
     if (!tasks) return

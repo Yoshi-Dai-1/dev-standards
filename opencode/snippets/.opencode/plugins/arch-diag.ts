@@ -134,7 +134,7 @@ export const ArchDiagPlugin: Plugin = async ({ client, $ }) => ({
 
     const candidatePaths: string[] = []
     if (input.tool === "multiedit") {
-      const ops = (input.args as any)?.operations || []
+      const ops = input.args?.operations || []
       for (const op of ops) {
         const p = op?.filePath || op?.path
         if (p) candidatePaths.push(p)
@@ -227,20 +227,18 @@ export const ArchDiagPlugin: Plugin = async ({ client, $ }) => ({
   },
   // コンパクション検知：ENF フラグとクールダウンをリセット（コンパクション後の AI 記憶喪失に対応）
   "experimental.session.compacting": async (input) => {
-    const sessionId = (input as any)?.sessionID
+    const sessionId = input.sessionID
     if (sessionId) resetAfterCompaction(sessionId)
   },
   // 安定APIフォールバック：session.compacted イベントでもリセット。session.deleted で状態を破棄する
   event: async (input) => {
     const ev = input.event
     if (!ev) return
-    const sessionId = (ev as any).properties?.sessionID
-    if (!sessionId) return
     if (ev.type === "session.compacted") {
-      resetAfterCompaction(sessionId)
+      resetAfterCompaction(ev.properties.sessionID)
     } else if (ev.type === "session.deleted") {
       // セッション削除時に状態を破棄（メモリリーク防止）
-      sessions.delete(sessionId)
+      sessions.delete(ev.properties.info.id)
     }
   },
 })

@@ -1,5 +1,25 @@
 # Session Context
 
+## API 準拠キャスト除去 + session.deleted バグ修正（2026-08-14 実施）
+
+### 変更ファイル（未コミット）
+- `opencode/snippets/.opencode/plugins/rule-injector.ts` / `secrets-guard.ts` / `working-dir-guide.ts` / `env-check.ts` / `arch-diag.ts` / `adr-prompt.ts` / `harness-health.ts` / `task-archive.ts`: 不要な `(input as any).sessionID` / `(ev as any).properties?.sessionID` / `(input.args as any)` キャストを除去し、実型（`input.sessionID` / `ev.properties.sessionID` / `input.args`）に置換
+- `opencode/snippets/.opencode/plugins/commit-review.ts`: `(child as any).data.id` → `child.data?.id`、`(resp as any).data?.parts || (resp as any).parts` → `resp.data?.parts || []`、`(diffResult as any).text()` → `diffResult.text()`。`client` 引数を `any` → `OpencodeClient`（`@opencode-ai/sdk/client`）に型付け
+- `opencode/snippets/.opencode/plugins/lockfile-record.ts`: `(output as any)?.exitCode` は `tool.execute.after` の output 型に exitCode が無いため**必要なキャストとして維持**（唯一の残存 `as any`）
+- `opencode/snippets/.opencode/plugins/README.md`: `tool.execute.before`/`after` の引数型を実型（`{tool, sessionID, callID}` / `{tool, sessionID, callID, args}`）に修正。`event` セクションに `session.deleted` は `properties.info.id`（`properties` は `{ info: Session }` で sessionID を持たない）の注記を追加
+
+### session.deleted のバグ修正（今回の主目的の1つ）
+- **バグ**: `EventSessionDeleted` の properties は `{ info: Session }`（types.gen.d.ts:505-510）。旧実装は `(ev as any).properties?.sessionID` を参照しており、常に `undefined` → session.deleted 分岐のクリーンアップが**実質発火していなかった**
+- **修正**: `ev.properties.info.id` に変更（rule-injector / working-dir-guide / env-check / arch-diag / adr-prompt の5 Plugin）
+
+### 検証
+- typecheck: `bunx --bun tsc --noEmit --strict --skipLibCheck --types bun plugins/*.ts` エラーゼロ
+- テストハーネス（archdiag-test）で全 PASS（41+12+13=66件）。test-plugins-consistency.ts の session.deleted フィクスチャを `properties.sessionID` → `properties.info.id` に修正（実型と整合）
+
+### 判断基準（ユーザーと確認済みの監査結論から）
+- AGENTS.md の `instructions[]` 明記は維持（opencode ソース `instruction.ts` の `systemPaths()` が `Set<string>` で絶対パス管理 → 二重ロードされない）
+- lockfile-record の exitCode キャストは API 型の制約上必要（output 型に exitCode フィールドがない）
+
 ## code-quality.md 常時化（2026-08-14 実施）
 
 ### 変更ファイル
@@ -79,9 +99,7 @@
 - v1120test: code-review.md は setup 再実行で自動反映（SAME 確認済み）、AGENTS.md と ARCHITECTURE.md はプロジェクト固有版のため手動反映
 
 ## 次のセッションでやること
-- 今回の変更（code-quality.md 常時化）のコミット可否を人間に確認する（commit/push は人間の指示があるまで実行しない）
-- ステージ済みで未コミットの naming 常時化＋rule-injector 強化変更のコミット可否も確認する
-- v1120test で新設計の実地検証（初回セッションで mkdir / テストファイル書き込みがゲートされること）
+- 今回の変更（API 準拠キャスト除去 + session.deleted 修正）と、未コミットの naming/code-quality 常時化のコミット可否を人間に確認する（commit/push は人間の指示があるまで実行しない）
 
 ## 検証メモ（2026-08-13）
 - テストハーネス: `/var/folders/2r/4xmj5zsd5736vnnwzp3gj1x40000gn/T/opencode/archdiag-test/`

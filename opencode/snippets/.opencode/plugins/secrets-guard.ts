@@ -63,7 +63,7 @@ export const SecretsGuardPlugin: Plugin = async ({ client }) => ({
     if (!["write", "edit", "multiedit"].includes(input.tool)) return
 
     const ops = extractOps(input.tool, output.args)
-    const sessionId = (input as any).sessionID
+    const sessionId = input.sessionID
 
     for (const { filePath: fp, content } of ops) {
       if (!fp) continue

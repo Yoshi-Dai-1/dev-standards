@@ -1,4 +1,5 @@
 import type { Plugin } from "@opencode-ai/plugin"
+import type { OpencodeClient } from "@opencode-ai/sdk/client"
 import { join } from "path"
 
 /**
@@ -40,21 +41,22 @@ async function readAgentPrompt(worktree: string, name: string): Promise<string |
 }
 
 async function runReviewInSession(
-  client: any,
+  client: OpencodeClient,
   parentSessionId: string,
   title: string,
   systemPrompt: string,
   userMessage: string,
 ): Promise<string | null> {
-  let childSessionId: string
+  let childSessionId: string | undefined
   try {
     const child = await client.session.create({
       body: { parentID: parentSessionId, title },
     })
-    childSessionId = (child as any).data.id
+    childSessionId = child.data?.id
   } catch {
     return null
   }
+  if (!childSessionId) return null
 
   try {
     const resp = await client.session.prompt({
@@ -64,7 +66,7 @@ async function runReviewInSession(
         system: systemPrompt,
       },
     })
-    const parts = (resp as any).data?.parts || (resp as any).parts || []
+    const parts = resp.data?.parts || []
     return parts
       .filter((p: any) => p.type === "text")
       .map((p: any) => p.text)
@@ -94,7 +96,7 @@ export const CommitReviewPlugin: Plugin = async ({ client, $, worktree }) => ({
       await $`git add -A`.nothrow().quiet()
     }
     const diffResult = await $`git diff --cached`.nothrow().quiet()
-    const diff = (diffResult as any).text()
+    const diff = diffResult.text()
     if (!diff || !diff.trim()) return
 
     // 2. 両方のプロンプトを並列読み込み

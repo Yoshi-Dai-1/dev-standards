@@ -28,11 +28,11 @@ AGENTS.md への言語指示と異なり、エージェントの意思に関わ�
 ## イベントの種類
 
 **`tool.execute.before`**: ツール実行前に発火。エラーを投げるとツール実行をブロックする。
-- 引数: `(input: ToolCall, output: WritableToolArgs)`
+- 引数: `(input: { tool: string, sessionID: string, callID: string }, output: { args: any })`
 - ブロック: `throw new Error("message")`
 
 **`tool.execute.after`**: ツール実行後に発火。ブロック不可（サイドエフェクトのみ）。
-- 引数: `(input: ToolCall, output: ToolResult)`
+- 引数: `(input: { tool: string, sessionID: string, callID: string, args: any }, output: { title: string, output: string, metadata: any })`
 - ログ: `client.app.log({ body: { service, level, message } })`
 
 **`session.idle`（`event` 経由で購読）**: セッションがアイドル状態（AI 応答完了）に遷移したときに発火。
@@ -40,13 +40,14 @@ AGENTS.md への言語指示と異なり、エージェントの意思に関わ�
 - 用途: Context Anxiety 検知（harness-health.ts）・アーカイブ提案（task-archive.ts）・セキュリティレビュー催促（rule-injector.ts）
 
 **`experimental.session.compacting`**: セッションコンパクション開始時に発火。
-- 引数: `(input: { sessionID: string }, output: { context: string[] })`
+- 引数: `(input: { sessionID: string }, output: { context: string[]; prompt?: string })`
 - 用途: コンパクション時の文脈注入（compaction-context.ts）。arch-diag.ts / rule-injector.ts / adr-prompt.ts / working-dir-guide.ts / env-check.ts はこれを利用して per-session フラグをリセットする（実験的API。将来変更される可能性あり）
 - 安定APIフォールバック: `event` フックで `session.compacted` イベント（`properties.sessionID`）を検知してもリセットする
 
 **`event`**: 全サーバーイベントの購読フック。
 - 引数: `(input: { event: Event })`（`Event` は `@opencode-ai/sdk` のイベントユニオン）
 - 用途: 型付きフックを持たないイベント（`session.compacted` / `session.idle` / `session.deleted` など）を購読する汎用フック。`session.deleted` で各 Plugin は per-session 状態を破棄する（メモリリーク防止）
+- イベント固有のプロパティ: `session.idle` / `session.compacted` は `event.properties.sessionID`、`session.deleted` は `event.properties.info.id` から取得する（`session.deleted` の `properties` は `{ info: Session }` で、`sessionID` を持たない）
 
 ## セットアップ
 

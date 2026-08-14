@@ -71,19 +71,18 @@ export const AdrPromptPlugin: Plugin = async ({ client }) => {
     },
     // コンパクション検知：per-session 状態をリセット（arch-diag.ts / rule-injector.ts と同型の対策）
     "experimental.session.compacting": async (input) => {
-      const sessionId = (input as any)?.sessionID
+      const sessionId = input.sessionID
       if (sessionId) resetAfterCompaction(sessionId)
     },
     // 安定APIフォールバック：session.compacted イベントでもリセット。session.deleted で状態を破棄する
     event: async (input) => {
       const ev = input.event
       if (!ev) return
-      const sessionId = (ev as any).properties?.sessionID
-      if (!sessionId) return
       if (ev.type === "session.compacted") {
-        resetAfterCompaction(sessionId)
+        resetAfterCompaction(ev.properties.sessionID)
       } else if (ev.type === "session.deleted") {
-        deleteSessionState(sessionId)
+        // セッション削除時に状態を破棄（メモリリーク防止）
+        deleteSessionState(ev.properties.info.id)
       }
     },
   }

@@ -154,7 +154,7 @@ function isReadOfRule(fp: string, filePath: string): boolean {
 
 export const RuleInjectorPlugin: Plugin = async ({ client }) => ({
   "tool.execute.before": async (input, output) => {
-    const sessionId = (input as any).sessionID
+    const sessionId = input.sessionID
     if (!sessionId) return
 
     // === Read tracking ===
@@ -270,7 +270,7 @@ export const RuleInjectorPlugin: Plugin = async ({ client }) => ({
   },
   // コンパクション検知：AI の記憶喪失に合わせて注入系フラグをリセット
   "experimental.session.compacting": async (input) => {
-    const sessionId = (input as any)?.sessionID
+    const sessionId = input.sessionID
     if (sessionId) resetAfterCompaction(sessionId)
   },
   // 安定APIフォールバック：session.compacted イベントでもリセット
@@ -278,18 +278,17 @@ export const RuleInjectorPlugin: Plugin = async ({ client }) => ({
   event: async (input) => {
     const ev = input.event
     if (!ev) return
-    const sessionId = (ev as any).properties?.sessionID
     if (ev.type === "session.compacted") {
-      if (sessionId) resetAfterCompaction(sessionId)
+      resetAfterCompaction(ev.properties.sessionID)
       return
     }
     if (ev.type === "session.deleted") {
       // セッション削除時に状態を破棄（メモリリーク防止）
-      if (sessionId) sessions.delete(sessionId)
+      sessions.delete(ev.properties.info.id)
       return
     }
     if (ev.type === "session.idle") {
-      if (!sessionId) return
+      const sessionId = ev.properties.sessionID
       const s = sessions.get(sessionId)
       if (!s) return
       if (s.securityContentMatched && !s.securityAuditInjected) {
