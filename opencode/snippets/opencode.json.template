@@ -4,6 +4,7 @@
     "AGENTS.md",
     ".opencode/instructions/cli-first.md",
     ".opencode/instructions/naming-conventions.md",
+    ".opencode/instructions/code-quality.md",
     "ARCHITECTURE.md",
     "docs/project-definition.md"
   ]

@@ -1,5 +1,43 @@
 # Session Context
 
+## code-quality.md 常時化（2026-08-14 実施）
+
+### 変更ファイル
+- `opencode/snippets/opencode.json.template`: `instructions[]` に `.opencode/instructions/code-quality.md` を追加（**6ファイル構成**）
+- `opencode/snippets/.opencode/instructions/code-quality.md`: 先頭を「コードファイル編集時に Plugin が注入する」→「セッション開始時に常時読み込まれる」に修正。品質6軸・劣化サイン・自律トリガーがセッション開始時点で文脈に存在する
+- `opencode/snippets/.opencode/plugins/rule-injector.ts`: RULES から `code-quality` エントリを削除（常時化により noReply 通知が冗長）。`CODE_FILE_PATTERN` は規約ゲートで引き続き使用
+- `opencode/snippets/.opencode/plugins/README.md`: 作用フロー（6ファイル記載）・検出テーブル（code-quality 行削除）・BLOCK 詳細・初期状態（6ファイル）を更新
+- `opencode/snippets/ARCHITECTURE.md.template`: コード品質セクションに「ベースルール：`.opencode/instructions/code-quality.md`（常時読込）に従う」を追加（naming 常時化時の命名規則セクションと同型）。重複していた「詳細は principles」行を削除
+- `opencode/snippets/.opencode/instructions/code-quality.md`: principle 参照（code-quality / cognitive-load-design / file-size-and-cohesion / tdd-with-ai）は維持
+
+### 判断基準（ユーザーと確認済み）
+- code-quality.md 常時化の目的: **コードを書く前段階（思考段階）から品質6軸・分割統合の基準を考慮**できるようにする。プラグインはコード編集イベントでしか注入できず、設計・計画段階の品質判断が未保護だった
+- code-quality.md は「入り口の instruction」。詳細は principles/ を **必要時に自律的に読みに行く**（naming 常時化と同じ設計パターン）
+- **coding-conventions.md は常時化しない**: プロジェクト固有にカスタマイズされるファイル（7.4KB+）で、既に初回書き込みハードゲートで読了100%保証済み。常時化は文脈圧迫のリスクがメリットを上回る
+- principles（file-size-and-cohesion / cognitive-load-design / code-quality）は on-demand 維持。約20KB の常時化は文脈圧迫
+
+### テスト
+- `test-plugins-consistency.ts`: **41件**（code-quality 常時化チェック4件追加: opencode.json に含まれる / 先頭に常時読込注記 / principle 参照維持 / rule-injector RULES から除外）
+- `test-rule-injector.ts`: 12件（テスト6のバッチ化検証を security+network-resilience 同時該当に修正）
+- 全テスト PASS（計66件: 12+41+13）
+
+### v1120test 反映
+- setup-harness.sh 再実行（YORI_HAS_UI=n / QUALITY_STRATEGY=1 / USAGE_GIT=1）
+- `.opencode/instructions/code-quality.md` / `rule-injector.ts` / `plugins/README.md` が yori 最新と SAME
+- `opencode.json`: 上書き保護のため手動で code-quality.md 追記（6ファイル構成）
+- `ARCHITECTURE.md`: コード品質セクションに「ベースルール：`.opencode/instructions/code-quality.md`（常時読込）」を手動追記（参照先2ファイル実在確認）
+- STALE_REF = 0 / 参照先全パス実在
+
+### 常時化ファイル間参照の「（常時読込）」注記付与（2026-08-14 追記）
+- **背景（公式ドキュメント調査）**: OpenCode のコンパクションは**会話履歴のみ**を対象とする。instructions（常時化ファイル）はシステムプロンプトとしてリクエスト組み立て時に毎回導出され、コンパクション後も残る。コンパクション自体はソース再読をしない（「Compaction advances the instruction epoch」節）。→ 常時化ファイルへの参照で Read を呼ぶと**本当の冗長読込**になる
+- 前回の分析「コンパクション後の再読は自己回復」は不正確 → 訂正。注記が再読防止の有効防御
+- **修正**:
+  - `agents/AGENTS.md:22`: `cli-first.md` → `cli-first.md`（常時読込）
+  - `.opencode/instructions/naming-conventions.md`: ARCHITECTURE.md 参照5箇所（15/74/101/103/113/120）に「（常時読込）」付与
+- code-quality.md 内の参照は全て非常時化 principles（正当な on-demand）なので注記不要
+- v1120test: naming-conventions.md は setup で自動反映（SAME 確認）。AGENTS.md はプロジェクト固有版で cli-first 参照がないため手動編集不要
+- 全テスト PASS（66件: 12+41+13）
+
 ## ステージ済みの変更
 - `opencode/snippets/opencode.json.template`: `instructions[]` に `.opencode/instructions/naming-conventions.md` を追加（常時読込化。5ファイル構成）
 - `opencode/snippets/.opencode/instructions/naming-conventions.md`: 「優先チェーン（ARCHITECTURE(SSOT) > coding-conventions > 本ファイル > フレームワーク規約）」+「自己充足的コア表（ケーススタイル・ディレクトリ名・ファイル名・テストファイル命名規則）」を追加し、自律トリガー・常駐禁止事項をコア表参照に書き換え（1.8KB→6.2KB）
@@ -20,11 +58,29 @@
 - `.design-notes/session-context.md`: 本ファイル更新
 
 ## 未解決の課題
-- 検証用プロジェクト（v1120test 等）の opencode.json は上書き保護（戦略 A）のため、naming-conventions.md の常時化が自動反映されない。opencode.json に一行手動追加が必要（`.opencode/instructions/naming-conventions.md`）。プロジェクト固有の編集を尊重するため自動変更しない
+- 検証用プロジェクト（v1120test 等）の opencode.json は上書き保護（戦略 A）のため、naming-conventions.md / code-quality.md の常時化が自動反映されない。opencode.json に手動追加が必要（v1120test は反映済み）。プロジェクト固有の編集を尊重するため自動変更しない
 - touch / 非 mkdir によるファイル作成はゲート対象外のまま（ユーザー確認済み・現状維持）
 
+## 質疑監査（2026-08-14 追記）
+- **Q1（常時読込注記の要否）**: **残す判断**。code-quality.md の「このルールはセッション開始時に常時読み込まれる。」は必要。ただし根拠は「naming と同型」ではなく独立判断:
+  - 事実: ルール系の常時読込ファイルは全て「常時有効宣言」を持つ（cli-first.md「全セッション・全フェーズで有効」/ naming「常時読み込まれる」/ code-quality 同文）。AGENTS.md（最上位SSOT）と ARCHITECTURE.md（書かれる対象）は宣言を持たないのが一貫
+  - 機能: AGENTS.md:8 が「instructions は Plugin がイベント駆動で注入する」と宣言しているため、常時読込ルールが「セッション開始時から有効である」ことの適用タイミング明示が必要。この情報は opencode.json（AIの文脈外）にしか存在せず、ファイル自身の宣言でのみ文脈内で完結 → 真の重複ではない
+  - 「無ければ正しく判断できない」は不正確。正しくは「適用タイミングの誤認防止・文書契約」
+- **Q2（ARCHITECTURE.md.template の「詳細・深掘りは principles を参照」行）**: **冗長と判断し削除（ユーザー承認済み 2026-08-14）**
+  - 根拠: `code-quality.md:5-8`（常時読込）冒頭に同一導線が既にあり、ARCHITECTURE.md も常時読込なので AI の文脈内で同じ情報が既に成立。再掲しても到達手段は増えない
+  - 残したのは「ベースルール：`...code-quality.md`（常時読込）に従う。」のみ（適用タイミングの明示として独自機能を持つため）
+  - naming セクション（同型）も同時に削除し整合性を確保: `ARCHITECTURE.md.template` 409行（naming）/496行（code-quality）→ 両「詳細・深掘り」行を削除
+  - v1120test ARCHITECTURE.md（102-103 / 178-179行）にも手動反映（上書き保護のため）
+  - 全66テスト PASS を確認（この行へのテスト依存なし）
+- **Q3（監査で検出・修正）**:
+  1. `code-review.md:18`: `instructions/naming-conventions.md`（相対パス・注記なし）→ `.opencode/instructions/naming-conventions.md`（常時読込）に完全一致形へ修正。設置場所が reference 側のためテスト対象外ではあるがパス表記不統一を解消
+  2. `AGENTS.md:117`: `ARCHITECTURE.md` に（常時読込）注記を付与（セッション開始時の確認は注入済み内容の参照なので注記が有効）。v1120test AGENTS.md:49 にも手動反映
+  3. AGENTS.md:117 以外は ARCHITECTURE.md 参照は「編集対象」または「0-* 初期セットアップ」中のものであり、注記追加は不要と判断（編集時は Read が正当、初期セットアップはテンプレート全文の refile が目的）
+- v1120test: code-review.md は setup 再実行で自動反映（SAME 確認済み）、AGENTS.md と ARCHITECTURE.md はプロジェクト固有版のため手動反映
+
 ## 次のセッションでやること
-- ステージ済み変更のコミット可否を人間に確認する（commit/push は人間の指示があるまで実行しない）
+- 今回の変更（code-quality.md 常時化）のコミット可否を人間に確認する（commit/push は人間の指示があるまで実行しない）
+- ステージ済みで未コミットの naming 常時化＋rule-injector 強化変更のコミット可否も確認する
 - v1120test で新設計の実地検証（初回セッションで mkdir / テストファイル書き込みがゲートされること）
 
 ## 検証メモ（2026-08-13）

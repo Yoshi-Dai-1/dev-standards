@@ -236,7 +236,7 @@ AGENTS.md を軽量に保つための仕組み。
 ### 作用の流れ
 
 ```
-Session開始（instructions: AGENTS.md / cli-first.md / naming-conventions.md / ARCHITECTURE.md / project-definition.md）
+Session開始（instructions: AGENTS.md / cli-first.md / naming-conventions.md / code-quality.md / ARCHITECTURE.md / project-definition.md）
   ↓
 AI: アーキテクチャ設計・プロジェクト設定（コードは未記述）
   ↓
@@ -253,7 +253,7 @@ AI: 規約に従って正しいコードを書く
 
 `throw new Error()` は AI に tool result として返り、人間には表示されない。
 AI が自己回復し、規約を読んでから再試行する。
-naming-conventions.md は `opencode.json` の `instructions` で常時読込されるため、BLOCK 対象外（セッション開始時点で文脈に存在する）。
+naming-conventions.md / code-quality.md は `opencode.json` の `instructions` で常時読込されるため、BLOCK・通知対象外（セッション開始時点で文脈に存在する）。
 
 ### 検出と注入のルール
 
@@ -262,7 +262,6 @@ naming-conventions.md は `opencode.json` の `instructions` で常時読込さ�
 | **BLOCK**（読了まで） | コードファイル（`.ts/.js/.py/.css/.scss/...`）の write/edit | 2つの規約ファイル（directory-structure / coding-conventions）を読むよう要求。書き込みを中断。未読のまま再試行しても再ブロック（リトライバイパス対策） |
 | **BLOCK**（読了まで） | テストファイル（`.test.*` / `_test.*` / `test_*.*` / `*Test.java` 等）の write/edit | `tdd-cycle.md` を読むよう要求。書き込みを中断 |
 | **BLOCK**（読了まで） | bash の `mkdir` コマンド | `directory-structure.md` を読むよう要求。実行を中断 |
-| **noReply 注入** | コードファイル編集 | `code-quality.md` の参照を推奨 |
 | **noReply 注入** | コードファイル + 非コードファイル（`package.json` / `docs/project-definition.md` / `AGENTS.md` / 依存関係ファイル 等） | `security.md` の確認を推奨。内容キーワード（login/auth/token/stripe/payment 等）に合致すると再注入 |
 | **noReply 注入** | コードファイル + `ARCHITECTURE.md` + `docs/project-definition.md` | `network-resilience.md` の確認を推奨。内容キーワード（fetch/axios/retry/timeout/redis 等）に合致すると再注入 |
 | **noReply 注入** | `.tsx/.jsx/.css/.scss` + `DESIGN.md` + `design/*.json` | `design-contract.md` の確認を推奨 |
@@ -276,7 +275,7 @@ naming-conventions.md は `opencode.json` の `instructions` で常時読込さ�
 **規約ゲート（コードファイル）**: `conventionsOffered === false` かつ `CODE_FILE_PATTERN` に一致
 - 未読の規約ファイルのパスを列挙して `throw new Error()`
 - `conventionsOffered` は「全規約読了済み」を意味し、読了が確認できた場合のみ true になる。未読のまま再試行しても再ブロックする（リトライバイパス修正）
-- `naming-conventions.md` は常時読込（instructions）のためゲート対象外
+- `naming-conventions.md` / `code-quality.md` は常時読込（instructions）のためゲート・通知対象外
 
 **tdd ゲート（テストファイル）**: `TEST_FILE_PATTERN` に一致かつ `tdd-cycle.md` 未読
 - テストファイルの作成・編集は `tdd-cycle.md` を読了するまでブロックする
@@ -298,10 +297,10 @@ naming-conventions.md は `opencode.json` の `instructions` で常時読込さ�
 
 ### 初期状態
 
-`opencode.json` の `instructions` フィールドは 5ファイル（`AGENTS.md` / `.opencode/instructions/cli-first.md` / `.opencode/instructions/naming-conventions.md` / `ARCHITECTURE.md` / `docs/project-definition.md`）を読み込む。
-`cli-first.md`・`naming-conventions.md` を除く `instructions/` 配下のルールファイル（および `.opencode/coding-conventions.md`）はセッション開始時には読み込まれず、
+`opencode.json` の `instructions` フィールドは 6ファイル（`AGENTS.md` / `.opencode/instructions/cli-first.md` / `.opencode/instructions/naming-conventions.md` / `.opencode/instructions/code-quality.md` / `ARCHITECTURE.md` / `docs/project-definition.md`）を読み込む。
+`cli-first.md`・`naming-conventions.md`・`code-quality.md` を除く `instructions/` 配下のルールファイル（および `.opencode/coding-conventions.md`）はセッション開始時には読み込まれず、
 この Plugin が BLOCK または noReply 注入でイベント駆動する。
-`naming-conventions.md` は常時読み込まれるため「作成・命名前に欠かさず読む」ことを保証し、`directory-structure.md` は mkdir ゲート、`coding-conventions.md` はコード書き込みゲートでそれぞれ読了を強制する。
+`naming-conventions.md` は常時読み込まれるため「作成・命名前に欠かさず読む」ことを保証し、`code-quality.md` は常時読み込まれるため「コードを書く前段階から品質6軸・分割統合の基準を踏まえる」ことを保証する。`directory-structure.md` は mkdir ゲート、`coding-conventions.md` はコード書き込みゲートでそれぞれ読了を強制する。
 
 ## `arch-diag.ts` 詳細
 

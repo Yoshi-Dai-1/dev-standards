@@ -8,7 +8,7 @@ const TEST_FILE_PATTERN = /\.test\.(ts|js|tsx|jsx|py|go|rs|cpp|c|rb)$|_test\.(go
 const MKDIR_PATTERN = /\bmkdir\b/
 
 // 初回コード書き込み時に読了を要求する規約ファイル。
-// naming-conventions.md は opencode.json の instructions で常時読込されるためゲート対象外。
+// naming-conventions.md / code-quality.md は opencode.json の instructions で常時読込されるためゲート・通知対象外。
 const CONVENTION_FILES = [
   { name: "directory-structure", filePath: ".opencode/instructions/directory-structure.md" },
   { name: "coding-conventions", filePath: ".opencode/coding-conventions.md" },
@@ -22,11 +22,6 @@ interface RuleDef {
 }
 
 const RULES: RuleDef[] = [
-  {
-    name: "code-quality",
-    filePath: ".opencode/instructions/code-quality.md",
-    filePattern: CODE_FILE_PATTERN,
-  },
   {
     name: "security",
     filePath: ".opencode/instructions/security.md",

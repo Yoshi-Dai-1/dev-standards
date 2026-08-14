@@ -407,7 +407,6 @@ project-root/
 <!-- 「展開なし」モードの場合は以下を参考に手動で記入する -->
 
 ベースルール：`.opencode/instructions/naming-conventions.md`（常時読込）に従う。
-詳細・深掘りは `.opencode/standards/principles/naming-conventions.md` を参照。
 
 | 対象 | 規則 |
 |------|------|
@@ -494,6 +493,8 @@ project-root/
 
 ### コード品質
 
+ベースルール：`.opencode/instructions/code-quality.md`（常時読込）に従う。
+
 **品質基準：**
 - ファイル最大行数：300行（超えたら分割）
 - テストカバレッジ：ビジネスロジック ___% 以上
@@ -504,7 +505,6 @@ project-root/
 **品質維持の仕組み：**
 - `lint-and-typecheck.ts` Plugin でファイル編集のたびに lint・フォーマットを自動実行
 - 品質診断戦略：[Reactive / Scheduled / Continuous]（言語確定時に stack-setup.md ルールに従って確認・記録）
-- 詳細は `.opencode/standards/principles/code-quality.md` を参照
 
 ### 国際化・ローカライゼーション（i18n）
 

@@ -19,7 +19,7 @@
 
 プロジェクトフォルダ内の既存ファイルを確認し、
 CLI で外部リソース（DB・API・クラウドサービス等）の状態を確認する。
-`.opencode/instructions/cli-first.md` の手順に従う。
+`.opencode/instructions/cli-first.md`（常時読込）の手順に従う。
 
 - ✅ **許可**: 状態確認とそれに必要な認証（一覧表示・ログ取得・ヘルスチェック等）
 - ❌ **禁止**: プロジェクトのソースコードとなるファイルのローカル取得・作成・編集
@@ -114,7 +114,7 @@ CLI で外部リソース（DB・API・クラウドサービス等）の状態�
 
 ## コミット実行（Commit Execution）
 
-セッション開始時に `ARCHITECTURE.md` の「開発プロセス」セクションから
+セッション開始時に `ARCHITECTURE.md`（常時読込）の「開発プロセス」セクションから
 「コミット実行」設定を確認する。設定がない場合は「AI が提案・人間が実行」として動作する。
 
 コミットメッセージは `.opencode/standards/principles/naming-conventions.md` の
