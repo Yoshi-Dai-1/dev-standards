@@ -14,13 +14,13 @@
 project-root/                  リポジトリルート
   apps/                        デプロイ単位のアプリケーション
     web/                       フロントエンド
-      src/                     → web-frontend-large.md または web-frontend-small.md に従う
-      package.json
+      src/                     → `.opencode/standards/architectures/web-frontend-large.md` または web-frontend-small.md に従う
+      `package.json`
       tsconfig.json
       vite.config.ts
     api/                       バックエンドAPI
       src/                     → backend-api.md に従う
-      package.json
+      `package.json`
       tsconfig.json
 
   packages/                    アプリ間で共有するパッケージ
@@ -28,18 +28,18 @@ project-root/                  リポジトリルート
       src/
         stock.types.ts         APIレスポンスの型（SSOTとして機能）
         user.types.ts
-      package.json             name: "@myproject/shared-types"
+      `package.json`             name: "@myproject/shared-types"
       tsconfig.json
     ui/                        共通UIコンポーネントライブラリ（必要な場合）
       src/
         Button.tsx
         Modal.tsx
-      package.json             name: "@myproject/ui"
+      `package.json`             name: "@myproject/ui"
     utils/                     共通ユーティリティ関数
       src/
         formatNumber.ts
         formatDate.ts
-      package.json             name: "@myproject/utils"
+      `package.json`             name: "@myproject/utils"
 
   tools/                       ビルド・開発ツールの設定
     tsconfig/
@@ -50,17 +50,17 @@ project-root/                  リポジトリルート
   docs/                        ドキュメント
   scripts/                     モノリポ全体を操作するスクリプト
 
-  package.json                 ワークスペース設定・共通devDependencies
-  pnpm-workspace.yaml          pnpmのワークスペース定義
-  turbo.json                   Turborepoのタスク定義
+  `package.json`                 ワークスペース設定・共通devDependencies
+  `pnpm-workspace.yaml`          pnpmのワークスペース定義
+  `turbo.json`                   Turborepoのタスク定義
   .env.example                 全体で使う環境変数
-  ARCHITECTURE.md
+  `ARCHITECTURE.md`
   README.md
 ```
 
 ---
 
-## pnpm-workspace.yaml
+## `pnpm-workspace.yaml`
 
 ```yaml
 packages:
@@ -70,7 +70,7 @@ packages:
 
 ---
 
-## turbo.json（タスクのキャッシュ・並列実行）
+## `turbo.json`（タスクのキャッシュ・並列実行）
 
 ```json
 {
@@ -94,7 +94,7 @@ packages:
 
 ---
 
-## packages/ の package.json 例
+## packages/ の `package.json` 例
 
 ```json
 // packages/shared-types/package.json

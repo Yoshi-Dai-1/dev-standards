@@ -4,7 +4,7 @@
 **採用パターン**：pages + components + hooks のフラット構成
 
 FSDは強力だが、小規模プロジェクトには過剰。
-シンプルな構成から始め、複雑になったら web-frontend-large.md に移行する。
+シンプルな構成から始め、複雑になったら `.opencode/standards/architectures/web-frontend-large.md` に移行する。
 
 ---
 
@@ -69,9 +69,9 @@ components は services を直接呼ばない（hooks 経由にする）。
 
 ## FSDへの移行タイミング
 
-以下のいずれかが発生したら web-frontend-large.md に移行を検討する：
+以下のいずれかが発生したら `.opencode/standards/architectures/web-frontend-large.md` に移行を検討する：
 
-- `components/` が50ファイルを超えた（stack-setup.md Step 3.5 ブロックB（必須ファイルの確認・記録）の実行時、および月次品質診断時にファイル数をカウントする。超過を検出した場合、ARCHITECTURE.md の「アーキテクチャ移行検討」セクションに警告を記録し、人間に通知する）
+- `components/` が50ファイルを超えた（`.opencode/instructions/stack-setup.md` Step 3.5 ブロックB（必須ファイルの確認・記録）の実行時、および月次品質診断時にファイル数をカウントする。超過を検出した場合、`ARCHITECTURE.md` の「アーキテクチャ移行検討」セクションに警告を記録し、人間に通知する）
 - `hooks/` が20ファイルを超えた（同様にカウント・通知する）
 - 同じドメインのコンポーネントとhooksを探すのに時間がかかるようになった
 - チーム開発になった
@@ -85,9 +85,9 @@ project-root/
   src/           （上記の構成）
   public/
   .env.example
-  ARCHITECTURE.md
+  `ARCHITECTURE.md`
   README.md
-  package.json
+  `package.json`
   tsconfig.json
   vite.config.ts（またはnext.config.js等）
 ```
@@ -96,4 +96,4 @@ project-root/
 
 ## Design Contract
 
-instructions/design-contract.md に従う。design/token-ssot.json を色・フォント・スペーシングの正本とし、design/component-map.json でコンポーネント名と実装の対応を管理する。
+`.opencode/instructions/design-contract.md` に従う。`design/token-ssot.json` を色・フォント・スペーシングの正本とし、`design/component-map.json` でコンポーネント名と実装の対応を管理する。

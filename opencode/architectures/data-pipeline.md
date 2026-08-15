@@ -26,7 +26,7 @@ project-root/
       validators.py
       date_utils.py
     config/                     設定の読み込み
-      settings.py               環境変数を型安全に読み込む
+      `settings.py`               環境変数を型安全に読み込む
 
   data/                         データファイル（gitignoreするものが多い）
     raw/                        取得した生データ（コミットしない）
@@ -118,7 +118,7 @@ __pycache__/
 
 ---
 
-## settings.py（型安全な環境変数読み込み）
+## `settings.py`（型安全な環境変数読み込み）
 
 ```python
 # src/config/settings.py

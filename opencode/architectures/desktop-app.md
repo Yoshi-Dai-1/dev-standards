@@ -43,7 +43,7 @@ Linux専用の技術（GTK / Qt等）はエコシステムの変化が速く、�
 project-root/
   src/
     main/                     メインプロセス（Node.js / Rust）
-      index.ts                エントリポイント
+      `index.ts`                エントリポイント
       window.ts               ウィンドウ管理
       ipc/                    IPC通信ハンドラ
         handlers.ts
@@ -61,7 +61,7 @@ project-root/
 
   electron-builder.yml        パッケージング設定（Electron）
   tauri.conf.json             Tauri設定ファイル（Tauri）
-  package.json
+  `package.json`
   tsconfig.json
   .env.example
 ```
@@ -81,7 +81,7 @@ project-root/
         [domain].py
       adapters/               外部サービス・ファイルシステム連携
       config/
-        settings.py
+        `settings.py`
 
   assets/
   tests/

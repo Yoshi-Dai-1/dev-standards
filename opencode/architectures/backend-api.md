@@ -150,19 +150,19 @@ tests/
 
 ## アーキテクチャ違反の機械的検出（リンター設定）
 
-依存ルールを ARCHITECTURE.md に書くだけでなく、リンターで機械的に強制する。
+依存ルールを `ARCHITECTURE.md` に書くだけでなく、リンターで機械的に強制する。
 エラーメッセージに修正方法を記載することで、AIが修正先を推測なしで判断できる。
 `lint-and-typecheck.ts` Plugin と組み合わせると、ファイル編集のたびに
 自動実行され、違反が即座にAIに通知される。
 
-**設定ファイルは ARCHITECTURE.md の層定義が確定した時点で自動生成される。**
-ARCHITECTURE.md の記入手順（Step 5-B）が各層名・ディレクトリパスを読んで
+**設定ファイルは `ARCHITECTURE.md` の層定義が確定した時点で自動生成される。**
+`ARCHITECTURE.md` の記入手順（Step 5-B）が各層名・ディレクトリパスを読んで
 プロジェクト固有の設定を生成する。以下は生成される設定の構造例。
 
 ### JavaScript / TypeScript の場合（ESLint）
 
 ```json
-// eslint.config.mjs — ARCHITECTURE.md の層定義から自動生成される
+// eslint.config.mjs — `ARCHITECTURE.md` の層定義から自動生成される
 {
   "rules": {
     "import/no-cycle": "error",
@@ -184,7 +184,7 @@ AIが修正方法を推測なしで実行できるようになる。
 ### Python の場合（Ruff）
 
 ```toml
-# pyproject.toml の [tool.ruff.lint] に追記 — ARCHITECTURE.md の層定義から自動生成される
+# pyproject.toml の [tool.ruff.lint] に追記 — `ARCHITECTURE.md` の層定義から自動生成される
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "[上位層から禁止するモジュールパス]" = { msg = "[アーキテクチャ違反] 〜 [正しい依存経路] 経由に変更してください。" }
 ```

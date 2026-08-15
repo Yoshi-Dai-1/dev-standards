@@ -83,7 +83,7 @@ project-root/
   test/                       スナップショットテスト
   cdk.json                    必須（CDK設定ファイル）
   cdk.context.json            コンテキスト値（コミットする）
-  package.json
+  `package.json`
   tsconfig.json
 ```
 

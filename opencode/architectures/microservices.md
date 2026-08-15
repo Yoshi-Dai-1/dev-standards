@@ -38,7 +38,7 @@ services/
       middleware/
       config/
     Dockerfile
-    package.json
+    `package.json`
 
   user-service/           ユーザー管理・認証
     src/
@@ -52,7 +52,7 @@ services/
       config/
         constants/        タイムアウト・リトライ回数・エンドポイント
     Dockerfile
-    package.json
+    `package.json`
 
   payment-service/        決済処理
     src/
@@ -91,14 +91,14 @@ infra/
 同期通信（REST / gRPC）：
   使う場面：即時レスポンスが必要な場合（ユーザー情報の取得など）
   注意点：呼び出し先のサービスが停止すると呼び出し元も影響を受ける
-  → サーキットブレーカーは「必ず」実装する（network-resilience.md の判断不要）
+  → サーキットブレーカーは「必ず」実装する（`.opencode/standards/principles/network-resilience.md` の判断不要）
   → タイムアウトとリトライは「必ず」実装する
 
 非同期通信（メッセージキュー）：
   使う場面：即時レスポンスが不要な場合（注文後のメール送信など）
   ツール例：Kafka / RabbitMQ / AWS SQS / Google Pub/Sub
   注意点：メッセージの重複配信が発生する前提で設計する
-  → コンシューマーを「必ず」冪等に実装する（network-resilience.md の冪等性参照）
+  → コンシューマーを「必ず」冪等に実装する（`.opencode/standards/principles/network-resilience.md` の冪等性参照）
   → 使用するメッセージキューは「[ツール名] idempotent consumer [現在年]」で検索する
 
 gRPC を使う場合：
@@ -113,7 +113,7 @@ gRPC を使う場合：
 
 サーキットブレーカーの必須設定（各サービスの infra/ に実装する）：
   → 同期通信でサービスを呼び出す箇所すべてに適用する
-  → network-resilience.md の「サーキットブレーカー」の原則に従って実装する
+  → `.opencode/standards/principles/network-resilience.md` の「サーキットブレーカー」の原則に従って実装する
 
 タイムアウトは全サービス間通信に設定する（デフォルト値を禁止する）：
   → 各サービスの constants/ にタイムアウト値を定数として定義する
@@ -122,7 +122,7 @@ gRPC を使う場合：
 フォールバックの定義：
   呼び出し先サービスが応答しないとき、何を返すかを必ず定義する
   例：ユーザーサービスが停止 → キャッシュした最終既知の値を返す / エラーレスポンスを返す
-  → ARCHITECTURE.md の「フォールバック設計」セクションに記録する
+  → `ARCHITECTURE.md` の「フォールバック設計」セクションに記録する
 ```
 
 ### 分散トレーシング（サービスをまたいだ問題調査のため）
@@ -144,7 +144,7 @@ gRPC を使う場合：
 ### APIゲートウェイの役割を明確にする
 
 ```
-APIゲートウェイが担う責務（ARCHITECTURE.md に記録する）：
+APIゲートウェイが担う責務（`ARCHITECTURE.md` に記録する）：
   ルーティング：外部リクエストを適切なサービスに転送する
   認証：JWTの検証はゲートウェイで一元管理する（各サービスで重複実装しない）
   レートリミット：外部からの大量リクエストをゲートウェイでブロックする
@@ -200,7 +200,7 @@ URLは変更される可能性があるため、組織名・ドメインで判�
 
 ---
 
-## ARCHITECTURE.md への追記セクション（マイクロサービス固有）
+## `ARCHITECTURE.md` への追記セクション（マイクロサービス固有）
 
 ```markdown
 ## サービス構成

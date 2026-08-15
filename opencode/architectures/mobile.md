@@ -7,14 +7,14 @@
 
 ## このファイルを使う前に確認すること
 
-ARCHITECTURE.md を記入する前に、以下を project-definition.md で確認する：
+`ARCHITECTURE.md` を記入する前に、以下を `docs/project-definition.md` で確認する：
 
 ```
 確認1：ネイティブか・クロスプラットフォームか
   iOS のみ          → Swift / SwiftUI
   Android のみ      → Kotlin / Jetpack Compose
   両方              → React Native（JS/TS） / Flutter（Dart）
-  → ARCHITECTURE.md の「言語・フレームワーク」欄に記録する
+  → `ARCHITECTURE.md` の「言語・フレームワーク」欄に記録する
 
 確認2：オフライン動作が必要か
   必要な場合        → ローカルDB（SQLite / Core Data / Room）を設計に含める
@@ -90,13 +90,13 @@ src/
 
 ## モバイル固有の設計原則
 
-### 通信設計（network-resilience.md に加えてモバイル固有の考慮が必要）
+### 通信設計（`.opencode/standards/principles/network-resilience.md` に加えてモバイル固有の考慮が必要）
 
 ```
 原則1：電波不安定を前提にする
   モバイル通信は Wi-Fi・4G・5G を行き来する。
   一時的な通信断は「例外」ではなく「通常の動作」として設計する。
-  → タイムアウトとリトライは「必ず」実装する（network-resilience.md の判断不要）
+  → タイムアウトとリトライは「必ず」実装する（`.opencode/standards/principles/network-resilience.md` の判断不要）
   → 通信中の画面操作をブロックしない（ローディング表示 + キャンセル可能な設計にする）
 
 原則2：バックグラウンド通信の制約を考慮する
@@ -108,10 +108,10 @@ src/
 
 原則3：オフライン状態の表示を必ず定義する
   通信エラー時に何を表示するか・どのデータをキャッシュするかを
-  ARCHITECTURE.md の「オフライン設計」セクションに記録する
+  `ARCHITECTURE.md` の「オフライン設計」セクションに記録する
 ```
 
-### 認証トークンの保管（security-implementation.md と連携）
+### 認証トークンの保管（`.opencode/standards/principles/security-implementation.md` と連携）
 
 ```
 機密情報（認証トークン・APIキー）の保管先：
@@ -164,7 +164,7 @@ URLは変更される可能性があるため、組織名・ドメインで判�
 
 ---
 
-## ARCHITECTURE.md への追記セクション（モバイル固有）
+## `ARCHITECTURE.md` への追記セクション（モバイル固有）
 
 ```markdown
 ## モバイル固有設計
