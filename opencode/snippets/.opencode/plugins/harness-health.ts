@@ -224,7 +224,7 @@ export const HarnessHealthPlugin: Plugin = async ({ client }) => {
       await notifyAI(
         client,
         sessionId,
-        `harness-health: tasks.json の pass 率は ${passRate}%（${result.passed}/${result.total}）です。` +
+        `harness-health: \`docs/tasks.json\` の pass 率は ${passRate}%（${result.passed}/${result.total}）です。` +
           `閾値 ${PASS_RATE_THRESHOLD * 100}% を下回っています。` +
           `未完了のタスクを見直してください。`,
       )

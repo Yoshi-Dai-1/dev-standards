@@ -2,13 +2,13 @@
 
 ### 設計初期段階（必ず検索する）
 
-ARCHITECTURE.md Step3 または project-definition.md 作成後の
+`ARCHITECTURE.md` Step3 または `docs/project-definition.md` 作成後の
 セキュリティ要件定義時に、以下を必ずWebで検索してから提案する：
 
 ```
 OWASP Top 10 [現在年]        → 現在有効なバージョンを確認
-使用言語・使用フレームワーク（ARCHITECTURE.mdに記録）の security guide [現在年] → 言語・フレームワーク固有の最新ガイドを確認
-適用される法令の最新状況      → GDPR改正・個人情報保護法改正・その他 project-definition.md で特定した法令の改正状況
+使用言語・使用フレームワーク（`ARCHITECTURE.md`に記録）の security guide [現在年] → 言語・フレームワーク固有の最新ガイドを確認
+適用される法令の最新状況      → GDPR改正・個人情報保護法改正・その他 `docs/project-definition.md` で特定した法令の改正状況
 ```
 
 ### 実装中（以下の操作を行ったとき、またはその結果をAIが受け取ったとき）
@@ -60,7 +60,7 @@ URLは変更される可能性があるため組織名・ドメインで判断�
 どんな弱点か  → CWE（cwe.mitre.org）
 既知の脆弱性  → CVE/NVD（cve.mitre.org / nvd.nist.gov）
 管理・統制    → NIST（nist.gov）SP 800-53・CSF / ISMAP
-実装方法      → 各言語・フレームワーク（ARCHITECTURE.mdに記録）の公式ドキュメント
+実装方法      → 各言語・フレームワーク（`ARCHITECTURE.md`に記録）の公式ドキュメント
 ライブラリ    → GitHub 公式リポジトリ セキュリティアドバイザリ
 ```
 

@@ -3,12 +3,12 @@
 ```
 tsconfig.base.json   → 下記インラインテンプレートで作成
 .prettierrc          → 下記テンプレートで作成
-.nvmrc               → ARCHITECTURE.md の Node.js バージョンから生成
+.nvmrc               → `ARCHITECTURE.md` の Node.js バージョンから生成
 ```
 
 **`.nvmrc` の生成（Node.js バージョン管理）：**
 ```
-自動展開：  ARCHITECTURE.md の「技術スタック」に記録された Node.js バージョンを .nvmrc に書き込む
+自動展開：  `ARCHITECTURE.md` の「技術スタック」に記録された Node.js バージョンを .nvmrc に書き込む
            未記録の場合は `node --version` のメジャーバージョンを使う
 確認付き展開：バージョンを提示し、承認後に書き込む
 展開なし：  コマンドを提示するのみ（実行しない）
@@ -23,9 +23,9 @@ tsconfig.base.json   → 下記インラインテンプレートで作成
 npm install --save-dev typescript prettier
 ```
 `npm` は Node.js に同梱。未インストールの場合は `https://nodejs.org` からインストールする。
-`tsconfig.json` の strict 系オプション・eslint 設定はアーキテクチャ種別（web-frontend / backend-api / monorepo）に応じて、ARCHITECTURE.md の「アーキテクチャ固有設計」セクションの指示に従って調整する。
+`tsconfig.json` の strict 系オプション・eslint 設定はアーキテクチャ種別（web-frontend / backend-api / monorepo）に応じて、`ARCHITECTURE.md` の「アーキテクチャ固有設計」セクションの指示に従って調整する。
 
-**tsconfig.base.json テンプレート：**
+**`tsconfig.base.json` テンプレート：**
 ```json
 {
   "$schema": "https://json.schemastore.org/tsconfig",
@@ -58,7 +58,7 @@ npm install --save-dev typescript prettier
 
 展開後、ユーザーに以下を案内する：
 > TypeScript プロジェクト用の設定ファイルを作成しました。
-> `tsconfig.json`（プロジェクト固有）は別途 ARCHITECTURE.md の指示に従って作成します。
+> `tsconfig.json`（プロジェクト固有）は別途 `ARCHITECTURE.md` の指示に従って作成します。
 > lint・フォーマットの自動チェックには `.opencode/plugins/lint-and-typecheck.ts` が有効です（`.opencode/plugins/README.md` 参照）。
 
 ---

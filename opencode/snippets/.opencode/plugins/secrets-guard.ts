@@ -82,7 +82,7 @@ export const SecretsGuardPlugin: Plugin = async ({ client }) => ({
             throw new Error(
               `Potential secret detected: ${label} in ${fp}\n` +
                 `Remove the hardcoded secret and use environment variables or a secrets manager.\n` +
-                `See .opencode/standards/principles/security-requirements.md`,
+                `See \`.opencode/standards/principles/security-requirements.md\``,
             )
           } else if (severity === "warn" && sessionId) {
             await client.session.prompt({

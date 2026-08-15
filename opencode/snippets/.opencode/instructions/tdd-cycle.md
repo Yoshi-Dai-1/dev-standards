@@ -1,7 +1,7 @@
 # TDD Cycle - 詳細手順
 
 このルールはテストファイル編集時に Plugin が注入する。
-AGENTS.md の TDD Cycle セクションを補完する詳細手順。
+`AGENTS.md` の TDD Cycle セクションを補完する詳細手順。
 
 ---
 

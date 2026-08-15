@@ -78,15 +78,15 @@ export const CompactionContextPlugin: Plugin = async () => ({
     for (const dir of workingDirs) {
       const allPassed = dir.passes.length > 0 && dir.passes.every((p) => p)
       const status = allPassed ? "COMPLETED" : "IN PROGRESS"
-      context += `### docs/working/${dir.name}/ — ${status}\n`
+      context += `### \`docs/working/${dir.name}/\` — ${status}\n`
       if (dir.tasks.length > 0) {
         context += `Tasks: ${dir.tasks.join(", ")}\n`
       }
     }
 
-    context += "\n作業ディレクトリの詳細は docs/working/<id>/plan.md を参照してください。\n"
+    context += "\n作業ディレクトリの詳細は `docs/working/<id>/plan.md` を参照してください。\n"
     context += "完了条件：全タスクの passes が true（@evaluator のみが更新可能）\n"
-    context += "アーカイブ：task-archive.ts がアイドル時に提案"
+    context += "アーカイブ：`task-archive.ts` がアイドル時に提案"
 
     output.context.push(context)
   },

@@ -1,20 +1,20 @@
 # デザイン契約ルール（Design Contract Rules）
 
-このルールは DESIGN.md・UI コンポーネントファイル編集時に Plugin が注入する。
+このルールは `DESIGN.md`・UI コンポーネントファイル編集時に Plugin が注入する。
 詳細な判断基準は `.opencode/standards/principles/design-contract.md` を参照（必要時に読む）。
 
 ---
 
 ## 自律トリガー
 
-### DESIGN.md が存在し design/token-ssot.json が存在しないとき
+### `DESIGN.md` が存在し `design/token-ssot.json` が存在しないとき
 
 #### Pre-step: Open Design の提案
 
 1. `.opencode/standards/principles/design-contract.md` の「Open Design との関係」を読む
 2. 人間に以下を説明する：
    - Open Design（OD）はデザインシステムを自動生成するための外部ツール。OD を使うと AI が一貫性のあるデザイントークン候補を生成し、`design/token-ssot.json` に取り込める。
-   - 使わなくてもこのまま INTAKE.md の手順で 1 つずつデザイン値を決められる。
+   - 使わなくてもこのまま `design/INTAKE.md` の手順で 1 つずつデザイン値を決められる。
 3. 「Open Design をセットアップして使いますか？」と質問する
 4. 使う場合：
    a. `git submodule add https://github.com/nexu-io/open-design.git tools/open-design`
@@ -44,21 +44,21 @@
 ### UI コンポーネントを新規作成するとき
 
 1. `design/component-map.json` を読み、既存コンポーネントを確認する
-2. Header / Drawer / Tabs / Card Grid / Hero / CTA がリクエストに含まれる場合、component-map.json に同名のエントリがないか確認する
+2. Header / Drawer / Tabs / Card Grid / Hero / CTA がリクエストに含まれる場合、`design/component-map.json` に同名のエントリがないか確認する
 3. 存在する場合：既存コンポーネントを使用する。新規作成しない
-4. 存在しない場合：新規作成し、component-map.json に追記する
+4. 存在しない場合：新規作成し、`design/component-map.json` に追記する
 
-### design/token-ssot.json を編集したとき
+### `design/token-ssot.json` を編集したとき
 
-1. 変更を DESIGN.md の該当説明に追従させる（DESIGN.md は値を直接持たないため、参照が正しいことの確認のみ）
+1. 変更を `DESIGN.md` の該当説明に追従させる（`DESIGN.md` は値を直接持たないため、参照が正しいことの確認のみ）
 2. グローバルCSS（globals.css / variables.css 等）の該当値を追従させる
 3. 変更の影響を受ける全コンポーネントを確認する
-4. component-map.json の token 参照がずれていないか確認する
+4. `design/component-map.json` の token 参照がずれていないか確認する
 
 ---
 
 ## 常駐禁止事項
 
-- token-ssot.json にない色・サイズ・スペーシング値を CSS に直書きしない
-- component-map.json 未登録のコンポーネントを新規作成しない
-- 外部UI語彙（Header / Drawer / Tabs / Card Grid / Hero / CTA）を component-map.json 未確認のままコードに登場させない
+- `design/token-ssot.json` にない色・サイズ・スペーシング値を CSS に直書きしない
+- `design/component-map.json` 未登録のコンポーネントを新規作成しない
+- 外部UI語彙（Header / Drawer / Tabs / Card Grid / Hero / CTA）を `design/component-map.json` 未確認のままコードに登場させない

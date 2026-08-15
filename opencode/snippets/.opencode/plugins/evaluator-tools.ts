@@ -22,8 +22,8 @@ export const EvalToolsPlugin: Plugin = async () => ({
   tool: {
     "evaluator-passed": tool({
       description:
-        "@evaluator PASS 時に呼び出す。.evaluator-updating マーカーを作成し、" +
-        "tasks.json の該当スプリント passes を true に更新し、マーカーを削除する。",
+        "@evaluator PASS 時に呼び出す。`.evaluator-updating` マーカーを作成し、" +
+        "`docs/tasks.json` の該当スプリント passes を true に更新し、マーカーを削除する。",
       args: {
         sprint: tool.schema.number().describe("今回評価したスプリント番号"),
       },
@@ -58,13 +58,13 @@ export const EvalToolsPlugin: Plugin = async () => ({
         // 5. マーカー削除
         await Bun.write(markerPath, "")
 
-        return `PASS 結果を tasks.json に反映しました（sprint ${args.sprint}）`
+        return `PASS 結果を \`docs/tasks.json\` に反映しました（sprint ${args.sprint}）`
       },
     }),
 
     "evaluator-failed": tool({
       description:
-        "@evaluator FAIL 時に呼び出す。.evaluator-failed マーカーを作成する。",
+        "@evaluator FAIL 時に呼び出す。`.evaluator-failed` マーカーを作成する。",
       args: {},
       async execute() {
         await Bun.write(".opencode/.evaluator-failed", "evaluator FAIL")

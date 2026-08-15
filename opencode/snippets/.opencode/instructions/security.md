@@ -1,6 +1,6 @@
 # セキュリティルール（Security Rules）
 
-このルールはコードファイル・project-definition.md 編集時に Plugin が注入する。
+このルールはコードファイル・`docs/project-definition.md` 編集時に Plugin が注入する。
 
 詳細な判断基準・チェックリスト・言語別ガイドは以下を参照（必要時に読む）：
 - `.opencode/standards/principles/security-requirements.md`（対応レベル・法令判断・言語別詳細）
@@ -15,12 +15,12 @@
 
 | トリガー | 参照先 |
 |---------|--------|
-| project-definition.md 作成・更新時 | `.opencode/instructions/security/_trigger-project-definition.md` |
+| `docs/project-definition.md` 作成・更新時 | `.opencode/instructions/security/_trigger-project-definition.md` |
 | 最初のコードファイル作成時 | `.opencode/instructions/security/_trigger-first-code.md` |
 | スプリント完了後（セキュリティ監査） | `.opencode/instructions/security/_trigger-sprint-audit.md` |
 | PR作成時（gh pr create / git push） | `.opencode/instructions/security/_trigger-pr.md` |
 | 新機能実装時（Won't違反チェック） | `.opencode/instructions/security/_trigger-wont.md` |
-| package.json バージョン変更時 | `.opencode/instructions/security/_trigger-package-version.md` |
+| `package.json` バージョン変更時 | `.opencode/instructions/security/_trigger-package-version.md` |
 
 ### コードファイルを編集するとき
 
@@ -39,7 +39,7 @@
 
 ## 常駐禁止事項（セッション中いつでも適用）
 
-AGENTS.md の記憶が薄れても以下は常に有効：
+`AGENTS.md` の記憶が薄れても以下は常に有効：
 
 - 機密情報（APIキー・パスワード・トークン）をコードにハードコードしない
 - 機密情報をログに出力しない（デバッグログも含む）

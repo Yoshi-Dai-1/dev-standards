@@ -68,7 +68,7 @@
 → `.opencode/instructions/stack-setup/_arch-deploy.md` を読んで実行する
 
 ### Step 3.5: 命名規則・フレームワーク深掘り・コンプライアンス
-→ `.opencode/instructions/stack-setup/_step-35.md` を読んで実行する（Step 2 と Step 3 の完了直後または ARCHITECTURE.md 更新時）
+→ `.opencode/instructions/stack-setup/_step-35.md` を読んで実行する（Step 2 と Step 3 の完了直後または `ARCHITECTURE.md` 更新時）
 
 ### Step 3.6: アーキテクチャ固有ルールの適用
 → `.opencode/instructions/stack-setup/_step-36-arch.md` を読んで実行する
@@ -88,5 +88,5 @@
 - 展開したファイルは必ず一覧を報告する
 - 不明点がある場合はデフォルト値を使い、後で変更できると案内する:
     TypeScript → ES2022、Python → 3.12、Go → モジュール名のみ、Node.js → `node --version` のメジャーバージョン、Ruby → 3.3
-- 実際のランタイムバージョンは Step 3.5 のブロックBで Web検索により決定し、ARCHITECTURE.md に記録する（SSOT）。
+- 実際のランタイムバージョンは Step 3.5 のブロックBで Web検索により決定し、`ARCHITECTURE.md` に記録する（SSOT）。
   デフォルト値はブロックB実行前のフォールバックとしてのみ機能する。

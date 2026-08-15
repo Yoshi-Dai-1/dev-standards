@@ -44,7 +44,7 @@ export const DestructiveOpGuardPlugin: Plugin = async () => ({
       if (pattern.test(cmd)) {
         throw new Error(
           `[destructive-op-guard] 破壊的操作を検出しました: "${cmd}"\n` +
-            `この操作は AGENTS.md Safety Rules により制限されています。\n` +
+            `この操作は \`AGENTS.md\` Safety Rules により制限されています。\n` +
             `実行する必要がある場合は、人間に以下のコマンドを確認してから再実行してください。`,
         )
       }

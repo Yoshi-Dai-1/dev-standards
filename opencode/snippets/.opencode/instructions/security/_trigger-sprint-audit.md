@@ -24,6 +24,6 @@
 
 Lv.3以上のプロジェクトで、脅威モデリングが未実施の場合:
 → `decisions/` ディレクトリ内に `*-threat-modeling.md` にマッチするファイルが存在しない、
-  かつ ARCHITECTURE.md の「セキュリティ要件」セクションに「脅威モデリング実施」の記載がない場合、未実施と判定する
+  かつ `ARCHITECTURE.md` の「セキュリティ要件」セクションに「脅威モデリング実施」の記載がない場合、未実施と判定する
 → `@security-auditor` 呼び出しの前に
   `.opencode/standards/principles/threat-modeling.md` を読んで実施する

@@ -1,13 +1,13 @@
-# AGENTS.md 記入ガイド
+# `AGENTS.md` 記入ガイド
 
 このファイルは `AGENTS.md` テンプレートをプロジェクト固有の内容で埋めるためのガイド。
 AIがこのファイルを読み、以下の記入手順に従って人間と対話しながら記入する。
 
 ---
 
-## AGENTS.md の記入手順
+## `AGENTS.md` の記入手順
 
-**注意：AGENTS.md を保存するときは、削除が指示されているコメント（`## 初期セットアップ` セクション内のもの等）を除き、HTML コメント（`<!-- ... -->`）をそのまま維持すること。コメントは初回セットアップの記入プロセス中に AI が参照する指示であり、記入完了時（0-f）に `## 初期セットアップ` セクションごと削除される。**
+**注意：`AGENTS.md` を保存するときは、削除が指示されているコメント（`## 初期セットアップ` セクション内のもの等）を除き、HTML コメント（`<!-- ... -->`）をそのまま維持すること。コメントは初回セットアップの記入プロセス中に AI が参照する指示であり、記入完了時（0-f）に `## 初期セットアップ` セクションごと削除される。**
 
 以下の手順で、Project Overview / Commands / コミットメッセージ言語 / Subagents を決定して記入する。
 `docs/project-definition.md` と `ARCHITECTURE.md` を参照しながら、以下を1つずつ人間に質問して埋めてください：
@@ -16,7 +16,7 @@ AIがこのファイルを読み、以下の記入手順に従って人間と対
 2. 技術スタックとバージョン
 3. 実行コマンド（install/dev/build/typecheck/lint/test）
 4. コミットメッセージ言語（以下の手順で提案してください）：
-   - docs/project-definition.md と ARCHITECTURE.md から、コミットログを読む対象者（想定コントリビューター・OSS公開範囲）を確認する
+   - `docs/project-definition.md` と `ARCHITECTURE.md` から、コミットログを読む対象者（想定コントリビューター・OSS公開範囲）を確認する
    - GitHub 公開予定または国際チームの場合は subject=English を推奨する（理由を説明する）
    - チーム内のみの場合は subject=対話言語と同じを推奨する
    - body の言語は subject と同じを基本とし、subject と分ける選択肢も提示する
@@ -25,7 +25,7 @@ AIがこのファイルを読み、以下の記入手順に従って人間と対
    1. 自動展開：言語確定時に設定ファイルを確認なしで自動作成する（デフォルト・初心者〜標準）
    2. 確認付き展開：すべての設定ファイル作成前に内容を説明し、承認を得てから作成する（上級者向け）
    3. 展開なし：設定ファイルはすべて自分で管理する。AIは提案のみ行い作成はしない（上級者・独自構成あり）
-   選択後、.opencode/project-context.md の「未設定」を選択した値に書き換える。
+   選択後、`.opencode/project-context.md` の「未設定」を選択した値に書き換える。
    質問は1つずつ。人間が答えるまで次に進まないでください。
 
 ## セクションごとの記入ガイド
@@ -36,7 +36,7 @@ AIがこのファイルを読み、以下の記入手順に従って人間と対
 
 ### Commands
 - プロジェクトで実際に使うコマンドを完全な形で書く
-- 言語・ツールに合わせて書き換える（ARCHITECTURE.md 記入後に stack-setup.md が補完する）
+- 言語・ツールに合わせて書き換える（`ARCHITECTURE.md` 記入後に `.opencode/instructions/stack-setup.md` が補完する）
 
 ### Boundaries（禁止事項）
 - 省略しない。すべてのプロジェクトに共通する禁止事項
@@ -45,12 +45,12 @@ AIがこのファイルを読み、以下の記入手順に従って人間と対
 - そのまま維持する（全プロジェクト共通）
 
 ### コミット実行
-- ARCHITECTURE.md の「開発プロセス」セクションの設定に従う
+- `ARCHITECTURE.md` の「開発プロセス」セクションの設定に従う
 - 設定がない場合は「AI が提案・人間が実行」として動作する
 
 ### Security Boundaries
 - 先頭5行は全プロジェクト共通。編集しない
-- 6行目以降は ARCHITECTURE.md Step 3 で追記する。データ源: project-definition.md + security-requirements.md
+- 6行目以降は `ARCHITECTURE.md` Step 3 で追記する。データ源: `docs/project-definition.md` + `.opencode/standards/principles/security-requirements.md`
 
 ### TDD Cycle
 - テストドリフト検知の詳細は `.opencode/instructions/tdd-cycle.md` を参照
@@ -70,11 +70,11 @@ AIがこのファイルを読み、以下の記入手順に従って人間と対
 
 ---
 
-## プロジェクト途中でAGENTS.mdを書き換える場合
+## プロジェクト途中で`AGENTS.md`を書き換える場合
 
-既存の AGENTS.md を修正したいときは、以下のようにAIに伝える：
+既存の `AGENTS.md` を修正したいときは、以下のようにAIに伝える：
 
-> 「AGENTS.md を以下の観点で見直してください：
+> 「`AGENTS.md` を以下の観点で見直してください：
 >  1. Project Overview が現在の状態と一致しているか
 >  2. Commands が最新の開発コマンドと一致しているか
 >  3. Boundaries / Safety Rules / Security Boundaries に追加すべき制約があるか

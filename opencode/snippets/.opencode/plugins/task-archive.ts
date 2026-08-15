@@ -66,16 +66,16 @@ async function archiveDir(
   await notifyAI(
     client,
     sessionId,
-    `task-archive: docs/working/${candidate.dirName}/ に属する全タスク（${candidate.taskIds.join(", ")}）の passes が true です。` +
+    `task-archive: \`docs/working/${candidate.dirName}/\` に属する全タスク（${candidate.taskIds.join(", ")}）の passes が true です。` +
       `この作業ディレクトリは完了状態です。` +
       `以下の手順でアーカイブしてください：\n` +
-      `1. docs/working/${candidate.dirName}/ の内容を docs/archive/${candidate.dirName}/ に移動\n` +
+      `1. \`docs/working/${candidate.dirName}/\` の内容を \`docs/archive/${candidate.dirName}/\` に移動\n` +
       `   移動先の構造：\n` +
-      `   docs/archive/${candidate.dirName}/\n` +
-      `     plan.md\n` +
-      `     notes.md\n` +
-      `     review-checklist.md\n` +
-      `2. docs/working/${candidate.dirName}/ を削除\n` +
+      `   \`docs/archive/${candidate.dirName}/\`\n` +
+      `     \`plan.md\`\n` +
+      `     \`notes.md\`\n` +
+      `     \`review-checklist.md\`\n` +
+      `2. \`docs/working/${candidate.dirName}/\` を削除\n` +
       `（archive/ は .gitignore に含まれるためコミットされません）`,
   )
 }

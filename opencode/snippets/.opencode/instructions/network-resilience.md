@@ -13,8 +13,8 @@
 
 | トリガー | 参照先 |
 |---------|--------|
-| ARCHITECTURE.md 作成・更新時（採否判断） | `.opencode/instructions/network-resilience/_trigger-arch.md` |
-| ARCHITECTURE.md の「通信設計」が未記入のまま実装フェーズに入ったとき | `.opencode/instructions/network-resilience/_trigger-implementation-phase.md` |
+| `ARCHITECTURE.md` 作成・更新時（採否判断） | `.opencode/instructions/network-resilience/_trigger-arch.md` |
+| `ARCHITECTURE.md` の「通信設計」が未記入のまま実装フェーズに入ったとき | `.opencode/instructions/network-resilience/_trigger-implementation-phase.md` |
 
 ### 外部通信を含むコードファイルを作成・編集するとき
 
@@ -44,18 +44,18 @@
   → 決済・メール送信・SMS送信・プッシュ通知送信のコードに
     タイムアウト後のリトライが設定されている場合は実装を止めて通知する：
     「この操作は冪等でないため、単純なリトライを設定すると二重処理になります。
-     network-resilience.md の冪等性の確保を先に実装します。」
+     `.opencode/standards/principles/network-resilience.md` の冪等性の確保を先に実装します。」
 
 ---
 
 ## 常駐禁止事項（セッション中いつでも適用）
 
-AGENTS.md の記憶が薄れても以下は常に有効：
+`AGENTS.md` の記憶が薄れても以下は常に有効：
 
 - 外部通信（HTTP・DB・API）にタイムアウトを設定せずにコードを書かない
 - タイムアウト値・リトライ回数などの設定値をコードに直接書かない（constants/ に定義する）
 - 冪等でない操作（決済・メール送信・SMS送信・通知送信）にタイムアウト後のリトライを設定しない
-- 通信設計の採否が ARCHITECTURE.md に記録されていない状態で通信コードを本番に適用しない
+- 通信設計の採否が `ARCHITECTURE.md` に記録されていない状態で通信コードを本番に適用しない
 
 ---
 

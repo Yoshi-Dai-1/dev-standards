@@ -3,12 +3,12 @@
 `Cargo.toml` はプロジェクト固有のため自動作成しない。
 
 **バージョン管理：** `rust-toolchain.toml` でランタイムバージョンを固定する。
-ARCHITECTURE.md に記録された Rust バージョンから以下のテンプレートで作成する：
+`ARCHITECTURE.md` に記録された Rust バージョンから以下のテンプレートで作成する：
 ```toml
 [toolchain]
 channel = "stable"
 ```
-（バージョンは ARCHITECTURE.md に記録されたバージョンを優先する。未記録の場合は `stable` を使う）
+（バージョンは `ARCHITECTURE.md` に記録されたバージョンを優先する。未記録の場合は `stable` を使う）
 
 **インストールを実行する（全OS対応）：**
 ```bash

@@ -1,7 +1,7 @@
 #### Python が含まれる場合
 
 ```
-.python-version       → 下記テンプレートで作成（ARCHITECTURE.md のバージョンを優先）
+.python-version       → 下記テンプレートで作成（`ARCHITECTURE.md` のバージョンを優先）
 pyproject.toml        → 下記テンプレートで作成（Ruff・mypy の設定を含む）
 requirements.txt      → 下記テンプレートで作成
 requirements-dev.txt  → 下記テンプレートで作成
@@ -11,7 +11,7 @@ requirements-dev.txt  → 下記テンプレートで作成
 ```
 3.12
 ```
-（バージョンは ARCHITECTURE.md に記録されたバージョンを優先する。
+（バージョンは `ARCHITECTURE.md` に記録されたバージョンを優先する。
 未記録の場合は上記デフォルト値を使い、後で変更できると案内する）
 
 **仮想環境の作成（pip インストールより前に実行する）：**

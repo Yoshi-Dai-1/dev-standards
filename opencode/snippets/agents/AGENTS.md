@@ -42,14 +42,14 @@ CLI で外部リソース（DB・API・クラウドサービス等）の状態�
 空セクションが残っている → 0-b に戻る。
 全セクション完了 → 0-d に進む。
 
-### 0-d. アーキテクチャ選定 → ARCHITECTURE.md 記入
+### 0-d. アーキテクチャ選定 → `ARCHITECTURE.md` 記入
 
 1. `.opencode/standards/architectures/_how-to-choose.md` でアーキテクチャを選定する
 2. セクション間の一貫性を保つため、`ARCHITECTURE.md` の**テンプレート全文を先に読んでから**記入を開始する。
 3. テンプレート内のコメント指示（「削除する」「該当セクションのみ記入」等）に従い、不要なセクションや未使用のコメントアウトブロックを削除する。プレースホルダーを残さない
 4. アーキテクチャ選定の理由を `decisions/001-choose-[アーキテクチャ名].md` として作成する（`decisions/000-template.md` をコピーして使用する）
 
-### 0-e. AGENTS.md の Project Overview / Commands / コミットメッセージ言語を更新
+### 0-e. `AGENTS.md` の Project Overview / Commands / コミットメッセージ言語を更新
 
 `docs/project-definition.md` と `ARCHITECTURE.md` を参照して、
 プロジェクト名・目的・コマンドを記入する。
@@ -135,8 +135,8 @@ git add -A && git commit -m "[生成したメッセージ]"
 1. **TDD 確認順序完了後**（型チェック → lint → テスト → @code-reviewer → 人間レビュー → 提案）
 2. **人間の明示指示時**
 
-提案後、人間が「実行して」と指示 → AI が bash 実行し commit-review.ts が発火する。
-人間のターミナル手動実行では commit-review.ts は動作しない。
+提案後、人間が「実行して」と指示 → AI が bash 実行し `commit-review.ts` が発火する。
+人間のターミナル手動実行では `commit-review.ts` は動作しない。
 
 ## Security Boundaries
 
@@ -154,7 +154,7 @@ git add -A && git commit -m "[生成したメッセージ]"
 
 ## Subagents
 
-- 複数ファイル・複数タスクの実装 → `@planner`（spec.md + tasks.json 生成。作業ディレクトリ判断基準は `.opencode/standards/principles/harness-engineering.md`）
+- 複数ファイル・複数タスクの実装 → `@planner`（`spec.md` + `tasks.json` 生成。作業ディレクトリ判断基準は `.opencode/standards/principles/harness-engineering.md`）
 - スプリント開始前 → `@evaluator`（Sprint Contract レビュー。承認まで繰り返す）
 - スプリント完了後 → `@evaluator`（QA評価。PASS → 次、FAIL → 修正）
 - 調査・原因特定 → `@codebase-investigator`（メインコンテキストを汚さない）
@@ -199,5 +199,5 @@ git add -A && git commit -m "[生成したメッセージ]"
  所感：[変更の意図と影響を技術知識の有無にかかわらず理解できる平易な言葉で1〜2文]
 ```
 
-【テンプレート：decisions/000-template.md（ADR・技術選定兼用）】
+【テンプレート：`decisions/000-template.md`（ADR・技術選定兼用）】
 【保存先：decisions/[連番]-[内容を表すslug].md】

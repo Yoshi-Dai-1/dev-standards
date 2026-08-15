@@ -59,8 +59,8 @@ export const AdrPromptPlugin: Plugin = async ({ client }) => {
               text: [
                 "---adr-prompt---",
                 "複数のファイルを編集しました。",
-                "実装が完了したら AGENTS.md の Report Format に従って報告し、",
-                "decisions/ への記録が必要な判断（ライブラリ選定・データモデル・",
+                "実装が完了したら `AGENTS.md` の Report Format に従って報告し、",
+                "`decisions/` への記録が必要な判断（ライブラリ選定・データモデル・",
                 "認証方式・方針変更）があれば提案してください。",
                 "---adr-prompt---",
               ].join("\n"),

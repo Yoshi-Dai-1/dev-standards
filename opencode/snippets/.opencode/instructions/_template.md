@@ -3,7 +3,7 @@
 <!-- このファイルをコピーして .opencode/instructions/[rule-name].md として使う -->
 <!-- ルールはプロジェクト固有の問題から生まれる。最初から網羅的に書かない -->
 <!-- 「同じ指摘を2回した」がルール化のトリガー -->
-<!-- ルールは Plugin (rule-injector.ts) がファイル種別・内容に応じてイベント駆動で注入する -->
+<!-- ルールは Plugin (`.opencode/plugins/rule-injector.ts`) がファイル種別・内容に応じてイベント駆動で注入する -->
 
 ## [ルール名]
 
@@ -36,7 +36,7 @@
 ---
 
 <!-- ルールファイルの命名規則 -->
-<!-- testing.md / security.md / naming.md / prisma-schema.md など -->
+<!-- `.opencode/instructions/testing.md` / `security.md` / `naming.md` / `prisma-schema.md` など -->
 <!-- 1ファイル1トピック。混在させない -->
 
 <!-- GCのタイミング：月1回、「先月このファイルが参照されたか」を確認 -->
