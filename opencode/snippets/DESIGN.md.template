@@ -1,6 +1,6 @@
 # DESIGN.md
 
-【このファイルはUI実装の入口。DESIGN.md は設計の索引であり、値を持たない。値はすべて design/token-ssot.json が正本。】
+【このファイルはUI実装の入口。`DESIGN.md` は設計の索引であり、値を持たない。値はすべて `design/token-ssot.json` が正本。】
 
 ---
 
@@ -192,7 +192,7 @@ font-feature-settings: "palt" 1;
 - font-family に特定言語のフォント1つだけを指定しない（環境依存になる）
 - 本文に line-height: 1.2 以下を使わない（可読性が著しく低下する）
 - テキストの色に純粋な #000000 を使わない（コントラストが強すぎる）
-- token-ssot.json にない色・サイズ・スペーシング値を CSS に直書きしない
+- `design/token-ssot.json` にない色・サイズ・スペーシング値を CSS に直書きしない
 - [プロジェクト固有の禁止事項]
 
 ---
@@ -228,7 +228,7 @@ font-feature-settings: "palt" 1;
 ### 検証手段
 
 - `@evaluator` による QA評価（各スプリント完了後） — 必須
-- CLI検証コマンドが存在する場合（例：Penpot→`pnpm penpot:verify`、Open Design→`pnpm tools-dev`）— DESIGN.md 編集後に必ず実行する。コマンド名はプロジェクトに応じてARCHITECTURE.md に記載する
+- CLI検証コマンドが存在する場合（例：Penpot→`pnpm penpot:verify`、Open Design→`pnpm tools-dev`）— `DESIGN.md` 編集後に必ず実行する。コマンド名はプロジェクトに応じて`ARCHITECTURE.md` に記載する
 
 ---
 
@@ -252,5 +252,5 @@ Pre-step（Open Design の提案）に従い案内される。
 ### Penpot を使う場合
 
 Penpot を使う場合、`pnpm penpot:verify` のようなプロジェクト固有のCLI検証コマンドを
-ARCHITECTURE.md に定義する。token の値は Penpot のデザインシステムから
+`ARCHITECTURE.md` に定義する。token の値は Penpot のデザインシステムから
 `design/token-ssot.json` に転記する。
