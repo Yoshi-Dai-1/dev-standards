@@ -101,11 +101,11 @@ NODE_ENV=development     # development / production / test
 
 ## ドキュメントのSSOT
 
-同じ情報がREADME.mdとARCHITECTURE.mdと別のドキュメントに重複して書かれている状態を禁止する。
+同じ情報がREADME.mdと`ARCHITECTURE.md`と別のドキュメントに重複して書かれている状態を禁止する。
 
 ```
 README.md           セットアップ手順・概要
-ARCHITECTURE.md     設計思想・層のルール・制約
+`ARCHITECTURE.md`     設計思想・層のルール・制約
 decisions/          個別の判断記録（ADR）
 
 # 禁止：同じルールをREADMEとARCHITECTUREの両方に書く

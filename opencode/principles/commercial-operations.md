@@ -88,7 +88,7 @@ AIは `docs/project-definition.md` のチーム規模を読んで以下を適用
 | 2〜5人 | Trunk-Based Development（以下参照） |
 | 6人以上 または リリースサイクルが月1回以下 | GitFlow（以下参照） |
 
-docs/project-definition.md にチーム規模の記載がない場合は人間に確認する。
+`docs/project-definition.md` にチーム規模の記載がない場合は人間に確認する。
 
 ### 個人開発：シンプル戦略
 
@@ -423,7 +423,7 @@ await auditLogger.log({
 
 ---
 
-## ARCHITECTURE.md への反映
+## `ARCHITECTURE.md` への反映
 
 このファイルで定義した内容をプロジェクトの `ARCHITECTURE.md` 非機能要件セクションに転記する。
 転記すべき項目は `non-functional-requirements.md` のテンプレートに商用列として統合済み。
@@ -436,27 +436,27 @@ await auditLogger.log({
 
 ```
 このプロジェクトは商用サービスです。
-.opencode/standards/principles/commercial-operations.md を読んで、
-docs/project-definition.md の内容をもとに以下を評価してください：
+`.opencode/standards/principles/commercial-operations.md` を読んで、
+`docs/project-definition.md` の内容をもとに以下を評価してください：
 
 1. SLA / SLO / SLI の定義が必要か（どの水準が妥当か）
 2. ブランチ戦略として Trunk-Based と GitFlow のどちらが適切か
 3. 監査ログの対象操作として何を記録すべきか
 4. 定期セキュリティ監査のスコープを提案してください
 
-評価後、ARCHITECTURE.md の非機能要件セクションに追記すべき内容を提案してください。
+評価後、`ARCHITECTURE.md` の非機能要件セクションに追記すべき内容を提案してください。
 ```
 
 ### インシデント発生時
 
 ```
 P[0/1/2] インシデントが発生しました。
-.opencode/standards/principles/commercial-operations.md のインシデント管理セクションに従って、
+`.opencode/standards/principles/commercial-operations.md` のインシデント管理セクションに従って、
 以下を支援してください：
 
 1. 影響範囲の特定に必要な確認事項を列挙してください
 2. 暫定対応の選択肢を提案してください（ロールバック / フィーチャーフラグ / 等）
-3. docs/operations.md のインシデント対応手順を参照してください
+3. `docs/operations.md` のインシデント対応手順を参照してください
 ```
 
 ### 月次の定期確認（商用）
@@ -464,7 +464,7 @@ P[0/1/2] インシデントが発生しました。
 ```
 @resilience-checker に加えて、以下を商用観点で確認してください：
 
-.opencode/standards/principles/commercial-operations.md を参照して：
+`.opencode/standards/principles/commercial-operations.md` を参照して：
 1. 今月のエラーバジェット消費量（SLO達成状況）
 2. 監査ログが正常に記録されているか（サンプル確認）
 3. アクセス権限の棚卸しが必要な項目はないか

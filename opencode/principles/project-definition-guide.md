@@ -168,7 +168,7 @@ Won't（今回はやらない）：
 
 ## リスク評価（Risk Assessment）
 
-<!-- 詳細は .opencode/standards/principles/risk-based-approach.md を参照 -->
+<!-- 詳細は `.opencode/standards/principles/risk-based-approach.md` を参照 -->
 <!-- 「今は小さいから関係ない」が最も危険な思い込み -->
 
 ### 即死系リスク（発生したらプロジェクトが止まる）

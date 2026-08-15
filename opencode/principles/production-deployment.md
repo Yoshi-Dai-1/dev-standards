@@ -52,7 +52,7 @@
 ## 2. The Twelve-Factor App 適用
 
 本番移行時に適用する因子を優先順に示す。
-各因子の詳細は、AIがARCHITECTURE.mdを踏まえて適用方法を説明する。
+各因子の詳細は、AIが`ARCHITECTURE.md`を踏まえて適用方法を説明する。
 
 ### 優先度：高（リリース前に必ず対応）
 

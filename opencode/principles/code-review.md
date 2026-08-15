@@ -25,7 +25,7 @@
 
 ```
 確認すること：
-[ ] 機能要件（docs/project-definition.md の Must）を満たしているか
+[ ] 機能要件（`docs/project-definition.md` の Must）を満たしているか
 [ ] エッジケース（空配列・null・0・負の数・最大値）が考慮されているか
 [ ] エラーが適切にハンドリングされているか
 [ ] 非同期処理の順序が正しいか（race conditionがないか）
@@ -49,13 +49,13 @@
 
 ### 3. 設計の整合性（Consistency）
 
-ARCHITECTURE.md のルールに従っているか。
+`ARCHITECTURE.md` のルールに従っているか。
 
 ```
 確認すること：
 [ ] 依存の方向が正しいか（上位層が下位層にのみ依存しているか）
-[ ] 命名規則（.opencode/standards/principles/naming-conventions.md）に従っているか
-[ ] ファイルサイズが .opencode/standards/principles/file-size-and-cohesion.md の閾値（300行以内）に収まっているか
+[ ] 命名規則（`.opencode/standards/principles/naming-conventions.md`）に従っているか
+[ ] ファイルサイズが `.opencode/standards/principles/file-size-and-cohesion.md` の閾値（300行以内）に収まっているか
 [ ] SSOTが守られているか（同じ情報が複数箇所にないか）
 [ ] マジックナンバーが定数化されているか
 ```
@@ -92,7 +92,7 @@ AIは「動くコード」を高速に生成するが、以下のパターンで
 **過剰実装（Over-engineering）**
 ```
 症状：要求していない機能・抽象化・最適化が含まれている
-対処：docs/project-definition.md の Won't を確認し、不要な実装を削除する
+対処：`docs/project-definition.md` の Won't を確認し、不要な実装を削除する
 ```
 
 **命名の不一致**
@@ -105,7 +105,7 @@ AIは「動くコード」を高速に生成するが、以下のパターンで
 **依存の方向の違反**
 ```
 症状：shared/ が features/ を import している、など
-対処：「ARCHITECTURE.md の層のルールに違反していないか確認して」と指示する
+対処：「`ARCHITECTURE.md` の層のルールに違反していないか確認して」と指示する
 ```
 
 **エラーハンドリングの省略**

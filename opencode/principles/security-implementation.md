@@ -3,7 +3,7 @@
 ## このファイルの目的と他ファイルとの役割分担
 
 ```
-security-requirements.md  → 何が必要か（プロジェクト性質から対応レベルを判定）
+`.opencode/standards/principles/security-requirements.md`  → 何が必要か（プロジェクト性質から対応レベルを判定）
 .opencode/agents/security-designer.md        → 実装前に何を決めるか（選択肢の提示・対話）
 .opencode/instructions/security.md          → ルール・禁止事項・自律トリガー（Plugin rule-injector がイベント駆動で注入）
 このファイル               → どう実装するか（構築の指針・情報源・例外対応）
@@ -15,7 +15,7 @@ production-readiness.md    → 実装後に何を確認するか（リリース�
 ```
 参照タイミングと参照元：
   セキュリティ関連機能の実装依頼を受けたとき → .opencode/instructions/security.md の自律トリガー経由
-  ARCHITECTURE.md Step3 完了後              → ARCHITECTURE.md.template に組み込み済み
+  `ARCHITECTURE.md` Step3 完了後              → ARCHITECTURE.md.template に組み込み済み
   @security-designer 完了後         → .opencode/agents/security-designer.md の実装手順
 ```
 
@@ -25,13 +25,13 @@ production-readiness.md    → 実装後に何を確認するか（リリース�
 
 ```
 「使用言語」
-  → ARCHITECTURE.md の「言語」欄に記録されている言語名
+  → `ARCHITECTURE.md` の「言語」欄に記録されている言語名
 
 「使用フレームワーク」
-  → ARCHITECTURE.md の「フレームワーク・主要ライブラリ」欄に記録されているフレームワーク名
+  → `ARCHITECTURE.md` の「フレームワーク・主要ライブラリ」欄に記録されているフレームワーク名
 
 検索クエリへの使い方：
-  ARCHITECTURE.md に「TypeScript / Next.js」と記録されている場合
+  `ARCHITECTURE.md` に「TypeScript / Next.js」と記録されている場合
   → 検索クエリは「TypeScript Next.js authentication best practices 2026」のように
     使用言語と使用フレームワークの両方を含める
 ```
@@ -68,10 +68,10 @@ APIキー・シークレット管理を実装するとき：
   1. OWASP Secrets Management Cheat Sheet [現在年]
   2. [使用言語] [使用フレームワーク] environment variables secrets management [現在年]
 
-決済機能を実装するとき（使用する決済サービスは docs/project-definition.md で確認する）：
-  1. [docs/project-definition.md に記載の決済サービス名] webhook security [現在年]
-  2. [docs/project-definition.md に記載の決済サービス名] idempotency [現在年]
-  3. [docs/project-definition.md に記載の決済サービス名] official security documentation [現在年]
+決済機能を実装するとき（使用する決済サービスは `docs/project-definition.md` で確認する）：
+  1. [`docs/project-definition.md` に記載の決済サービス名] webhook security [現在年]
+  2. [`docs/project-definition.md` に記載の決済サービス名] idempotency [現在年]
+  3. [`docs/project-definition.md` に記載の決済サービス名] official security documentation [現在年]
 
 ファイルアップロードを実装するとき：
   1. OWASP File Upload Cheat Sheet [現在年]
@@ -184,7 +184,7 @@ API設計の原則：
   → メールアドレスとパスワードのどちらが誤りかを教えない
 
 原則4：ブルートフォース対策を実装する
-  → 5回連続失敗で15分ロック（security-requirements.md の対応レベルに応じて調整）
+  → 5回連続失敗で15分ロック（`.opencode/standards/principles/security-requirements.md` の対応レベルに応じて調整）
   → レートリミットはミドルウェアで一元管理する
 
 原則5：セッション・トークンの保存場所
@@ -232,7 +232,7 @@ API設計の原則：
 
 原則3：APIキーのスコープを最小化する
   → そのAPIで必要な権限のみ付与する
-  → ローテーション手順をdocs/operations.mdに記録する
+  → ローテーション手順を`docs/operations.md`に記録する
 ```
 
 ### エラーハンドリング
@@ -293,7 +293,7 @@ GraphQLを使用するプロジェクトでのみ適用する（REST APIのみ�
 原則3：認可はリゾルバーレベルで実装する
   GraphQLはHTTPエンドポイントが1つのため、認可をエンドポイントレベルで行えない
   各リゾルバー・フィールドレベルで認可チェックを実装する
-  → security-requirements.md の対応レベルに従い実装する
+  → `.opencode/standards/principles/security-requirements.md` の対応レベルに従い実装する
 
 原則4：エラーメッセージにスタックトレース・内部情報を含めない
   GraphQLのエラーレスポンスはデフォルトで詳細な情報を返す場合がある
@@ -308,7 +308,7 @@ GraphQLを使用するプロジェクトでのみ適用する（REST APIのみ�
 ## AIの実装手順（自律実行・人間の指示を待たない）
 
 ```
-Step 1：ARCHITECTURE.md を読み、使用言語と使用フレームワークを確認する
+Step 1：`ARCHITECTURE.md` を読み、使用言語と使用フレームワークを確認する
   → 確認できない場合は人間に質問する（推測で進めない）
 
 Step 2：.opencode/agents/security-designer.md を呼び出し実装前の決定事項を確認する
@@ -421,12 +421,12 @@ Step 3：人間が最終確認する（AIに任せない箇所）
 
 ### AIが自律的に実行するタイミング
 
-ARCHITECTURE.md に CIツールが記録されており、かつ
-security-requirements.md の対応レベルが Lv.3以上の場合、
-ARCHITECTURE.md Step3 完了後に以下を自律的に実行する。
+`ARCHITECTURE.md` に CIツールが記録されており、かつ
+`.opencode/standards/principles/security-requirements.md` の対応レベルが Lv.3以上の場合、
+`ARCHITECTURE.md` Step3 完了後に以下を自律的に実行する。
 人間の指示を待たない。
 
-CIツールの確認方法：ARCHITECTURE.md の「CI/CD」欄を読む。
+CIツールの確認方法：`ARCHITECTURE.md` の「CI/CD」欄を読む。
 記録されていない場合は人間に質問する：
 「セキュリティスキャンをCIに組み込みます。
  使用するCIツールを教えてください

@@ -30,9 +30,9 @@ AI が UI を実装するとき、以下の問題が繰り返し発生する：
 | component | 部品スコープの割り当て | `button.background`, `card.padding` |
 
 **運用ルール：**
-- token-ssot.json を唯一の正本とする
-- DESIGN.md は値を直接持たない。すべての値は token-ssot.json を参照する
-- 値を変更するときは必ず token-ssot.json を先に編集する
+- `design/token-ssot.json` を唯一の正本とする
+- `DESIGN.md` は値を直接持たない。すべての値は `design/token-ssot.json` を参照する
+- 値を変更するときは必ず `design/token-ssot.json` を先に編集する
 - CSS にトークン値を直書きしない。CSS 変数（`var(--color-accent)`）経由で参照する
 
 ### 柱2：Component Map
@@ -53,10 +53,10 @@ AI が UI を実装するとき、以下の問題が繰り返し発生する：
 ```
 
 **運用ルール：**
-- コンポーネントを新規作成するときは必ず component-map.json に登録してから実装する
-- 外部UI語彙（Header / Drawer / Tabs / Card Grid / Hero / CTA）がリクエストに含まれる場合、component-map.json に既存コンポーネントがないか確認する。存在する場合は新規作成しない
-- variant を追加するときは component-map.json の variants 配列を更新する
-- token 参照を変更するときは component-map.json の tokens 配列を更新する
+- コンポーネントを新規作成するときは必ず `design/component-map.json` に登録してから実装する
+- 外部UI語彙（Header / Drawer / Tabs / Card Grid / Hero / CTA）がリクエストに含まれる場合、`design/component-map.json` に既存コンポーネントがないか確認する。存在する場合は新規作成しない
+- variant を追加するときは `design/component-map.json` の variants 配列を更新する
+- token 参照を変更するときは `design/component-map.json` の tokens 配列を更新する
 
 ### 柱3：外部UI語彙の正規化
 
@@ -71,7 +71,7 @@ AI が UI を実装するとき、以下の問題が繰り返し発生する：
 - Hero → Display/Hero として既存を確認する
 - CTA → Action/Button の variant として既存を確認する
 
-上記以外の外部語彙がリクエストに含まれる場合も同様に、component-map.json の design_name との一致を確認してから実装する。
+上記以外の外部語彙がリクエストに含まれる場合も同様に、`design/component-map.json` の design_name との一致を確認してから実装する。
 
 ---
 
@@ -84,7 +84,7 @@ AI が UI を実装するとき、以下の問題が繰り返し発生する：
 3. 変更の影響を受ける全コンポーネントを確認する
 4. `design/component-map.json` の token 参照がずれていないか確認する
 
-DESIGN.md の編集は不要。DESIGN.md は値を直接持たず token-ssot.json を参照するため、変更は自動的に反映される。
+`DESIGN.md` の編集は不要。`DESIGN.md` は値を直接持たず `design/token-ssot.json` を参照するため、変更は自動的に反映される。
 
 ### コンポーネントの追加
 
@@ -94,14 +94,14 @@ DESIGN.md の編集は不要。DESIGN.md は値を直接持たず token-ssot.jso
    - tokens：使用する token 名の配列
    - variants：バリエーション名の配列
 2. コンポーネントを実装する
-3. component-map.json の情報と実装が一致するか確認する
+3. `design/component-map.json` の情報と実装が一致するか確認する
 
 ### コンポーネントの変更
 
-1. variant を変える場合：component-map.json の variants を更新する
-2. token 参照を変える場合：component-map.json の tokens を更新する
+1. variant を変える場合：`design/component-map.json` の variants を更新する
+2. token 参照を変える場合：`design/component-map.json` の tokens を更新する
 3. 実装を追従させる
-4. component-map.json と実装の一致を確認する
+4. `design/component-map.json` と実装の一致を確認する
 
 ### デザインの再収集（新プロジェクト立ち上げ時や初期値の再設定時）
 
@@ -112,11 +112,11 @@ DESIGN.md の編集は不要。DESIGN.md は値を直接持たず token-ssot.jso
 5. 影響を受ける全コンポーネントを確認し、必要に応じて更新する
 
 頻繁なピクセル単位の調整（カードサイズ・余白・1色の変更等）に対してこの手順は不要。
-その場合は「Token 値の変更」手順で token-ssot.json のみを編集すればよい。
+その場合は「Token 値の変更」手順で `design/token-ssot.json` のみを編集すればよい。
 
 ### 破壊的変更（複数の正本ファイルを同時に変更する場合）
 
-複数の正本ファイル（token-ssot.json + component-map.json）を同時に変更する場合、
+複数の正本ファイル（`design/token-ssot.json` + `design/component-map.json`）を同時に変更する場合、
 以下の確認順を固定する。この手順は変更単位別の手順（Token / コンポーネント追加 / コンポーネント変更）より優先する。
 
 1. `design/token-ssot.json` を編集する（primitive → semantic → component の順）
@@ -176,7 +176,7 @@ component/  部品スコープの割り当て
 | デザイン生成 | Open Design | Design System（Skill が参照） |
 | 検証 | yori 契約 + OD CLI | evaluator / `pnpm tools-dev` |
 
-- Open Design の Design System は token-ssot.json の**外部入力ソース**として利用できる。OD で生成したデザインから値を抽出して token-ssot.json に転記する
-- OD の CLI 検証コマンド（`pnpm tools-dev`）は DESIGN.md 編集後の整合検証として使用できる
+- Open Design の Design System は `design/token-ssot.json` の**外部入力ソース**として利用できる。OD で生成したデザインから値を抽出して `design/token-ssot.json` に転記する
+- OD の CLI 検証コマンド（`pnpm tools-dev`）は `DESIGN.md` 編集後の整合検証として使用できる
 - Open Design の Skill（132種）と yori の subagents（evaluator 等）は独立した機能。OD Skill はデザイン生成に、yori の evaluator は品質検証に使う
-- OD を使う場合も `design/component-map.json` は yori の契約として維持する。OD の生成物をコンポーネントに起こすときの名対応は component-map.json で管理する
+- OD を使う場合も `design/component-map.json` は yori の契約として維持する。OD の生成物をコンポーネントに起こすときの名対応は `design/component-map.json` で管理する

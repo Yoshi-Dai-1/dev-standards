@@ -84,7 +84,7 @@ project-root/
   config/           自作設定ファイル（ツール規約でルート必須のものは除く）
   .github/          CI/CD設定
   .env.example      必要な環境変数のテンプレート（コミットする）
-  ARCHITECTURE.md   このプロジェクトの設計思想・層のルール
+  `ARCHITECTURE.md`   このプロジェクトの設計思想・層のルール
   README.md         概要・セットアップ手順
 ```
 
@@ -123,7 +123,7 @@ docs/
 
 → 詳細は `.opencode/standards/principles/file-size-and-cohesion.md` を参照。
 
-目安：.opencode/standards/principles/file-size-and-cohesion.md の閾値（300行）を参照。超えたら責務を分割する。
+目安：`.opencode/standards/principles/file-size-and-cohesion.md` の閾値（300行）を参照。超えたら責務を分割する。
 
 ---
 
@@ -173,13 +173,13 @@ tests/
 ## 判断フローチャート（何かを決めるときの思考順序）
 
 ```
-1. これはどのレイヤーに属するか？              → ARCHITECTURE.mdで確認
+1. これはどのレイヤーに属するか？              → `ARCHITECTURE.md`で確認
 2. 一緒に変わるものは一緒に置かれているか？     → 凝集度の確認
 3. 依存の方向は正しいか？                      → 循環依存の確認
-4. 名前を見ただけで責務が分かるか？             → .opencode/standards/principles/naming-conventions.md で確認
-5. 1ファイルが .opencode/standards/principles/file-size-and-cohesion.md の閾値を超えていないか？           → 分割を検討
-6. 同じ情報が複数箇所にないか？                 → .opencode/standards/principles/ssot-and-constants.md で確認
-7. 非機能要件（性能・セキュリティ）を満たすか？ → .opencode/standards/principles/non-functional-requirements.md で確認
+4. 名前を見ただけで責務が分かるか？             → `.opencode/standards/principles/naming-conventions.md` で確認
+5. 1ファイルが `.opencode/standards/principles/file-size-and-cohesion.md` の閾値を超えていないか？           → 分割を検討
+6. 同じ情報が複数箇所にないか？                 → `.opencode/standards/principles/ssot-and-constants.md` で確認
+7. 非機能要件（性能・セキュリティ）を満たすか？ → `.opencode/standards/principles/non-functional-requirements.md` で確認
 ```
 
 ---
@@ -230,7 +230,7 @@ URLは変更される可能性があるため、ドメイン名・組織名で�
 
 **Step 2：プロジェクト種別・規模・クラウド・業種による構成の差異を確認する**
 
-ARCHITECTURE.md の以下のセクションが確定している場合、追加の検索を実行する。
+`ARCHITECTURE.md` の以下のセクションが確定している場合、追加の検索を実行する。
 
 | 確定している情報 | 追加検索クエリ |
 |----------------|--------------|
@@ -254,9 +254,9 @@ Web検索で公式情報が確認できなかった場合：
   - 確認を推奨する情報源：[言語名] / [フレームワーク名] の公式ドキュメント（[ドメイン名]）
 ```
 
-**Step 4：確認した必須ファイルを ARCHITECTURE.md に記録する**
+**Step 4：確認した必須ファイルを `ARCHITECTURE.md` に記録する**
 
-ARCHITECTURE.md の「技術スタック」セクション末尾に以下を追記する。
+`ARCHITECTURE.md` の「技術スタック」セクション末尾に以下を追記する。
 これが SSOT となり、以後このファイルを参照する。
 
 ```markdown

@@ -11,7 +11,7 @@
 このファイルには2種類のルールが存在する。適用する前に必ず以下の順序で判断する。
 
 ```
-1. ARCHITECTURE.md の「命名規則」セクションに確定値が記載されている
+1. `ARCHITECTURE.md` の「命名規則」セクションに確定値が記載されている
    → そちらを SSOT として従う。このファイルは参照しない。
 
 2. 言語別ルール（言語別のテストファイル命名・テスト種別）が確定している
@@ -34,7 +34,7 @@ Python プロジェクトでは「snake_case」が言語別ルールとして上
 
 ---
 
-## 基本コア表（SSOT は instructions/naming-conventions.md）
+## 基本コア表（SSOT は `.opencode/instructions/naming-conventions.md`）
 
 以下の基本ルールは `.opencode/instructions/naming-conventions.md`（常時読込）が SSOT。
 
@@ -393,7 +393,7 @@ chore/update-dependencies  依存関係更新
 feat: 株式スクリーナーの条件保存機能を追加
 fix: ログイン時のトークンリフレッシュエラーを修正
 refactor: 認証レイヤーをrepositoriesパターンに移行
-docs: ARCHITECTURE.mdにFSD層のルールを追記
+docs: `ARCHITECTURE.md`にFSD層のルールを追記
 chore: ESLintをv9に更新
 test: useStockDataのユニットテストを追加
 ```
@@ -401,8 +401,8 @@ test: useStockDataのユニットテストを追加
 - body（本文）を記述する場合は subject との間に空行を1行入れる
 - body は変更内容を箇条書き（`- `）で列挙する
 - subject の先頭は大文字不要、末尾ピリオド不要
-- コミットメッセージの言語は AGENTS.md の「コミットメッセージ言語」設定に従う
-- subject と body で言語を分ける場合は、AGENTS.md で subject と body それぞれに言語を指定する（書式: `subject=<言語>, body=<言語>`）
+- コミットメッセージの言語は `AGENTS.md` の「コミットメッセージ言語」設定に従う
+- subject と body で言語を分ける場合は、`AGENTS.md` で subject と body それぞれに言語を指定する（書式: `subject=<言語>, body=<言語>`）
 
 ---
 
@@ -489,7 +489,7 @@ JWT_SECRET            → JWT署名用シークレット
 ケーススタイルは変化しない情報であり、`.opencode/instructions/naming-conventions.md` の「ケーススタイル一覧」と各言語別セクションを参照すれば足りる。
 検索対象は「フレームワークが強制する追加の命名規則」に限定する。
 
-フレームワークが ARCHITECTURE.md に記載されている場合のみ以下を実行する。
+フレームワークが `ARCHITECTURE.md` に記載されている場合のみ以下を実行する。
 フレームワークが未定義の場合、このステップをスキップしてStep 2へ進む。
 
 | フレームワークの有無 | 検索クエリ | 信頼できる情報源のドメイン |
@@ -522,7 +522,7 @@ Web検索で公式情報が確認できなかった場合：
   - 確認を推奨する情報源：[言語名] の公式ドキュメント（[ドメイン名]）
 ```
 
-**Step 3：ARCHITECTURE.md の `## 命名規則` セクションに確定値を転記する**
+**Step 3：`ARCHITECTURE.md` の `## 命名規則` セクションに確定値を転記する**
 
-ARCHITECTURE.md の命名規則テーブルのプレースホルダーを確定値で上書きする。
+`ARCHITECTURE.md` の命名規則テーブルのプレースホルダーを確定値で上書きする。
 参照情報源も同セクションの末尾に記録する。これが SSOT となる。

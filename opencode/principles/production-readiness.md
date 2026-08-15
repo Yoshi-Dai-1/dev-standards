@@ -66,8 +66,8 @@ AIが自律的に `@security-auditor` を呼び出した後、
 [ ] すべての例外がキャッチされ、ログに記録されているか
 [ ] 外部APIの呼び出しに接続タイムアウトと読み取りタイムアウトの両方が設定されているか
     （タイムアウト値が constants/ に定数として定義されているか）
-[ ] ARCHITECTURE.md の「通信設計」セクションに採否と根拠が記録されているか
-    （詳細な判断基準：.opencode/standards/principles/network-resilience.md）
+[ ] `ARCHITECTURE.md` の「通信設計」セクションに採否と根拠が記録されているか
+    （詳細な判断基準：`.opencode/standards/principles/network-resilience.md`）
 [ ] リトライを実装している場合、冪等でない操作（決済・メール送信・SMS送信・通知送信）が
     リトライ対象から除外されているか
 [ ] 冪等でない操作にリトライが必要な場合、冪等性の確保が先に実装されているか
@@ -155,11 +155,11 @@ AIが自律的に `@security-auditor` を呼び出した後、
 [ ] .env.exampleが最新の状態か
 [ ] APIのエンドポイント一覧が文書化されているか
     文書化されていない場合、以下の検索クエリで実施方法を確認する：
-    `[ARCHITECTURE.md の「フレームワーク」値] API documentation [現在年]`
+    `[`ARCHITECTURE.md` の「フレームワーク」値] API documentation [現在年]`
     信頼できる情報源の判断基準：`.opencode/standards/principles/naming-conventions.md` の
     「信頼できる情報源の優先順位」を適用する。
     フレームワーク非依存の場合は `OpenAPI Specification [現在年]`（spec.openapis.org）を参照する。
-    選定したツールを ARCHITECTURE.md の「技術スタック」セクションに記録する。
+    選定したツールを `ARCHITECTURE.md` の「技術スタック」セクションに記録する。
 [ ] 既知の問題・制限事項が記録されているか
 ```
 
@@ -169,7 +169,7 @@ AIが自律的に `@security-auditor` を呼び出した後、
 
 ```
 テスト戦略の確認：
-  [ ] ARCHITECTURE.md の「テスト戦略」セクションに方針が記載されているか
+  [ ] `ARCHITECTURE.md` の「テスト戦略」セクションに方針が記載されているか
   [ ] テストフレームワークが決定・設定されているか
 
 テストの実装確認：
@@ -177,14 +177,14 @@ AIが自律的に `@security-auditor` を呼び出した後、
   [ ] 主要なAPIエンドポイントにインテグレーションテストがあるか
   [ ] テストが本番コードと同じリポジトリで管理されているか
   [ ] テストが自動実行されているか（CI/CD）
-  [ ] テストカバレッジの目標が定義・達成されているか（ARCHITECTURE.mdに記載の目標値）
+  [ ] テストカバレッジの目標が定義・達成されているか（`ARCHITECTURE.md`に記載の目標値）
 ```
 
 ### ユーザーテスト
 
-以下の条件判定を実行する（推測しない。docs/project-definition.md を読んで確認する）：
+以下の条件判定を実行する（推測しない。`docs/project-definition.md` を読んで確認する）：
 
-条件：docs/project-definition.md の「対象ユーザー」が「自分のみ」または「内部利用」である
+条件：`docs/project-definition.md` の「対象ユーザー」が「自分のみ」または「内部利用」である
 → 該当する：このセクションを完全にスキップする
 → 該当しない：以下のチェックリストを確認する
 
@@ -206,7 +206,7 @@ AIが自律的に `@security-auditor` を呼び出した後、
 ### 負荷テスト
 
 以下の条件を順番に確認する
-（ARCHITECTURE.md の非機能要件セクションを読む）：
+（`ARCHITECTURE.md` の非機能要件セクションを読む）：
 
 条件A：「スケーリング方針：スケーリング不要（個人利用・社内限定）」と記載されている
 → 該当する：このセクションを完全にスキップする。条件Bは確認しない。
@@ -220,16 +220,16 @@ AIが自律的に `@security-auditor` を呼び出した後、
 → 両方記録されている：以下のチェックリストを確認する
 
 ```
-[ ] 本番相当のデータ量（ARCHITECTURE.md の「データ件数（1年後想定）」の値）で
-    主要APIのレスポンスタイムが目標値（ARCHITECTURE.md の p95 値）を満たすか確認したか
+[ ] 本番相当のデータ量（`ARCHITECTURE.md` の「データ件数（1年後想定）」の値）で
+    主要APIのレスポンスタイムが目標値（`ARCHITECTURE.md` の p95 値）を満たすか確認したか
 [ ] 定義された同時接続ユーザー数の負荷をかけたとき、エラーが発生しないか確認したか
 ```
 
 負荷テストツールの選定：
-ARCHITECTURE.md の「技術スタック」の「負荷テスト」行を確認する。
+`ARCHITECTURE.md` の「技術スタック」の「負荷テスト」行を確認する。
 - 「未選定」と記録されている場合：以下の検索クエリでツールを選定し、
-  ARCHITECTURE.md の「負荷テスト」行を選定したツール名に更新する：
-  `[ARCHITECTURE.md の「言語」値] load testing tool [現在年]`
+  `ARCHITECTURE.md` の「負荷テスト」行を選定したツール名に更新する：
+  `[`ARCHITECTURE.md` の「言語」値] load testing tool [現在年]`
   信頼できる情報源の判断基準：
   `.opencode/standards/principles/naming-conventions.md` の
   「信頼できる情報源の優先順位」を適用する。
@@ -258,12 +258,12 @@ ARCHITECTURE.md の「技術スタック」の「負荷テスト」行を確認�
   [ ] 政府・重要インフラ向けの場合：サイバーセキュリティ基本法・ISMAPへの対応を確認したか
 
 アクセシビリティ（Webフロントエンドを含む場合）：
-  [ ] ARCHITECTURE.md の「アクセシビリティ」セクションに適合レベル目標が記載されているか
+  [ ] `ARCHITECTURE.md` の「アクセシビリティ」セクションに適合レベル目標が記載されているか
   [ ] 定めた適合レベルのチェックリストを実施したか（non-functional-requirements.md 参照）
   [ ] 法的義務がある場合（公共機関等）：専門家による確認を実施したか
 
 国際化（多言語展開がある場合）：
-  [ ] ARCHITECTURE.md の「国際化」セクションに方針が記載されているか
+  [ ] `ARCHITECTURE.md` の「国際化」セクションに方針が記載されているか
   [ ] UIテキストがハードコードされていないか（翻訳ファイルで管理されているか）
   [ ] タイムゾーンがUTCで保存されているか
 
@@ -284,9 +284,9 @@ GraphQL（GraphQLを使用している場合）：
 
 ### OSS として公開する場合
 
-以下の条件判定を実行する（推測しない。docs/project-definition.md を読んで確認する）：
+以下の条件判定を実行する（推測しない。`docs/project-definition.md` を読んで確認する）：
 
-条件：docs/project-definition.md の「ライセンス」が「商用利用あり」または「一般公開」である
+条件：`docs/project-definition.md` の「ライセンス」が「商用利用あり」または「一般公開」である
 → 該当しない：このセクションを完全にスキップする
 → 該当する：以下のチェックリストを確認する
 
@@ -368,7 +368,7 @@ GraphQL（GraphQLを使用している場合）：
   [ ] PR テンプレートが用意されているか
 
 SLA / 可用性：
-  [ ] SLA / SLO / SLI が定義され、ARCHITECTURE.md に記録されているか
+  [ ] SLA / SLO / SLI が定義され、`ARCHITECTURE.md` に記録されているか
   [ ] エラーバジェットの計算・管理方法が決まっているか
   [ ] ステージング環境が本番と同じ構成で存在するか
 

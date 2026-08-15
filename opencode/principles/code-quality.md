@@ -45,7 +45,7 @@ const calculateDepreciatedValue = (
 開発者が変更を避けるようになると、機能追加もバグ修正も停滞する。
 
 低保守性のサイン：
-- 1つのファイルが.opencode/standards/principles/file-size-and-cohesion.md の閾値を超えている（単一責任の原則違反のサイン）
+- 1つのファイルが`.opencode/standards/principles/file-size-and-cohesion.md` の閾値を超えている（単一責任の原則違反のサイン）
 - 同じロジックが複数箇所にコピーされている（DRY原則違反）
 - マジックナンバーが散在している（意味不明な `0.08` や `1440` など）
 - 変数名が `a`、`b`、`tmp`、`data2` など
@@ -162,7 +162,7 @@ UI層 → ビジネスロジック層 → データアクセス層
 
 「今必要でないものは作らない」
 → AIは過剰実装する傾向がある（キャッシュ・最適化・汎用化を勝手に追加する）
-→ AGENTS.md の Boundaries に「指示されていない機能を追加しない」を必ず書く
+→ `AGENTS.md` の Boundaries に「指示されていない機能を追加しない」を必ず書く
 
 ---
 
@@ -232,7 +232,7 @@ function calculateLegacyScore(value: number): number {
                   対処：「定数はすべて constants/ に移して」と指示する
 
 複雑性の蓄積    → 動けばいいコードが積み上がる
-                   対処：.opencode/standards/principles/file-size-and-cohesion.md の閾値に従い分割を指示する
+                   対処：`.opencode/standards/principles/file-size-and-cohesion.md` の閾値に従い分割を指示する
 ```
 
 ### 品質チェックの確認順序（毎実装後）

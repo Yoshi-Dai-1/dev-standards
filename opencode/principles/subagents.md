@@ -40,7 +40,7 @@ AIは自分が書いたコードを同一コンテキスト内でレビューす
 ```
 @code-reviewer
 以下のファイルをレビューしてください：[ファイルパス]
-確認してほしい観点：ARCHITECTURE.mdのルール準拠・セキュリティ・命名規則
+確認してほしい観点：`ARCHITECTURE.md`のルール準拠・セキュリティ・命名規則
 ```
 
 ### 2. セキュリティ監査
@@ -98,7 +98,7 @@ src/ 以下のコードベースを対象に品質診断を実施してくださ
 
 ```
 @resilience-checker
-現在のプロジェクト（ARCHITECTURE.md・docs/operations.md参照）の
+現在のプロジェクト（`ARCHITECTURE.md`・`docs/operations.md`参照）の
 レジリエンスを診断してください。
 ```
 
@@ -134,7 +134,7 @@ src/ 以下のコードベースを対象に品質診断を実施してくださ
 
 ```
 @evaluator
-Sprint [番号] の Contract を docs/spec.md で確認して承認してください。
+Sprint [番号] の Contract を `docs/spec.md` で確認して承認してください。
 ```
 
 **【スプリント完了後】QA評価 + Task List 更新：**
@@ -142,8 +142,8 @@ Sprint [番号] の Contract を docs/spec.md で確認して承認してくだ�
 ```
 @evaluator
 Sprint [番号] の評価をしてください。
-仕様は docs/spec.md を参照してください。
-PASSの場合は docs/tasks.json の該当スプリントの passes を true に更新してください。
+仕様は `docs/spec.md` を参照してください。
+PASSの場合は `docs/tasks.json` の該当スプリントの passes を true に更新してください。
 ```
 
 → 詳細は `.opencode/standards/principles/harness-engineering.md` の Planner・Generator・Evaluator の 3 段階構成を参照。
@@ -183,17 +183,17 @@ OpenCode の場合（`.opencode/agents/` に配置）：
 ## コンテキストウィンドウと段階的開示の関係
 
 サブエージェントはコンテキスト問題の「解決策」の一つ。
-段階的開示（AGENTS.mdを60〜200行に保ち、詳細は別ファイルに分離）と組み合わせることで
+段階的開示（`AGENTS.md`を60〜200行に保ち、詳細は別ファイルに分離）と組み合わせることで
 メインエージェントのコンテキストを最適な状態に保てる。
 
 ```
 コンテキスト管理の三層：
 
-Layer 1：AGENTS.md（60〜200行）
+Layer 1：`AGENTS.md`（60〜200行）
           常にロードされる。最小限の必須情報のみ。
           詳細は別ファイルへの参照で示す。
 
-Layer 2：ARCHITECTURE.md・coding-conventions.md等
+Layer 2：`ARCHITECTURE.md`・coding-conventions.md等
           必要なときだけ参照される詳細情報。
 
 Layer 3：サブエージェント

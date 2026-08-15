@@ -40,12 +40,12 @@ AIエージェントが暴走せずに正しい方向へ進み続けるための
 
 ```
 プロジェクトルート/
-  AGENTS.md              エントリポイント（60〜200行）常にロードされる
-  ARCHITECTURE.md        設計の詳細（AGENTS.mdから参照）
+  `AGENTS.md`              エントリポイント（60〜200行）常にロードされる
+  `ARCHITECTURE.md`        設計の詳細（`AGENTS.md`から参照）
 
   docs/（プロジェクト成果物・AIと人間が共有するドキュメント）
-    project-definition.md  プロジェクトの目的・制約・Won't
-    spec.md                仕様書・Sprint Contract（Plannerが生成）
+    `docs/project-definition.md`  プロジェクトの目的・制約・Won't
+    `docs/spec.md`                仕様書・Sprint Contract（Plannerが生成）
     tasks.json          Task List・pass/fail追跡（Plannerが生成・Evaluatorが更新）
     build-log.md           セッション間の意思決定・試行錯誤の積み上げログ
     operations.md          本番運用手順書
@@ -53,7 +53,7 @@ AIエージェントが暴走せずに正しい方向へ進み続けるための
     archive/               完了したタスクのアーカイブ（task-archive.ts が自動提案・.gitignore 対象）
 
   .opencode/（ハーネスの詳細）
-    instructions/        opencode.json instructions がセッション開始時にLLMに注入（判断基準）
+    instructions/        `opencode.json` instructions がセッション開始時にLLMに注入（判断基準）
     skills/              プロジェクトスコープのスキル（gitで共有）
                          descriptionで自動参照・/コマンドで明示呼び出しも可能
     agents/              サブエージェント定義（@名前で呼び出す）
@@ -61,7 +61,7 @@ AIエージェントが暴走せずに正しい方向へ進み続けるための
     usage/               使用履歴（GCの判断基準）
     coding-conventions.md  プロジェクト固有のコーディング規約（AIが常に参照）
     project-context.md   プロジェクト文脈・現在のフェーズ（AIがセッション開始時に参照）
-    handoff-artifact.md  Context Reset 時の引き継ぎ（スナップショット・毎回上書き）
+    `.opencode/handoff-artifact.md`  Context Reset 時の引き継ぎ（スナップショット・毎回上書き）
     persona.md           エージェントの性格定義（任意）
     standards/           yori の参照ドキュメント（setup-harness.sh が自動コピー）
       principles/        開発原則集（tdd-with-ai / security-implementation 等）
@@ -74,12 +74,12 @@ AIエージェントが暴走せずに正しい方向へ進み続けるための
 
 ---
 
-## AGENTS.md・instructions・skills・Pluginsの役割分担
+## `AGENTS.md`・instructions・skills・Pluginsの役割分担
 
 | ファイル | 読み込まれるタイミング | 役割 |
 |---------|---------------------|------|
-| AGENTS.md | 常時（セッション開始時） | 常駐指示・禁止事項・参照先 |
-| instructions/ | opencode.json instructions がセッション開始時に注入 | マークダウン判断基準の提供 |
+| `AGENTS.md` | 常時（セッション開始時） | 常駐指示・禁止事項・参照先 |
+| instructions/ | `opencode.json` instructions がセッション開始時に注入 | マークダウン判断基準の提供 |
 | skills/ | descriptionで自動参照（発言検知）、または/コマンドで明示呼び出し | 手順書（定型作業の標準化）|
 | agents/ | @エージェント名で呼び出したとき | 独立コンテキストの専門処理 |
 | plugins/ | コードイベント発生時（ツール実行後等） | 強制的なガードレール・自動記録・プロアクティブなルール注入 |
@@ -90,7 +90,7 @@ AIエージェントが暴走せずに正しい方向へ進み続けるための
 
 **理由1：コンテキストウィンドウの肥大化**
 長時間タスクでは会話が積み重なり、初期の指示を忘れる。
-解決策：Context Reset（コンテキストリセット）＋handoff-artifact.md
+解決策：Context Reset（コンテキストリセット）＋`.opencode/handoff-artifact.md`
 
 **理由2：自己評価の甘さ（自己評価バイアス）**
 自分が書いたコードを自分でレビューすると過大評価する。
@@ -120,8 +120,8 @@ PASS と判定し、`docs/tasks.json` の `passes` フィールドを `true` に
 
 ```
 Planner（サブエージェント）
-  役割：1〜4文のプロンプトを詳細な仕様書（docs/spec.md）と
-        Task List（docs/tasks.json）に変換する
+  役割：1〜4文のプロンプトを詳細な仕様書（`docs/spec.md`）と
+        Task List（`docs/tasks.json`）に変換する
   使うタイミング：中規模以上のタスク開始時
   書く場所：`.opencode/agents/planner.md`
 
@@ -129,7 +129,7 @@ Generator（メインエージェント・Build）
   役割：仕様書から実装する。各スプリント開始前に Evaluator へ
         Sprint Contract のレビューを依頼し、承認を得てから実装に入る
   使うタイミング：常時
-   書く場所：AGENTS.md（＋instructions/ skills/ が自動補助）
+   書く場所：`AGENTS.md`（＋instructions/ skills/ が自動補助）
 
 Evaluator（サブエージェント）
   役割：① Sprint Contract のレビュー（スプリント開始前・合意）
@@ -138,7 +138,7 @@ Evaluator（サブエージェント）
   書く場所：`.opencode/agents/evaluator.md`
 ```
 
-### Task List（docs/tasks.json）
+### Task List（`docs/tasks.json`）
 
 Planner がスプリント計画と同時に生成する機能追跡ファイル。
 各フィーチャーに `"passes": false` フィールドを持ち、Evaluator のみが `true` に更新する。
@@ -181,7 +181,7 @@ Planner がスプリント計画と同時に生成する機能追跡ファイル
 ### Sprint Contract（スプリント契約）
 
 スプリント開始前に Generator と Evaluator が「完了の定義」を合意する仕組み。
-Sprint Contract の枠組みは Planner が spec.md 生成時に作成する。
+Sprint Contract の枠組みは Planner が `docs/spec.md` 生成時に作成する。
 Generator は各スプリント開始前に @evaluator を呼び出してレビューを依頼し、
 Evaluator が承認してから実装に入る。
 「実装者の解釈」と「評価者の期待」のずれを事前に防ぐ。
@@ -191,7 +191,7 @@ Evaluator が承認してから実装に入る。
 
 ```
 10分以内の単機能実装   → ハーネスなし（プロンプト直接）
-30分〜1時間の中規模   → AGENTS.md + instructions/ + skills/ + code-reviewer
+30分〜1時間の中規模   → `AGENTS.md` + instructions/ + skills/ + code-reviewer
 数時間のフルアプリ    → 上記 + Planner + Generator + Evaluator
                         （Sprint Contract → Build → QA サイクル）
 ```
@@ -201,7 +201,7 @@ Evaluator が承認してから実装に入る。
 ## 6つの原則
 
 **1. Progressive Disclosure（段階的開示）**
-AGENTS.mdは60〜200行以内。詳細は instructions/・docs/ に分離して
+`AGENTS.md`は60〜200行以内。詳細は instructions/・docs/ に分離して
 必要なときだけ読み込まれるようにする。
 全部を常に見せるのではなく、必要なときに必要なものだけ。
 
@@ -211,13 +211,13 @@ Whyが書いてあれば、エージェントはHowを自分で導き出せる�
 手順はすぐ陳腐化するが、判断基準は長持ちする。
 
 ただし、**アーキテクチャ制約の強制だけは例外**。
-依存ルールを AGENTS.md に「なぜ層をまたいではいけないか（Why）」として書くだけでは、
+依存ルールを `AGENTS.md` に「なぜ層をまたいではいけないか（Why）」として書くだけでは、
 エージェントが無意識にルールを破る「AIスロップ」を防げない。
 言語指示と機械的強制の3層を組み合わせる：
 
 | レイヤー | 役割 | 実装場所 |
 |---------|------|---------|
-| Why（言語指示） | 「なぜこの依存ルールが存在するか」を記述 | AGENTS.md・ARCHITECTURE.md |
+| Why（言語指示） | 「なぜこの依存ルールが存在するか」を記述 | `AGENTS.md`・`ARCHITECTURE.md` |
 | 機械的強制 | アーキテクチャ違反をファイル書き込み時に検出 | 言語固有のリンター設定 |
 | 即時フィードバック | lint をファイル編集後に自動実行してAIへ返す | `lint-and-typecheck.ts` Plugin |
 
@@ -280,7 +280,7 @@ CLI の具体的なコマンドは `command -v` / `--help` / `webfetch` で
 ## ハーネスの育て方（時系列）
 
 ```
-Day 1：AGENTS.mdに5行（プロジェクト概要・コマンド・禁止事項）
+Day 1：`AGENTS.md`に5行（プロジェクト概要・コマンド・禁止事項）
 Week 1：同じ指摘を2回した → instructions/ に追加
 Week 2：3回以上繰り返した作業 → skills/ に追加（/skill-creator で作成）
 Month 1：使っていないものを削除（最初のGC）
@@ -313,7 +313,7 @@ handoff スキルが自動生成した `.opencode/handoff-artifact.md` を、
 新しいセッションの Session Protocol step 1 が自動読取する。
 
 ```markdown
-# handoff-artifact.md の内容
+# `.opencode/handoff-artifact.md` の内容
 - 取り組んでいた機能
 - 完了した部分
 - 途中で止まっている部分
@@ -337,7 +337,7 @@ handoff スキルが自動生成した `.opencode/handoff-artifact.md` を、
 
 ```
 docs/
-  spec.md                ← プロジェクト全体の仕様（共通）
+  `docs/spec.md`                ← プロジェクト全体の仕様（共通）
   tasks.json          ← Task List（共通）
   build-log.md           ← 意思決定ログ（共通）
   working/               ← ★ タスクごとに分離した作業ディレクトリ
@@ -366,7 +366,7 @@ docs/
 4. **アーカイブ時**：AI が `docs/working/<group>/` の内容を
    `docs/archive/<group>/` へ移動する
 
-### handoff-artifact.md との違い
+### `.opencode/handoff-artifact.md` との違い
 
 | 仕組み | スコープ | ライフサイクル | 目的 |
 |--------|----------|----------------|------|
@@ -405,14 +405,14 @@ setup-harness.sh でテンプレートをコピーして、
 **ハーネス健全性の評価（定期実行）**：
 
    ```
-   .opencode/standards/principles/harness-engineering.md と .opencode/standards/principles/subagents.md を読んで、
+   `.opencode/standards/principles/harness-engineering.md` と `.opencode/standards/principles/subagents.md` を読んで、
    現在の .opencode/ ディレクトリの構成を評価してください。
    以下を確認してください：
-   1. AGENTS.mdが60〜200行以内か
+   1. `AGENTS.md`が60〜200行以内か
    2. instructions/ に使われていないファイルがないか
    3. skills/ に使われていないスキルがないか
    4. usage/ の履歴から削除候補を特定する
-   5. agents/ のサブエージェント定義が .opencode/standards/principles/subagents.md の設計基準に従っているか
+   5. agents/ のサブエージェント定義が `.opencode/standards/principles/subagents.md` の設計基準に従っているか
    ```
 
 ドキュメントリンクの自動検証・品質診断の自動化（Scheduled/Continuous）を
@@ -425,11 +425,11 @@ setup-harness.sh でテンプレートをコピーして、
 [1〜4文でやりたいことを書く]
 ```
 
-→ Planner が docs/spec.md（Sprint Contract 含む）と docs/tasks.json を生成する。
+→ Planner が `docs/spec.md`（Sprint Contract 含む）と `docs/tasks.json` を生成する。
 → 生成後、Sprint 1 の Contract を @evaluator にレビューしてもらってから実装を開始する。
 
 **Task List の現在の進捗を確認する**：
 
 ```
-docs/tasks.json を読んで、未完了（passes: false）のタスクを一覧してください。
+`docs/tasks.json` を読んで、未完了（passes: false）のタスクを一覧してください。
 ```

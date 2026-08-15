@@ -6,9 +6,9 @@ AIが以下のタイミングで自律的に参照する。人間が指示する
 
 ```
 参照タイミング：
-  security-requirements.md の対応レベルが Lv.3以上と判定されたとき
-  ARCHITECTURE.md Step3 でセキュリティ要件を記録するとき
-  security-requirements.md のLv.3チェックリストに「脅威モデリング」が含まれるとき
+  `.opencode/standards/principles/security-requirements.md` の対応レベルが Lv.3以上と判定されたとき
+  `ARCHITECTURE.md` Step3 でセキュリティ要件を記録するとき
+  `.opencode/standards/principles/security-requirements.md` のLv.3チェックリストに「脅威モデリング」が含まれるとき
 ```
 
 脅威モデリングは年々手法・ツールが更新される。
@@ -17,7 +17,7 @@ AIが以下のタイミングで自律的に参照する。人間が指示する
 ```
 1. STRIDE threat modeling [現在年]
 2. OWASP threat modeling [現在年]
-3. [使用言語] [使用フレームワーク（ARCHITECTURE.mdに記録）] security threats [現在年]
+3. [使用言語] [使用フレームワーク（`ARCHITECTURE.md`に記録）] security threats [現在年]
 ```
 
 検索結果は情報源通知テンプレートで人間に通知する。
@@ -67,7 +67,7 @@ E = Elevation of Privilege（権限昇格）
 
 ### Step 1：プロジェクト情報の読み取り
 
-ARCHITECTURE.md と docs/project-definition.md を読んで以下を特定する：
+`ARCHITECTURE.md` と `docs/project-definition.md` を読んで以下を特定する：
 
 ```
 信頼境界の特定：
@@ -83,7 +83,7 @@ ARCHITECTURE.md と docs/project-definition.md を読んで以下を特定する
 
 外部エンティティの特定：
   一般ユーザー・管理者・外部APIプロバイダー・CI/CDシステム
-  （docs/project-definition.md に記載の対象ユーザーと連携サービスを参照して特定する）
+  （`docs/project-definition.md` に記載の対象ユーザーと連携サービスを参照して特定する）
 ```
 
 ### Step 2：STRIDE各項目で脅威を列挙する
@@ -122,7 +122,7 @@ CRITICAL/HIGH/MEDIUM/LOW と4象限（A/B/C/D）の紐付けは同ファイル�
 ```
 CRITICAL/HIGH の脅威：
   → 対策を現スプリントまたは次スプリントに組み込む
-  → ARCHITECTURE.md の「セキュリティ要件」セクションに追記する
+  → `ARCHITECTURE.md` の「セキュリティ要件」セクションに追記する
 
 MEDIUM/LOW の脅威：
   → decisions/ に記録し、計画的に対処する
@@ -152,11 +152,11 @@ MEDIUM/LOW の脅威：
 
 ```
 Lv.3（商用・中規模以上）：
-  → 初回：ARCHITECTURE.md Step3 完了後に実施する
+  → 初回：`ARCHITECTURE.md` Step3 完了後に実施する
   → 以降：大きな機能追加のスプリント開始前に再実施する
 
 Lv.4（規制対象）：
-  → 初回：ARCHITECTURE.md Step3 完了後に実施する
+  → 初回：`ARCHITECTURE.md` Step3 完了後に実施する
   → 以降：すべてのスプリント開始前に再実施する
   → 外部監査：年次でセキュリティ専門家によるレビューを計画する
 ```
