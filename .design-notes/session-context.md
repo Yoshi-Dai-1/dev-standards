@@ -1,5 +1,33 @@
 # Session Context
 
+## ファイル参照のバッククォート＋展開後フルパス統一（2026-08-15 実施・未コミット）
+
+### 監査
+- 監査結果: principles/ 96件・architectures/ 48件・instructions/ 88件・agents-plugins-skills 177件の裸ファイル参照を検出
+- 展開マッピングは setup-harness.sh から確認: `principles/`→`.opencode/standards/principles/`、`architectures/`→`.opencode/standards/architectures/`、`instructions/_fill-guide.md`→`.opencode/instructions/agents-fill-guide.md`、`skills/`→`.opencode/skills/`、`secret-patterns.json`/`skills.lock.yaml`→`.opencode/config/`、`plugins/*.ts`→`.opencode/plugins/`、`subagents/*.md`→`.opencode/agents/`
+
+### 方針（ユーザー確認済み）
+- 影響度順（Phase 1〜5）に優先修正・最終目標は全件
+- パス形式: ハーネス展開後フルパスで統一
+- ルート配置ファイル（AGENTS.md / ARCHITECTURE.md / DESIGN.md / opencode.json）はベース名のままバッククォートのみ付与
+- 対象外: コードフェンス内 / TS 実行用引数（`Bun.file()` 等）/ JSON 値（opencode.json.template の instructions 配列）/ Design Token 参照値（`{primitive.shadow.md}`）/ ユーザー固有サンプル（`src/services/*`）
+- TS テンプレートリテラル内のバッククォートは `\`` エスケープが必要
+- 検証スキャナ: コードフェンス除去 + バッククォート区間除去後に `(?<![\w./-])([\w./-]+\.(?:md|json|ts|...))(?![\w.-])` で走査（URL 除外）
+
+### 変更（86ファイル・+562/-562）
+- Phase 1: `snippets/.opencode/instructions/` 41ファイル（perl 一括 + 個別修正）+ `plugins/*.ts` 9本 + `agents/AGENTS.md`。検証 OUT=0
+- Phase 2: `snippets/ARCHITECTURE.md.template` + `DESIGN.md.template`
+- Phase 3: `principles/` 全24ファイル（88件、design-contract 23件・harness-engineering 12件が上位）
+- Phase 4: `architectures/` 全13ファイル（27件、web-frontend-large 7件・mobile 5件が上位。_how-to-choose.md は違反0）
+- Phase 5: `skills/`（release-prep・handoff・live-operation）+ `agents/subagents/` + `docs/*.template` + `design/token-ssot.json.template` + `plugins/README.md` + `usage/` + `project-context`/`coding-conventions`/`.gitignore` テンプレート
+- 主なフルパス化: `token-ssot.json`→`design/`・`component-map.json`→`design/`・`stack-setup.md`→`.opencode/instructions/`・`network-resilience.md` 等→`.opencode/standards/principles/`・`mobile.md` 等→`.opencode/standards/architectures/`・`web-frontend-large.md`→`.opencode/standards/architectures/`・`handoff-artifact.md`→`.opencode/`・`skills.lock.yaml`/`secret-patterns.json`→`.opencode/config/`・plugin `.ts`→`.opencode/plugins/`・`tasks.json`/`spec.md`/`project-definition.md`→`docs/`・`release-prep/SKILL.md`→`.opencode/skills/release-prep/SKILL.md`
+- `plugins/README.md` は一部 plugins/*.ts を自身が配置される `.opencode/plugins/` 配下としてフルパス化
+
+### 最終検証
+- 全対象（snippets/・principles/・architectures/）を再走査し、フェンス外の裸ファイル参照 0 件
+- 残存8件は全員対象外: opencode.json.template の JSON 値6件・Design Token 参照値1件・検索クエリ例示1件（production-readiness.md:232 の `[`ARCHITECTURE.md` の...]` はバッククォート境界内）
+- 注意: `opencode/snippets/.opencode/node_modules/` がローカルに存在（git 未追跡・.gitignore 除外）. 配布混入リスクはなし
+
 ## API 準拠キャスト除去 + session.deleted バグ修正（2026-08-14 実施）
 
 ### 変更ファイル（未コミット）
@@ -99,7 +127,7 @@
 - v1120test: code-review.md は setup 再実行で自動反映（SAME 確認済み）、AGENTS.md と ARCHITECTURE.md はプロジェクト固有版のため手動反映
 
 ## 次のセッションでやること
-- 今回の変更（API 準拠キャスト除去 + session.deleted 修正）と、未コミットの naming/code-quality 常時化のコミット可否を人間に確認する（commit/push は人間の指示があるまで実行しない）
+- 今回の変更（ファイル参照バッククォート＋フルパス統一 86ファイル）と、未コミットの naming/code-quality 常時化・API キャスト除去のコミット可否を人間に確認する（commit/push は人間の指示があるまで実行しない）
 
 ## 検証メモ（2026-08-13）
 - テストハーネス: `/var/folders/2r/4xmj5zsd5736vnnwzp3gj1x40000gn/T/opencode/archdiag-test/`

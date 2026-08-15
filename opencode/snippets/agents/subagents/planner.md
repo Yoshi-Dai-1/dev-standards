@@ -13,7 +13,7 @@ permission:
   read: allow
   grep: allow
   edit: allow    # ドキュメント・JSON 編集用（コード編集不可は prompt で制限）
-  write: allow   # spec.md / tasks.json 新規作成用
+  write: allow   # `docs/spec.md` / `docs/tasks.json` 新規作成用
   list: allow
 ---
 
@@ -54,13 +54,13 @@ Won'tセクションに記載された機能は仕様書に含めない。
 
 以下の順番でファイルを生成する。
 
-### Step 1: docs/spec.md（仕様書）
+### Step 1: `docs/spec.md`（仕様書）
 
 仕様書を `docs/spec.md` として出力する。
 各スプリントに Sprint Contract セクションを含める。
 フォーマットは `docs/sprint-contract-template.md` を参照する。
 
-### Step 2: docs/tasks.json（Task List）
+### Step 2: `docs/tasks.json`（Task List）
 
 タスクごとに pass/fail 状態を管理する JSON ファイル。
 **Evaluator のみが `"passes": true` に更新できる。メインエージェントは `passes` フィールドを変更しない。**
@@ -80,11 +80,11 @@ Markdown ではなく JSON を使う理由：エージェントが Markdown よ�
 
 ### Step 3: 作業ディレクトリの作成判定
 
-Step 2 で作成した tasks.json の内容に基づき、以下**いずれか**を満たす場合に `docs/working/<group>/` を作成する：
-- tasks.json のタスク数が6以上
+Step 2 で作成した `docs/tasks.json` の内容に基づき、以下**いずれか**を満たす場合に `docs/working/<group>/` を作成する：
+- `docs/tasks.json` のタスク数が6以上
 - `docs/working/` 内に既存ディレクトリが2以上（list_directory で確認）
 
-作成する場合、`docs/working/<group>/` に plan.md / notes.md / review-checklist.md を作成する。
+作成する場合、`docs/working/<group>/` に `docs/working/<group>/plan.md` / `docs/working/<group>/notes.md` / `docs/working/<group>/review-checklist.md` を作成する。
 各テンプレートは `docs/working/` に配置されている（setup-harness.sh がコピー済み）。
 テンプレートを参照し、内容を記入する。
 

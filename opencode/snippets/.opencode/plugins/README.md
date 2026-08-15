@@ -1,27 +1,27 @@
 # Plugins
 
 OpenCode Plugin は TypeScript + Bun ランタイムで動作するイベント駆動型の自動実行仕組み。
-AGENTS.md への言語指示と異なり、エージェントの意思に関わらず自動実行される。
+`AGENTS.md` への言語指示と異なり、エージェントの意思に関わらず自動実行される。
 
 ## ファイル一覧
 
 | Plugin | イベント | 目的 |
 |--------|----------|------|
 | `secrets-guard.ts` | `tool.execute.before` | 機密ファイル・パターンの書き込み防止（P1-1 修正：SSoT 化） |
-| `tasks-guard.ts` | `tool.execute.before` | tasks.json passes 保護 |
+| `tasks-guard.ts` | `tool.execute.before` | `docs/tasks.json` passes 保護 |
 | `lint-and-typecheck.ts` | `tool.execute.after` | ファイル編集後の lint・format・typecheck・単一テスト自動実行（P1-2 修正：性能改善） |
 | `doc-links.ts` | `tool.execute.after` | ドキュメントリンクの整合性チェック（P1-3 修正：AI 通知パターン。multiedit 対応） |
 | `adr-prompt.ts` | `tool.execute.after` + noReply / `experimental.session.compacting` / `event` | Write/Edit 3回検出 → ADR 記録を促す（per-session 化・コンパクションリセット） |
 | `arch-diag.ts` | `tool.execute.after` / `experimental.session.compacting` / `event` | アーキテクチャ変更検知・スキル診断推奨（記入中抑制・変更検知・ENF セッション内1回） |
 | `skill-tracker.ts` | `tool.execute.after` | スキル使用履歴の記録 |
-| `lockfile-record.ts` | `tool.execute.after` | 外部スキルインストール検出・skills.lock.yaml への自動記録 |
+| `lockfile-record.ts` | `tool.execute.after` | 外部スキルインストール検出・`.opencode/config/skills.lock.yaml` への自動記録 |
 | `harness-health.ts` | `tool.execute.after` / `event` | Context Anxiety 兆候の検知（P0-3 per-session sliding window + TTL cleanup、multiedit 対応。pass 率は `event` 内で `session.idle` を購読） |
 | `task-archive.ts` | `event` | 作業ディレクトリの自動アーカイブ提案（全タスク完了時。`event` 内で `session.idle` を購読） |
 | `working-dir-guide.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | `docs/working/` ファイル Read/Write/Edit 検知時のルール注入 |
 | `evaluator-tools.ts` | `tool`（カスタムツール） | `evaluator-passed` / `evaluator-failed` ツール定義 |
 | `compaction-context.ts` | `experimental.session.compacting` | コンパクション時に作業ディレクトリの状態を維持 |
 | `env-check.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | Python/Node.js 環境パス自動書き換え + .nvmrc 不一致警告（セッション内1回） |
-| `rule-injector.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | ファイル種別・内容に応じてルールファイルの参照を注入（AGENTS.md 肥大化防止。規約未読ブロック・mkdir ゲート・tdd ハードゲート付き） |
+| `rule-injector.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | ファイル種別・内容に応じてルールファイルの参照を注入（`AGENTS.md` 肥大化防止。規約未読ブロック・mkdir ゲート・tdd ハードゲート付き） |
 | `destructive-op-guard.ts` | `tool.execute.before` | 破壊的Git操作（reset --hard / rebase / push --force / rm -rf 等）のブロック |
 | `commit-review.ts` | `tool.execute.before` | git commit 検出 → 子セッションで @code-reviewer + @security-auditor を並列実行 → 問題ありならブロック |
 
@@ -37,11 +37,11 @@ AGENTS.md への言語指示と異なり、エージェントの意思に関わ�
 
 **`session.idle`（`event` 経由で購読）**: セッションがアイドル状態（AI 応答完了）に遷移したときに発火。
 - 引数: フック名としての `session.idle` はスキーマ未宣言のため、`event` フック内で `event.type === "session.idle"` をフィルタして購読する。`sessionID` は `event.properties.sessionID` から取得
-- 用途: Context Anxiety 検知（harness-health.ts）・アーカイブ提案（task-archive.ts）・セキュリティレビュー催促（rule-injector.ts）
+- 用途: Context Anxiety 検知（`.opencode/plugins/harness-health.ts`）・アーカイブ提案（`.opencode/plugins/task-archive.ts`）・セキュリティレビュー催促（`.opencode/plugins/rule-injector.ts`）
 
 **`experimental.session.compacting`**: セッションコンパクション開始時に発火。
 - 引数: `(input: { sessionID: string }, output: { context: string[]; prompt?: string })`
-- 用途: コンパクション時の文脈注入（compaction-context.ts）。arch-diag.ts / rule-injector.ts / adr-prompt.ts / working-dir-guide.ts / env-check.ts はこれを利用して per-session フラグをリセットする（実験的API。将来変更される可能性あり）
+- 用途: コンパクション時の文脈注入（`.opencode/plugins/compaction-context.ts`）。`.opencode/plugins/arch-diag.ts` / `.opencode/plugins/rule-injector.ts` / `.opencode/plugins/adr-prompt.ts` / `.opencode/plugins/working-dir-guide.ts` / `.opencode/plugins/env-check.ts` はこれを利用して per-session フラグをリセットする（実験的API。将来変更される可能性あり）
 - 安定APIフォールバック: `event` フックで `session.compacted` イベント（`properties.sessionID`）を検知してもリセットする
 
 **`event`**: 全サーバーイベントの購読フック。
@@ -53,7 +53,7 @@ AGENTS.md への言語指示と異なり、エージェントの意思に関わ�
 
 `setup-harness.sh` が自動でファイルをコピーする。
 手動で有効化する場合は `.opencode/plugins/` に .ts ファイルを配置するだけでよい。
-opencode.json への登録は不要（auto-loading）。
+`opencode.json` への登録は不要（auto-loading）。
 
 依存関係のインストール：
 ```bash
@@ -122,7 +122,7 @@ Java/PHP には lint-and-typecheck の全言語に共通して採用している
    - ツール不在時はサイレントスキップ（JS/TS: pm の test script、Python: `.venv/bin/pytest`、Ruby: `bundle exec` 経由 or bare）
 5. 結果に応じて通知（人間向け Toast + コード対象の場合は AI への noReply 注入）：
    - 🟢 `all checks passed` — すべてのツールが正常終了（Toast のみ）
-   - 🟡 `no tools found for [lang]` — 1つもツールが見つからなかった。Toast とともに AI に「stack-setup.md でインストール」を通知して促す（`lang` が特定できた場合のみ）
+   - 🟡 `no tools found for [lang]` — 1つもツールが見つからなかった。Toast とともに AI に「`.opencode/instructions/stack-setup.md` でインストール」を通知して促す（`lang` が特定できた場合のみ）
    - 🔴 `${N} check(s) failed` — エラーあり。Toast とともに AI に修正対象を通知させる
 
 ### 責任境界
@@ -132,7 +132,7 @@ Java/PHP には lint-and-typecheck の全言語に共通して採用している
 自動実行・確認付き実行・提案のみを切り替える。
 
 - Plugin 層：ツールが既に存在することを前提に `which` 検出 → 実行 → 結果通知
-- ルール層（stack-setup.md）：言語検出時に必要なツールを OS 別にインストール
+- ルール層（`.opencode/instructions/stack-setup.md`）：言語検出時に必要なツールを OS 別にインストール
 
 ### 設定変更
 
@@ -174,7 +174,7 @@ AI エージェントが bash で `git commit` を実行したときにのみ動
 
 ### 保護される / されないケース
 
-| シナリオ | commit-review.ts | 代替保護 |
+| シナリオ | `.opencode/plugins/commit-review.ts` | 代替保護 |
 |---------|-----------------|---------|
 | AI が自律実行モードでコミット | ✅ 発火 | — |
 | 提案・人間実行モードで人間が「実行して」→ AI が bash 実行 | ✅ 発火 | — |
@@ -183,26 +183,26 @@ AI エージェントが bash で `git commit` を実行したときにのみ動
 
 ### 補完関係
 
-- **commit-review.ts**: LLM によるコードレビュー + セキュリティ監査。広範だが発火条件の制約あり
-- **pre-commit フック**: 決定論的パターンマッチ（secret-patterns.json）。範囲は限定されるが常に発火
+- **`.opencode/plugins/commit-review.ts`**: LLM によるコードレビュー + セキュリティ監査。広範だが発火条件の制約あり
+- **pre-commit フック**: 決定論的パターンマッチ（`.opencode/config/secret-patterns.json`）。範囲は限定されるが常に発火
 - 両者で defense in depth を構成する
 
 ### 備考
 
 個人開発ではブランチや Pull Request は不要。
-commit-review.ts が PR レビューと同じ品質保証をコミット時にコード強制するため、
+`.opencode/plugins/commit-review.ts` が PR レビューと同じ品質保証をコミット時にコード強制するため、
 main ブランチに直接コミットして問題ない。
 
 ### 未対応のトリガー
 
 | トリガー | 現状 | 理由 |
 |---------|------|------|
-| `gh pr create` | AI自己遵守（`_trigger-pr.md`） | PR頻度が低く、commit-review.ts が個別コミットを保護 |
-| `git push`（非main） | AI自己遵守（`_trigger-pr.md`） | push 検出は誤検知リスク大（force push は別途 destructive-op-guard.ts が保護）
+| `gh pr create` | AI自己遵守（`_trigger-pr.md`） | PR頻度が低く、`.opencode/plugins/commit-review.ts` が個別コミットを保護 |
+| `git push`（非main） | AI自己遵守（`_trigger-pr.md`） | push 検出は誤検知リスク大（force push は別途 `.opencode/plugins/destructive-op-guard.ts` が保護）
 
 ## `destructive-op-guard.ts` 詳細
 
-AGENTS.md Safety Rules に定義されている破壊的操作のうち、コード強制する範囲としない範囲。
+`AGENTS.md` Safety Rules に定義されている破壊的操作のうち、コード強制する範囲としない範囲。
 
 ### 強制する操作（guard がブロック）
 
@@ -220,24 +220,24 @@ AGENTS.md Safety Rules に定義されている破壊的操作のうち、コー
 
 | 操作 | コード強制しない理由 |
 |------|-------------------|
-| `git commit`（通常） | commit-review.ts が別途レビュー強制。通常の commit 自体は必須操作 |
+| `git commit`（通常） | `.opencode/plugins/commit-review.ts` が別途レビュー強制。通常の commit 自体は必須操作 |
 | `git push`（plain） | 頻繁に使う正常操作。force push のみ別途 guard |
 | `git add` | 頻繁に使う正常操作 |
 | ファイル削除（単一ファイル） | 誤検知が多い（正常なリファクタリング・リネームを阻害するため） |
 
-**設計意図**: `destructive-op-guard.ts` は Safety Rules の完全なコード実装ではなく、**復元が困難な操作のみを最低限ブロックする**ガードレール。復元可能な操作（通常 push, commit, 単一ファイル削除）は AGENTS.md の行動原則（AI 自発遵守）に委ね、誤検知リスクを回避している。
+**設計意図**: `destructive-op-guard.ts` は Safety Rules の完全なコード実装ではなく、**復元が困難な操作のみを最低限ブロックする**ガードレール。復元可能な操作（通常 push, commit, 単一ファイル削除）は `AGENTS.md` の行動原則（AI 自発遵守）に委ね、誤検知リスクを回避している。
 
 `commit-review.ts`、`secrets-guard.ts` と合わせて defense in depth を構成する。
 
 ## `rule-injector.ts` 詳細
 
 ファイル編集時にファイル種別と内容を検出し、対応するルールファイルの参照を注入する。
-AGENTS.md を軽量に保つための仕組み。
+`AGENTS.md` を軽量に保つための仕組み。
 
 ### 作用の流れ
 
 ```
-Session開始（instructions: AGENTS.md / cli-first.md / naming-conventions.md / code-quality.md / ARCHITECTURE.md / project-definition.md）
+Session開始（instructions: `AGENTS.md` / cli-first.md / `.opencode/instructions/naming-conventions.md` / `.opencode/instructions/code-quality.md` / `ARCHITECTURE.md` / project-definition.md）
   ↓
 AI: アーキテクチャ設計・プロジェクト設定（コードは未記述）
   ↓
@@ -254,7 +254,7 @@ AI: 規約に従って正しいコードを書く
 
 `throw new Error()` は AI に tool result として返り、人間には表示されない。
 AI が自己回復し、規約を読んでから再試行する。
-naming-conventions.md / code-quality.md は `opencode.json` の `instructions` で常時読込されるため、BLOCK・通知対象外（セッション開始時点で文脈に存在する）。
+`.opencode/instructions/naming-conventions.md` / `.opencode/instructions/code-quality.md` は `opencode.json` の `instructions` で常時読込されるため、BLOCK・通知対象外（セッション開始時点で文脈に存在する）。
 
 ### 検出と注入のルール
 
@@ -288,7 +288,7 @@ naming-conventions.md / code-quality.md は `opencode.json` の `instructions` �
 
 **再試行**: AI が規約を読み、全ての読了が確認されると以降のコードファイル書き込みはブロックしない
 **事前読了**: AI が最初の書き込みより前に規約ファイルを自発的に読んでいた場合、ブロックは発生しない
-**コンパクション**: セッションコンパクションで AI の記憶が失われても、`experimental.session.compacting` / `session.compacted` 検知で `injected` / `reminded` / `readByAI` フラグに加えて規約ゲート（`conventionsOffered` / `conventionsRead`）をリセットする。コンパクション後は単発ハードゲートが再起動し、次に作成操作をしたときに再度ゲートが効く（arch-diag.ts と同型の対策）。
+**コンパクション**: セッションコンパクションで AI の記憶が失われても、`experimental.session.compacting` / `session.compacted` 検知で `injected` / `reminded` / `readByAI` フラグに加えて規約ゲート（`conventionsOffered` / `conventionsRead`）をリセットする。コンパクション後は単発ハードゲートが再起動し、次に作成操作をしたときに再度ゲートが効く（`.opencode/plugins/arch-diag.ts` と同型の対策）。
 
 ### 再注入の条件（個別ルール、per-session state 管理）
 
@@ -305,7 +305,7 @@ naming-conventions.md / code-quality.md は `opencode.json` の `instructions` �
 
 ## `arch-diag.ts` 詳細
 
-ARCHITECTURE.md の技術スタック変更を検知し、スキルの追加検討を促す。
+`ARCHITECTURE.md` の技術スタック変更を検知し、スキルの追加検討を促す。
 あわせて、層のルールが定義されているのにアーキテクチャ違反検出が未設定の場合（ENF）に設定を促す。
 
 ### 過剰発火対策（2026-08）
@@ -329,5 +329,5 @@ ARCHITECTURE.md の技術スタック変更を検知し、スキルの追加検�
 ### 発火条件（ENF）
 
 - 層のルールが具体的に記入されている（`[層A]` のようなプレースホルダーがない）
-- アーキテクチャ違反検出設定が存在しない（eslint の `no-restricted-imports` / `boundaries`、pyproject.toml の `TID` など）
+- アーキテクチャ違反検出設定が存在しない（eslint の `no-restricted-imports` / `boundaries`、`pyproject.toml` の `TID` など）
 - セッション内1回のみ（コンパクションでリセットされる）

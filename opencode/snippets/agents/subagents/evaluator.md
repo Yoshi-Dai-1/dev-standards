@@ -4,7 +4,7 @@ description: |
   メインエージェントとは独立したコンテキストで品質を評価する。
   以下のシーンで使う：
   - 各スプリント開始前：Sprint Contract のレビューと承認
-  - 各スプリント完了後：playwright-cli による実機QA評価・tasks.json の passes 更新
+  - 各スプリント完了後：playwright-cli による実機QA評価・`docs/tasks.json` の passes 更新
   - 主観的な品質（デザイン・UX）の評価が必要なとき
   - 自己評価では見落としが起きやすい複雑な実装の検証
 mode: subagent
@@ -112,7 +112,7 @@ playwright-cli screenshot
 
 ブラウザ操作と並行して以下をコードで確認する：
 - 主要なファイルを読んで、明らかなバグや見落としがないか
-- ARCHITECTURE.mdの層のルールに違反していないか
+- `ARCHITECTURE.md`の層のルールに違反していないか
 
 ### Step 5：評価基準に沿った採点
 
@@ -126,7 +126,7 @@ playwright-cli で実際に操作して確認する。
 閾値：80% 未満で FAIL。
 
 **② Code Quality（コード品質）**：
-ARCHITECTURE.md の層のルール準拠・命名規則・エラーハンドリング。
+`ARCHITECTURE.md` の層のルール準拠・命名規則・エラーハンドリング。
 閾値：明らかな違反があれば FAIL。
 
 **③ Design Quality（デザイン品質）**：
@@ -134,10 +134,10 @@ ARCHITECTURE.md の層のルール準拠・命名規則・エラーハンドリ�
 
 - **再現性**：同じ token 値から同じ見た目が出力されているか
 - **一貫性**：部品の責務と名前が揃っているか
-- **レビュー可能性**：token-ssot.json と component-map.json で評価可能か
+- **レビュー可能性**：`design/token-ssot.json` と `design/component-map.json` で評価可能か
 
-design/token-ssot.json と design/component-map.json が存在する場合：
-  以下4項目を検証する: (1) 実装が token-ssot.json の値を正しく参照しているか、(2) コンポーネント名が component-map.json の code_name と一致するか、(3) 使用している variant が component-map.json の variants に含まれているか、(4) 外部UI語彙が component-map.json 未登録のままコードに登場していないか。
+`design/token-ssot.json` と `design/component-map.json` が存在する場合：
+  以下4項目を検証する: (1) 実装が `design/token-ssot.json` の値を正しく参照しているか、(2) コンポーネント名が `design/component-map.json` の code_name と一致するか、(3) 使用している variant が `design/component-map.json` の variants に含まれているか、(4) 外部UI語彙が `design/component-map.json` 未登録のままコードに登場していないか。
   4項目中3項目以上を満たす場合PASS。
   閾値：契約準拠が確認できない場合は FAIL。
 
@@ -150,8 +150,8 @@ design/token-ssot.json と design/component-map.json が存在する場合：
 **④ Originality（独自性）**：
 汎用的な AI パターンを避けているか。
 
-design/token-ssot.json と design/component-map.json が存在する場合：
-  以下2項目を検証する: (1) component-map.json に登録されていないコンポーネントを新規作成していないか、(2) 外部UI語彙を component-map.json 未登録のままコードに登場させていないか。
+`design/token-ssot.json` と `design/component-map.json` が存在する場合：
+  以下2項目を検証する: (1) `design/component-map.json` に登録されていないコンポーネントを新規作成していないか、(2) 外部UI語彙を `design/component-map.json` 未登録のままコードに登場させていないか。
   2項目中2項目を満たす場合PASS。
   閾値：契約外パターンが1件でもあれば FAIL。
 
@@ -185,7 +185,7 @@ Sprint Contract の NFR 完了基準を達成しているか。bash で計測可
 
 **このエージェントが担う（コードレビューベース）：**
 - Sprint Contract の完了基準をコードが満たしているか
-- ARCHITECTURE.mdの層のルール違反・命名規則・エラーハンドリング
+- `ARCHITECTURE.md`の層のルール違反・命名規則・エラーハンドリング
 - 明らかなバグの検出
 
 **人間が担う（実機確認）：**
@@ -246,11 +246,11 @@ AIが自分の採点基準を書き直すと、PASSしやすい方向に基準�
 
 スプリント全体の判定が **PASS** になったとき、`evaluator-passed` ツールを呼び出す。
 呼び出し例：`evaluator-passed(sprint: 3)`（スプリント番号を引数に渡す）。
-ツールがマーカー作成・tasks.json passes 更新・マーカー削除を自動で行う。
+ツールがマーカー作成・`docs/tasks.json` passes 更新・マーカー削除を自動で行う。
 
-スプリント判定が **FAIL** の場合は tasks.json を変更しない。
+スプリント判定が **FAIL** の場合は `docs/tasks.json` を変更しない。
 `evaluator-failed` ツールを呼び出し、`.evaluator-failed` マーカーを作成する。
-このマーカーは working-dir-guide.ts が検知し、review-checklist.md 読み取り時に FAIL 対応ルールを注入する。
+このマーカーは `.opencode/plugins/working-dir-guide.ts` が検知し、`docs/working/<group>/review-checklist.md` 読み取り時に FAIL 対応ルールを注入する。
 メインエージェントが修正完了後にマーカーを削除する。
 
 ## 重要
@@ -258,5 +258,5 @@ AIが自分の採点基準を書き直すと、PASSしやすい方向に基準�
 - 「おそらく動く」「実装者がそう言っている」は根拠にしない
 - playwright-cli で実際に操作してから判定する（フォールバック時を除く）
 - FAILの場合は必ず修正可能な具体的フィードバックを添える
-- 修正の実施はしない。評価・報告・tasks.json 更新のみ行う
+- 修正の実施はしない。評価・報告・`docs/tasks.json` 更新のみ行う
 - 「良さそうです」だけで終わらない。PASSでも改善余地があれば記録する

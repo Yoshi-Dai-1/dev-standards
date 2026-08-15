@@ -1,6 +1,6 @@
 # スキル使用履歴
 
-<!-- このファイルは skill-tracker.ts Plugin が自動追記する -->
+<!-- このファイルは `.opencode/plugins/skill-tracker.ts` Plugin が自動追記する -->
 <!-- 月次レビューでGarbage Collectionの判断基準として使う -->
 <!-- ローカルスキル（.opencode/skills/）もグローバルスキル（~/.opencode/skills/）も同じ形式で記録される -->
 
@@ -12,7 +12,7 @@
 
 ## 使用履歴
 
-<!-- skill-tracker.ts Plugin が自動追記する -->
+<!-- `.opencode/plugins/skill-tracker.ts` Plugin が自動追記する -->
 
 ---
 

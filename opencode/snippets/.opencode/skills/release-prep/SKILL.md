@@ -41,12 +41,12 @@ metadata:
 
 1.5 **バージョニングと CHANGELOG の準備**
 
-   ARCHITECTURE.md の「開発プロセス」セクションを読んで以下を実行する。
-   「開発プロセス」セクションが存在しない場合は ARCHITECTURE.md の記入が未完了なので、完了させるよう人間に伝える。
+   `ARCHITECTURE.md` の「開発プロセス」セクションを読んで以下を実行する。
+   「開発プロセス」セクションが存在しない場合は `ARCHITECTURE.md` の記入が未完了なので、完了させるよう人間に伝える。
 
    **SemVer の適用判断：**
 
-   ARCHITECTURE.md の「バージョニング：SemVer 採用」を確認する。
+   `ARCHITECTURE.md` の「バージョニング：SemVer 採用」を確認する。
    - 「SemVer 採用」→ 以下のバージョン番号決定ロジックを実行する
    - 「なし」または「管理しない」→ このステップを完全にスキップする
 
@@ -76,9 +76,9 @@ metadata:
    - それ以外（fix: / docs: / chore: 等のみ） → PATCH を +1
    決定したバージョン番号を人間に提示して確認を取る。
 
-   **CHANGELOG の確認と更新（ARCHITECTURE.md に「CHANGELOG：管理する」の記載がある場合）：**
+   **CHANGELOG の確認と更新（`ARCHITECTURE.md` に「CHANGELOG：管理する」の記載がある場合）：**
 
-   Step 1：プロジェクトルートに CHANGELOG.md が存在するか確認する
+   Step 1：プロジェクトルートに `CHANGELOG.md` が存在するか確認する
    存在しない場合 → 以下の形式で新規作成する
    （形式の根拠：keepachangelog.com。改訂確認は `Keep a Changelog [現在年]` で行う）：
    ```markdown
@@ -112,7 +112,7 @@ metadata:
 3. **The Twelve-Factor App 適用**
    `.opencode/standards/principles/production-deployment.md` を参照する。
 
-4. **docs/operations.md の作成**
+4. **`docs/operations.md` の作成**
    デプロイ方法・ロールバック手順・障害対応手順をAIと対話しながら記入する。
    本番リリース前までに完成させる。
 

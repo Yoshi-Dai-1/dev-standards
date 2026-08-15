@@ -6,7 +6,7 @@
 
 記録されるタイミング：
 - AIがセッション中に同じ種類の作業を3回以上実施したとき（.opencode/skills/live-operation/ のPeriodic Diagnosisから）
-- Plugin（skill-tracker.ts）の tool.execute.after（Skill）で自動記録されている場合
+- Plugin（`.opencode/plugins/skill-tracker.ts`）の tool.execute.after（Skill）で自動記録されている場合
 - 人間が「これスキル化できそう」と気づいたとき（手動追記）
 
 スキル化の判断基準：
@@ -31,7 +31,7 @@
 2. 作成されたスキルをプロジェクトの `.opencode/skills/` に保存する
 3. このファイルのステータスを「スキル化済み」に更新する
 
-保存後は `/スキル名` コマンドで呼び出せる状態になる。AGENTS.md への追記は不要。
+保存後は `/スキル名` コマンドで呼び出せる状態になる。`AGENTS.md` への追記は不要。
 
 > **skill-creator について**：初回使用時に AI が自動ダウンロードする（stub + _install.sh 方式）。
 > スキルの新規作成・改善・eval・descriptionの最適化まで一貫して対応する。

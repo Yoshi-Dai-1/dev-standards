@@ -61,7 +61,7 @@
 - 変化なし：（変化がなければ省略可）
 
 **対応状況サマリー**：
-- 未対応のセキュリティ要件：[handoff-artifact.md の `## Security Status` 参照]
+- 未対応のセキュリティ要件：[`.opencode/handoff-artifact.md` の `## Security Status` 参照]
 - 次回監査までのアクション：
   - [ ] （例: CVE-XXXX-XXXX のパッチ適用を確認）
   - [ ] （例: 依存ライブラリを最新版に更新）

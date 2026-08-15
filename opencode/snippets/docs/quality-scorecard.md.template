@@ -52,7 +52,7 @@ Monthly Checklist に従って @code-quality-auditor の結果を本ファイル
 | src/services | 🟢 GOOD | 🟢 GOOD | → |
 
 **主要な問題**：
-- [HIGH] （例: src/services/stock.service.ts が 412 行。分割を推奨）
+- [HIGH] （例: `src/services/stock.service.ts` が 412 行。分割を推奨）
 - [MEDIUM] （例: calculateROE が 2 ファイルに重複）
 - [LOW] （なければ「なし」）
 
@@ -62,5 +62,5 @@ Monthly Checklist に従って @code-quality-auditor の結果を本ファイル
 - 変化なし：（変化がなければ省略可）
 
 **翌月アクション**：
-- [ ] （例: src/services/stock.service.ts を 200 行以下に分割する）
+- [ ] （例: `src/services/stock.service.ts` を 200 行以下に分割する）
 - [ ] （例: calculateROE を shared/utils に統合する）
