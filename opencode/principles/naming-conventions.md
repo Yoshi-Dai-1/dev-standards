@@ -479,7 +479,7 @@ JWT_SECRET            → JWT署名用シークレット
 ## 命名規則の確定手順（`.opencode/instructions/stack-setup/_step-35.md` Step 3.5 ブロックA（命名規則の確定）から呼び出される）
 
 このセクションは `.opencode/instructions/stack-setup/_step-35.md` の Step 3.5 ブロックA（命名規則の確定）が呼び出したときのみ実行する。
-トリガーと実行タイミングは `.opencode/instructions/stack-setup.md`（Step 3.5 は `_step-35.md`）が管理する。このファイルは手順のみを定義する。
+トリガーと実行タイミングは `.opencode/instructions/stack-setup.md`（Step 3.5 は `.opencode/instructions/stack-setup/_step-35.md`）が管理する。このファイルは手順のみを定義する。
 
 ### 実行内容
 

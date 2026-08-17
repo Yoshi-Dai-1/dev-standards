@@ -98,11 +98,11 @@
 
 | レイヤー | 役割 | yori の対応 | 命名規則 |
 |----------|------|-------------|---------|
-| Unit Test | 即時フィードバック・TDD | `@test-generator` + `tdd-cycle.md` | `.opencode/standards/principles/naming-conventions.md`「テスト種別の命名規則」 |
+| Unit Test | 即時フィードバック・TDD | `@test-generator` + `.opencode/instructions/tdd-cycle.md` | `.opencode/standards/principles/naming-conventions.md`「テスト種別の命名規則」 |
 | Integration Test | ユニット間連携検証 | `@test-generator`（結合対象で生成） | 同上（`integration/` または `.integration.`） |
 | E2E Test | 最重要フローの最終確認 | `playwright-setup` skill | 同上（`e2e/` または `.e2e.`） |
 | 品質トレンド監視 | 長期的なピラミッド維持 | `@code-quality-auditor`（月次診断） | 同上（パターンマッチで分類） |
-| コミット前ゲート | バグの予防 | `commit-review.ts` Plugin + `lint-and-typecheck.ts` Plugin | — |
+| コミット前ゲート | バグの予防 | `.opencode/plugins/commit-review.ts` Plugin + `.opencode/plugins/lint-and-typecheck.ts` Plugin | — |
 | TDD サイクル | HOW（テストの書き方） | `.opencode/instructions/tdd-cycle.md` | — |
 
 ---

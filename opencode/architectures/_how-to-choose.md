@@ -21,7 +21,7 @@ Q1. 作るものは何か？
 
 Q2. UIの規模は？（「ブラウザで動くUI」と回答した場合）
   ├── 機能が10以下・個人開発・短期プロジェクト → web-frontend-small.md
-  └── 機能が多い・長期運用・チーム開発         → `.opencode/standards/architectures/web-frontend-large.md`
+  └── 機能が多い・長期運用・チーム開発         → web-frontend-large.md
 
 Q3. APIサーバーの形態は？（「HTTPで呼ぶAPI・サーバー」と回答した場合）
   ├── 常時起動・WebSocket・長時間処理が必要    → Q4へ
@@ -45,37 +45,37 @@ Q5. 以下の条件をすべて満たすか？
 
 ### 「web-frontend-small か large か分からない」
 
-→ 最初は必ず `web-frontend-small.md` を選ぶ。
+→ 最初は必ず `.opencode/standards/architectures/web-frontend-small.md` を選ぶ。
 
 理由：小規模構成から始めて必要になったら移行する方が、最初からFSDを導入して
-持て余すより低コスト。移行タイミングは `web-frontend-small.md` の
+持て余すより低コスト。移行タイミングは `.opencode/standards/architectures/web-frontend-small.md` の
 「FSDへの移行タイミング」セクションに明示されている。
 
 ### 「モバイルアプリとAPIサーバーを両方作る」
 
-→ `mobile.md`（モバイル）と `backend-api.md`（APIサーバー）を別リポジトリで使う。
-→ 型定義を共有したい場合は `monorepo.md` も参照する。
+→ `.opencode/standards/architectures/mobile.md`（モバイル）と `.opencode/standards/architectures/backend-api.md`（APIサーバー）を別リポジトリで使う。
+→ 型定義を共有したい場合は `.opencode/standards/architectures/monorepo.md` も参照する。
 
 ### 「サーバーレスにするかAPIサーバーにするか迷っている」
 
-→ 迷っている時点では `backend-api.md` を選ぶ。
-→ イベント駆動・コスト最適化・短時間処理の要件が確定してから `serverless.md` を参照する。
-→ WebSocket・長時間処理・ステートフルな要件がある場合は `backend-api.md` を選ぶ。
+→ 迷っている時点では `.opencode/standards/architectures/backend-api.md` を選ぶ。
+→ イベント駆動・コスト最適化・短時間処理の要件が確定してから `.opencode/standards/architectures/serverless.md` を参照する。
+→ WebSocket・長時間処理・ステートフルな要件がある場合は `.opencode/standards/architectures/backend-api.md` を選ぶ。
 
 ### 「マイクロサービスにするかモノリスにするか迷っている」
 
-→ 迷っている時点では `backend-api.md` を選ぶ。
+→ 迷っている時点では `.opencode/standards/architectures/backend-api.md` を選ぶ。
 → 「将来スケールするかもしれない」だけの理由でマイクロサービスを選ばない。
-→ ボトルネックが実際に発生してから `microservices.md` を参照して分割する。
+→ ボトルネックが実際に発生してから `.opencode/standards/architectures/microservices.md` を参照して分割する。
 
 ### 「フロントとバックを両方作る」
 
-型定義を共有したい（フロントとバックで同じ型を使いたい）→ `monorepo.md`
-独立してデプロイする（型共有は不要）→ `web-frontend-*.md` と `backend-api.md` を別リポジトリで使う
+型定義を共有したい（フロントとバックで同じ型を使いたい）→ `.opencode/standards/architectures/monorepo.md`
+独立してデプロイする（型共有は不要）→ `.opencode/standards/architectures/web-frontend-*.md` と `.opencode/standards/architectures/backend-api.md` を別リポジトリで使う
 
 ### 「スクリプトを書くが、Webからも呼びたい」
 
-→ `data-pipeline.md`（スクリプト部分）と `backend-api.md`（API部分）を組み合わせる。
+→ `.opencode/standards/architectures/data-pipeline.md`（スクリプト部分）と `.opencode/standards/architectures/backend-api.md`（API部分）を組み合わせる。
 何が主体かで、どちらを先に読むかを決める。
 
 ### 「複数の種別が混在する」

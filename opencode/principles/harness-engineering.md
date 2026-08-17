@@ -162,14 +162,14 @@ Planner がスプリント計画と同時に生成する機能追跡ファイル
 | `group` | string | `docs/working/<group>/` との対応（省略可） |
 
 `group` フィールドは **作業ディレクトリ パターン** 使用時に必須。
-セッションのアイドル検知（`session.idle` イベント購読）時に `task-archive.ts` Plugin が
+セッションのアイドル検知（`session.idle` イベント購読）時に `.opencode/plugins/task-archive.ts` Plugin が
 このフィールドで各作業ディレクトリの全タスクの `passes` が `true` かを確認し、
 完了したタスクを自動アーカイブする。
 `group` フィールドがないタスクはアーカイブ対象外（手動で対応する）。
 
 #### passes フィールドの保護メカニズム
 
-`passes` フィールドは tool.execute.before Plugin（`tasks-guard.ts`）によって
+`passes` フィールドは tool.execute.before Plugin（`.opencode/plugins/tasks-guard.ts`）によって
 機械的に保護される。
 
 - **ブロック対象**: 実装エージェントが誤って `passes: true` を設定する操作
@@ -219,14 +219,14 @@ Whyが書いてあれば、エージェントはHowを自分で導き出せる�
 |---------|------|---------|
 | Why（言語指示） | 「なぜこの依存ルールが存在するか」を記述 | `AGENTS.md`・`ARCHITECTURE.md` |
 | 機械的強制 | アーキテクチャ違反をファイル書き込み時に検出 | 言語固有のリンター設定 |
-| 即時フィードバック | lint をファイル編集後に自動実行してAIへ返す | `lint-and-typecheck.ts` Plugin |
+| 即時フィードバック | lint をファイル編集後に自動実行してAIへ返す | `.opencode/plugins/lint-and-typecheck.ts` Plugin |
 
 リンターのエラーメッセージには「どの層に移動すれば正しいか」をインラインで記載する。
 AIが修正方法を推測なしで実行できるようになる。
 
 **リンターとフォーマッターの役割分担**：
 リンターは「問題を報告する」、フォーマッターは「スタイルを自動修正する」と役割が異なる。
-両方を `lint-and-typecheck.ts` Plugin に組み込み、ファイル編集のたびに自動実行する。
+両方を `.opencode/plugins/lint-and-typecheck.ts` Plugin に組み込み、ファイル編集のたびに自動実行する。
 
 | 言語 | リンター（アーキテクチャ違反・バグ検出） | フォーマッター（スタイル統一） |
 |------|----------------------------------------|-----------------------------|
@@ -358,9 +358,9 @@ docs/
 
 ### 使い方
 
-1. **タスク開始時**：`@planner` が `docs/working/<group>/` を作成し `plan.md` を書く
+1. **タスク開始時**：`@planner` が `docs/working/<group>/` を作成し `docs/working/<group>/plan.md` を書く
 2. **タスク実装中**：メインエージェントは作業ディレクトリ内で計画・メモを管理
-3. **タスク完了時**：`task-archive.ts` Plugin がアイドル検知（`session.idle` イベント購読）時に `tasks.json` を確認する。
+3. **タスク完了時**：`.opencode/plugins/task-archive.ts` Plugin がアイドル検知（`session.idle` イベント購読）時に `docs/tasks.json` を確認する。
    同一 `group` フィールドを持つ全タスクの `passes` が `true`（= `@evaluator` が
    完了と判定）の場合、当該作業ディレクトリをアーカイブ対象として提案する
 4. **アーカイブ時**：AI が `docs/working/<group>/` の内容を
@@ -370,7 +370,7 @@ docs/
 
 | 仕組み | スコープ | ライフサイクル | 目的 |
 |--------|----------|----------------|------|
-| `handoff-artifact.md` | **セッション** | handoff スキルが AI 生成（毎回上書き） | 前セッションの文脈を次セッションに渡す |
+| `.opencode/handoff-artifact.md` | **セッション** | handoff スキルが AI 生成（毎回上書き） | 前セッションの文脈を次セッションに渡す |
 | `docs/working/<group>/` | **タスク** | タスク完了まで保持 | 複数タスクの状態を互いに干渉させない |
 
 ### 使い方を判断する基準

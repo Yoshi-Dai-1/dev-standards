@@ -426,7 +426,7 @@ await auditLogger.log({
 ## `ARCHITECTURE.md` への反映
 
 このファイルで定義した内容をプロジェクトの `ARCHITECTURE.md` 非機能要件セクションに転記する。
-転記すべき項目は `non-functional-requirements.md` のテンプレートに商用列として統合済み。
+転記すべき項目は `.opencode/standards/principles/non-functional-requirements.md` のテンプレートに商用列として統合済み。
 
 ---
 

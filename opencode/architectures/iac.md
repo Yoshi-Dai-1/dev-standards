@@ -10,7 +10,7 @@
 
 ## このファイルの使い方
 
-具体的なツールが確定したら、`stack-setup.md` の Step 3.5 ブロックB（必須ファイルの確認・記録）・C（フレームワーク固有設計の深掘り） が
+具体的なツールが確定したら、`.opencode/instructions/stack-setup.md` の Step 3.5 ブロックB（必須ファイルの確認・記録）・C（フレームワーク固有設計の深掘り） が
 ツール公式ドキュメントから固有の必須ファイルと構成を自律検索して補完する。
 このファイルは「共通の設計思想」を提供し、ツール固有の詳細は自律検索で調達する。
 
@@ -136,14 +136,14 @@ IaCのコードにシークレット（パスワード・APIキー）を直接�
 | `.env.example` | 必要な環境変数の一覧 | |
 
 ツール固有の必須ファイル（`cdk.json` / `.terraform.lock.hcl` 等）は
-`stack-setup.md` の Step 3.5 ブロックB（必須ファイルの確認・記録）が自律検索して記録する。
+`.opencode/instructions/stack-setup.md` の Step 3.5 ブロックB（必須ファイルの確認・記録）が自律検索して記録する。
 
 ---
 
 ## セキュリティ
 
 IaCはクラウドインフラ全体を制御するため、セキュリティリスクが高い。
-`security-requirements.md` の Lv.3 以上の対応を推奨する。
+`.opencode/standards/principles/security-requirements.md` の Lv.3 以上の対応を推奨する。
 
 静的解析ツールで設定ミスを検出する：
 `[ツール名] security scanning static analysis [現在年]`

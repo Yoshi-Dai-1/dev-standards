@@ -163,7 +163,7 @@ EC・電子商取引 → 特定商取引法（日本）/ 消費者契約法（�
 
 ### Step 4：プロジェクト固有制約の `AGENTS.md` 反映
 
-対応レベルはここに記述しない。都度 `project-definition.md` + 本ファイルから導出する。
+対応レベルはここに記述しない。都度 `docs/project-definition.md` + 本ファイルから導出する。
 
 ```markdown
 ## Security Boundaries

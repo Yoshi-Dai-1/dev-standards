@@ -3,14 +3,14 @@
 **向いている場面**：ターミナルから実行するコマンドラインツール・npm / pip パッケージとして配布するツール
 **言語**：TypeScript / JavaScript（Node.js）/ Python / Go / Rust / Shell
 
-`data-pipeline.md` との違い：CLIツールは「他者に配布・インストールしてもらうことを前提とした設計」である。
-個人・チーム内での自動化スクリプトは `data-pipeline.md` を参照する。
+`.opencode/standards/architectures/data-pipeline.md` との違い：CLIツールは「他者に配布・インストールしてもらうことを前提とした設計」である。
+個人・チーム内での自動化スクリプトは `.opencode/standards/architectures/data-pipeline.md` を参照する。
 
 ---
 
 ## このファイルの使い方
 
-具体的な言語・パッケージマネージャーが確定したら、`stack-setup.md` の Step 3.5 ブロックB（必須ファイルの確認・記録）が
+具体的な言語・パッケージマネージャーが確定したら、`.opencode/instructions/stack-setup.md` の Step 3.5 ブロックB（必須ファイルの確認・記録）が
 必須ファイルを自律検索して補完する。
 このファイルは「共通の設計思想」を提供し、言語固有の詳細は自律検索で調達する。
 
@@ -82,7 +82,7 @@ project-root/
 **エントリポイントの登録**
 
 配布ツールとして機能させるには、パッケージマネージャーにエントリポイントを登録する。
-登録方法は言語・ツールによって異なるため、`stack-setup.md` の Step 3.5 ブロックB（必須ファイルの確認・記録）が自律検索する。
+登録方法は言語・ツールによって異なるため、`.opencode/instructions/stack-setup.md` の Step 3.5 ブロックB（必須ファイルの確認・記録）が自律検索する。
 
 **バージョン管理**
 
@@ -164,7 +164,7 @@ CLIツールは複数の配布チャネルを持つことで、異なるOS・環
 | `.npmignore` / `.gitignore` | 配布に含めないファイルの除外 | |
 
 言語固有の必須ファイル（`package.json` の `bin` フィールド・`pyproject.toml` の `[project.scripts]` 等）は
-`stack-setup.md` の Step 3.5 ブロックB（必須ファイルの確認・記録）が自律検索して記録する。
+`.opencode/instructions/stack-setup.md` の Step 3.5 ブロックB（必須ファイルの確認・記録）が自律検索して記録する。
 
 ---
 

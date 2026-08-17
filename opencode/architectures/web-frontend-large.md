@@ -138,7 +138,7 @@ project-root/
 このアーキテクチャは JavaScript / TypeScript を前提としている。
 `eslint-plugin-boundaries` でFSD層ルールを機械的に強制し、
 エラーメッセージに修正方法を記載することでAIが修正先を推測なしで判断できる。
-`lint-and-typecheck.ts` Plugin と組み合わせると、ファイル編集のたびに
+`.opencode/plugins/lint-and-typecheck.ts` Plugin と組み合わせると、ファイル編集のたびに
 自動実行され、FSD違反が即座にAIに通知される（Plugin の設定方法は `.opencode/plugins/README.md` 参照）。
 
 ```json

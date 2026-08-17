@@ -135,8 +135,8 @@ git add -A && git commit -m "[生成したメッセージ]"
 1. **TDD 確認順序完了後**（型チェック → lint → テスト → @code-reviewer → 人間レビュー → 提案）
 2. **人間の明示指示時**
 
-提案後、人間が「実行して」と指示 → AI が bash 実行し `commit-review.ts` が発火する。
-人間のターミナル手動実行では `commit-review.ts` は動作しない。
+提案後、人間が「実行して」と指示 → AI が bash 実行し `.opencode/plugins/commit-review.ts` が発火する。
+人間のターミナル手動実行では `.opencode/plugins/commit-review.ts` は動作しない。
 
 ## Security Boundaries
 
@@ -154,7 +154,7 @@ git add -A && git commit -m "[生成したメッセージ]"
 
 ## Subagents
 
-- 複数ファイル・複数タスクの実装 → `@planner`（`spec.md` + `tasks.json` 生成。作業ディレクトリ判断基準は `.opencode/standards/principles/harness-engineering.md`）
+- 複数ファイル・複数タスクの実装 → `@planner`（`docs/spec.md` + `docs/tasks.json` 生成。作業ディレクトリ判断基準は `.opencode/standards/principles/harness-engineering.md`）
 - スプリント開始前 → `@evaluator`（Sprint Contract レビュー。承認まで繰り返す）
 - スプリント完了後 → `@evaluator`（QA評価。PASS → 次、FAIL → 修正）
 - 調査・原因特定 → `@codebase-investigator`（メインコンテキストを汚さない）

@@ -14,7 +14,7 @@
 project-root/                  リポジトリルート
   apps/                        デプロイ単位のアプリケーション
     web/                       フロントエンド
-      src/                     → .opencode/standards/architectures/web-frontend-large.md または web-frontend-small.md に従う
+      src/                     → web-frontend-large.md または web-frontend-small.md に従う
       package.json
       tsconfig.json
       vite.config.ts

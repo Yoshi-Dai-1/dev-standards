@@ -503,7 +503,7 @@ project-root/
 - フォーマッター：[言語確定時に `.opencode/instructions/stack-setup.md` ルールに従って設定]
 
 **品質維持の仕組み：**
-- `lint-and-typecheck.ts` Plugin でファイル編集のたびに lint・フォーマットを自動実行
+- `.opencode/plugins/lint-and-typecheck.ts` Plugin でファイル編集のたびに lint・フォーマットを自動実行
 - 品質診断戦略：[Reactive / Scheduled / Continuous]（言語確定時に `.opencode/instructions/stack-setup.md` ルールに従って確認・記録）
 
 ### 国際化・ローカライゼーション（i18n）
