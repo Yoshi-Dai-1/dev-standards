@@ -145,7 +145,7 @@ Won't（今回はやらない）：
 ### プロジェクト種別（商用要件の有無を決定する）
 - プロジェクト種別：[個人・社内ツール / 商用サービス（ユーザーへのSLA・収益あり）]
 - チーム規模：[個人 / 2〜5人 / 6人以上]
-- 商用の場合は `.opencode/standards/principles/commercial-operations.md` を参照して追加要件を定義する
+- 商用の場合は .opencode/standards/principles/commercial-operations.md を参照して追加要件を定義する
 
 ### 守るべき資産
 - ユーザーデータ：[個人情報あり / なし / 匿名のみ]
@@ -168,7 +168,7 @@ Won't（今回はやらない）：
 
 ## リスク評価（Risk Assessment）
 
-<!-- 詳細は `.opencode/standards/principles/risk-based-approach.md` を参照 -->
+<!-- 詳細は .opencode/standards/principles/risk-based-approach.md を参照 -->
 <!-- 「今は小さいから関係ない」が最も危険な思い込み -->
 
 ### 即死系リスク（発生したらプロジェクトが止まる）
@@ -226,8 +226,8 @@ AIにインタビュアーを依頼することで：
 1. 私に質問を1つずつしてください（複数まとめて聞かない）
 2. 私の回答をもとに、下記5項目のテンプレートを少しずつ埋めてください
 3. 各項目が埋まったら「この内容で合っているか」を確認してください
-4. 5項目がすべて埋まったら、完成したテンプレートをMarkdown形式で出力し、`docs/project-definition.md` として保存してください
-5. 保存後、`.opencode/standards/architectures/_how-to-choose.md` の選択フローチャートを読み、`docs/project-definition.md` の内容に基づいてプロジェクトに合ったアーキテクチャを自律的に判断し、選定結果と理由を人間に提示してください。人間が承認したら該当のアーキテクチャファイルを読み、`ARCHITECTURE.md` を記入してください
+4. 5項目がすべて埋まったら、完成したテンプレートをMarkdown形式で出力し、docs/project-definition.md として保存してください
+5. 保存後、.opencode/standards/architectures/_how-to-choose.md の選択フローチャートを読み、docs/project-definition.md の内容に基づいてプロジェクトに合ったアーキテクチャを自律的に判断し、選定結果と理由を人間に提示してください。人間が承認したら該当のアーキテクチャファイルを読み、ARCHITECTURE.md を記入してください
 
 【引き出してほしい項目】
 - Why：このプロジェクトが解決する問題・存在する理由

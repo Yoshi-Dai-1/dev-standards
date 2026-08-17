@@ -21,7 +21,7 @@
 ```
 project-root/
   src/
-    `index.ts`                  エントリポイント（`bin` に登録するファイル）
+    index.ts                  エントリポイント（`bin` に登録するファイル）
     commands/                 サブコマンド定義（1コマンド = 1ファイル）
       init.ts
       build.ts
@@ -32,7 +32,7 @@ project-root/
   tests/
   dist/                       ビルド成果物（gitignore）
 
-  `package.json`                必須（bin フィールドにエントリポイントを登録する）
+  package.json                必須（bin フィールドにエントリポイントを登録する）
   tsconfig.json
   .npmignore                  npm公開時に除外するファイルを指定する
   README.md                   インストール方法・使い方を必ず記載する

@@ -74,34 +74,34 @@ decisions/ の各ファイルを読んで以下を確認する：
 
 ```
 1. データ件数の確認
-   以下の手順でデータ件数を取得する（`ARCHITECTURE.md`にテーブル名の記録はないため
+   以下の手順でデータ件数を取得する（ARCHITECTURE.mdにテーブル名の記録はないため
    コードベースから自律的に特定する）：
    Step 1：マイグレーションファイルまたはスキーマ定義ファイルを検索して主要テーブルを特定する
            （例：schema.prisma / migrations/ / models.py / schema.rb 等）
    Step 2：特定したテーブルに対して件数クエリを実行する
            `SELECT COUNT(*) FROM [特定したテーブル名];`
-   Step 3：取得した件数を `ARCHITECTURE.md` の「データ件数（1年後想定）」の値と比較する
+   Step 3：取得した件数を ARCHITECTURE.md の「データ件数（1年後想定）」の値と比較する
 
 2. クエリパフォーマンス診断
    主要テーブルへの頻繁なクエリにインデックスが設定されているか確認する。
    確認方法（ツールは変化するため毎月検索する）：
-   `[`ARCHITECTURE.md` の「DB / ORM」値のDB部分] query performance analysis [現在年]`
+   `[ARCHITECTURE.md の「DB / ORM」値のDB部分] query performance analysis [現在年]`
    信頼できる情報源の判断基準：使用DBの公式組織が管理するドメイン。
    「[使用DB名] official documentation」で検索し公式ドメインを採用する
    （例：PostgreSQL は postgresql.org、MySQL は dev.mysql.com、
    MongoDB は mongodb.com）。
 
-3. N+1診断（`ARCHITECTURE.md` の「DB / ORM」に ORM が記録されている場合のみ）
+3. N+1診断（ARCHITECTURE.md の「DB / ORM」に ORM が記録されている場合のみ）
    `[使用言語] [使用ORM] N+1 detection [現在年]`
 
 4. スケーリング実施判断
-   以下の判断基準を順番に適用する（`.opencode/standards/principles/risk-based-approach.md` の4象限に対応）：
+   以下の判断基準を順番に適用する（.opencode/standards/principles/risk-based-approach.md の4象限に対応）：
 
    【A領域：即座に対処】
    以下のいずれかが真の場合：
-   - 現在のレスポンスタイムが `ARCHITECTURE.md` の「パフォーマンス > p95」目標値を超えている
+   - 現在のレスポンスタイムが ARCHITECTURE.md の「パフォーマンス > p95」目標値を超えている
    - 取得したデータ件数が「データ件数（1年後想定）」の値を超えている
-   → `.opencode/standards/principles/risk-based-approach.md` の「確率：高・影響：高」に相当する。
+   → .opencode/standards/principles/risk-based-approach.md の「確率：高・影響：高」に相当する。
      スケーリングを即座に実施する。人間に報告して承認を得てから実施する。
 
    【C領域：計画的に対処】
@@ -109,7 +109,7 @@ decisions/ の各ファイルを読んで以下を確認する：
    - 現在のレスポンスタイムは p95 目標値を超えていない
    - 取得したデータ件数が「データ件数（1年後想定）」の値に近づいている
      （目安：想定値の半分以上。ただし最終判断は人間が行う）
-   → `.opencode/standards/principles/risk-based-approach.md` の「確率：中・影響：高」に相当する。
+   → .opencode/standards/principles/risk-based-approach.md の「確率：中・影響：高」に相当する。
      次の月次診断までにスケーリングを計画するよう人間に報告する。
 
    【D領域：許容】
@@ -117,11 +117,11 @@ decisions/ の各ファイルを読んで以下を確認する：
    → 継続監視のみ。報告に記載する。
 
    スケーリングを実施する場合（A・C領域）：
-   `ARCHITECTURE.md` の「スケーリング方針」の記録を確認する。
+   ARCHITECTURE.md の「スケーリング方針」の記録を確認する。
    - 「垂直スケーリング」と記録されている場合：
-     `[`ARCHITECTURE.md` の「デプロイ先」値] vertical scaling [現在年]`
+     `[ARCHITECTURE.md の「デプロイ先」値] vertical scaling [現在年]`
    - 「水平スケーリング」と記録されている場合：
-     `[`ARCHITECTURE.md` の「デプロイ先」値] horizontal scaling auto-scaling [現在年]`
+     `[ARCHITECTURE.md の「デプロイ先」値] horizontal scaling auto-scaling [現在年]`
    信頼できる情報源の判断基準：デプロイ先の公式組織が管理するドメイン。
    「[デプロイ先名] official documentation」で検索し公式ドメインを採用する
    （例：Vercel は vercel.com/docs、Fly.io は fly.io/docs、

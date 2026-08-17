@@ -11,17 +11,17 @@
 このファイルには2種類のルールが存在する。適用する前に必ず以下の順序で判断する。
 
 ```
-1. `ARCHITECTURE.md` の「命名規則」セクションに確定値が記載されている
+1. ARCHITECTURE.md の「命名規則」セクションに確定値が記載されている
    → そちらを SSOT として従う。このファイルは参照しない。
 
 2. 言語別ルール（言語別のテストファイル命名・テスト種別）が確定している
    → このファイルの「テスト種別の命名規則」表と
-     `.opencode/instructions/naming-conventions.md` の「テストファイル命名規則」表を確認する。
+     .opencode/instructions/naming-conventions.md の「テストファイル命名規則」表を確認する。
      言語別ルールは基本コア表の基底規則を上書きする。
 
 3. 言語別ルールがない・該当しない
    → 基本コア表（ケーススタイル一覧・ディレクトリ名・ファイル名・テストファイル命名規則）を
-     `.opencode/instructions/naming-conventions.md`（常時読込）で参照する。
+     .opencode/instructions/naming-conventions.md（常時読込）で参照する。
 
 4. 基本コア表にも記載がない
    → 「命名規則の確定手順」セクションに従い、
@@ -393,7 +393,7 @@ chore/update-dependencies  依存関係更新
 feat: 株式スクリーナーの条件保存機能を追加
 fix: ログイン時のトークンリフレッシュエラーを修正
 refactor: 認証レイヤーをrepositoriesパターンに移行
-docs: `ARCHITECTURE.md`にFSD層のルールを追記
+docs: ARCHITECTURE.mdにFSD層のルールを追記
 chore: ESLintをv9に更新
 test: useStockDataのユニットテストを追加
 ```

@@ -4,11 +4,11 @@
 それが完了していないまま実装に入ることを防ぐ最後の砦。
 
 ```
-チェック1：`ARCHITECTURE.md` の「## セキュリティ要件」セクションが記入済みか
-  → 未記入：実装を止め、`ARCHITECTURE.md` Step3 の手順で記入するよう案内する
+チェック1：ARCHITECTURE.md の「## セキュリティ要件」セクションが記入済みか
+  → 未記入：実装を止め、ARCHITECTURE.md Step3 の手順で記入するよう案内する
 
-チェック2：`AGENTS.md` の Security Boundaries にプロジェクト固有の制約が記入済みか
-  → コメントのみ：`.opencode/standards/principles/security-requirements.md` の判断ステップを実行して追記する
+チェック2：AGENTS.md の Security Boundaries にプロジェクト固有の制約が記入済みか
+  → コメントのみ：.opencode/standards/principles/security-requirements.md の判断ステップを実行して追記する
 
 チェック3：認証・認可が必要なプロジェクトで未設計の場合
   → @security-designer を呼び出す

@@ -175,10 +175,10 @@ D領域（影響小・確率低）→ LOW（記録して計画的に対処）
 以下の概要は理解のための簡易版。詳細は `.opencode/standards/principles/resilience.md` にある。
 
 ```
-Layer 1: 壊れにくくする（Prevention）    → `.opencode/standards/principles/resilience.md` Layer 1 参照
-Layer 2: 気づく（Detection）            → `.opencode/standards/principles/resilience.md` Layer 2 参照
-Layer 3: 被害を限定する（Containment）  → `.opencode/standards/principles/resilience.md` Layer 3 参照
-Layer 4: 回復する（Recovery）           → `.opencode/standards/principles/resilience.md` Layer 4 参照
+Layer 1: 壊れにくくする（Prevention）    → .opencode/standards/principles/resilience.md Layer 1 参照
+Layer 2: 気づく（Detection）            → .opencode/standards/principles/resilience.md Layer 2 参照
+Layer 3: 被害を限定する（Containment）  → .opencode/standards/principles/resilience.md Layer 3 参照
+Layer 4: 回復する（Recovery）           → .opencode/standards/principles/resilience.md Layer 4 参照
 ```
 
 どれか1層が破られても他の層が機能する設計。

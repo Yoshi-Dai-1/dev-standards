@@ -237,7 +237,7 @@ main ブランチに直接コミットして問題ない。
 ### 作用の流れ
 
 ```
-Session開始（instructions: `AGENTS.md` / cli-first.md / `.opencode/instructions/naming-conventions.md` / `.opencode/instructions/code-quality.md` / `ARCHITECTURE.md` / project-definition.md）
+Session開始（instructions: AGENTS.md / cli-first.md / .opencode/instructions/naming-conventions.md / .opencode/instructions/code-quality.md / ARCHITECTURE.md / project-definition.md）
   ↓
 AI: アーキテクチャ設計・プロジェクト設定（コードは未記述）
   ↓

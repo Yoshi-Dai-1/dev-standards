@@ -53,7 +53,7 @@ features/stock-card/
   stockCard.types.ts     この機能専用の型
   stockCard.module.css   スタイル
   StockCard.test.tsx     テスト
-  `index.ts`               外部公開API（ここだけexport）
+  index.ts               外部公開API（ここだけexport）
 ```
 
 削除するとき：このディレクトリを丸ごと削除すれば取り残しがない。
@@ -147,5 +147,5 @@ features/auth/
     tokenParser.ts
     sessionStore.ts
   AuthForm.tsx        外部から使うコンポーネント
-  `index.ts`            公開API
+  index.ts            公開API
 ```

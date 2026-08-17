@@ -1,7 +1,7 @@
 #### Python が含まれる場合
 
 ```
-.python-version       → 下記テンプレートで作成（`ARCHITECTURE.md` のバージョンを優先）
+.python-version       → 下記テンプレートで作成（ARCHITECTURE.md のバージョンを優先）
 pyproject.toml        → 下記テンプレートで作成（Ruff・mypy の設定を含む）
 requirements.txt      → 下記テンプレートで作成
 requirements-dev.txt  → 下記テンプレートで作成

@@ -3,7 +3,7 @@
 ## このファイルの目的と他ファイルとの役割分担
 
 ```
-`.opencode/standards/principles/security-requirements.md`    → セキュリティ対応レベルの自律判断
+.opencode/standards/principles/security-requirements.md    → セキュリティ対応レベルの自律判断
 security-implementation.md  → セキュリティ機能の実装方法
 resilience.md               → システム全体の「壊れても死なない」設計
 このファイル                → 外部通信の安定性設計の判断基準・自律実行手順
@@ -15,12 +15,12 @@ production-readiness.md     → リリース前チェックリスト
 ```
 参照タイミングと参照元：
   外部API・DBへの通信を含む機能の実装依頼を受けたとき
-    → `.opencode/instructions/network-resilience.md` の自律トリガー経由
-  `ARCHITECTURE.md` Step3 完了後
+    → .opencode/instructions/network-resilience.md の自律トリガー経由
+  ARCHITECTURE.md Step3 完了後
     → ARCHITECTURE.md.template の通信設計セクション記入時
   @resilience-checker の月次診断時
-    → `.opencode/agents/resilience-checker.md` の診断項目から参照
-  `.opencode/standards/principles/production-readiness.md` のチェック実行時
+    → .opencode/agents/resilience-checker.md の診断項目から参照
+  .opencode/standards/principles/production-readiness.md のチェック実行時
     → エラーハンドリングセクションから参照
 ```
 
@@ -66,7 +66,7 @@ production-readiness.md     → リリース前チェックリスト
 冪等性を実装するとき：
   1. idempotency key http api [現在年]
   2. [使用言語] [使用フレームワーク] idempotent request [現在年]
-  3.    [`docs/project-definition.md` に記載の決済サービス名] idempotency [現在年]
+  3.    [docs/project-definition.md に記載の決済サービス名] idempotency [現在年]
      （決済サービスを使う場合のみ実行する）
 
 サーキットブレーカーを実装するとき：
@@ -78,7 +78,7 @@ production-readiness.md     → リリース前チェックリスト
 
 コネクションプーリングを実装するとき：
   1. [使用言語] [使用フレームワーク] connection pool configuration [現在年]
-  2. [使用DB名（`ARCHITECTURE.md`で確認）] connection pool best practices [現在年]
+  2. [使用DB名（ARCHITECTURE.mdで確認）] connection pool best practices [現在年]
 ```
 
 検索結果は以下のフォーマットで人間に必ず通知する（通知せずに実装しない）：
@@ -138,7 +138,7 @@ API設計・通信設計の原則：
 
 決済サービス固有の通信設計：
   各決済サービスの公式ドキュメント
-  → `docs/project-definition.md` に記載の決済サービス名で検索して確認する
+  → docs/project-definition.md に記載の決済サービス名で検索して確認する
 
 日本のWebサービス・行政・医療向け：
   IPA（情報処理推進機構）（ipa.go.jp）→ 日本語の実装ガイドライン・セキュリティ指針
@@ -156,17 +156,17 @@ AIは以下の判断フローを自律的に実行する。人間が指示する
 ```
 確認する項目：
   外部API・外部サービスへの通信があるか
-    → `ARCHITECTURE.md` の「外部依存」または「外部サービス」セクションを確認する
-    → 記録がない場合は `docs/project-definition.md` の「機能要件」から判断する
+    → ARCHITECTURE.md の「外部依存」または「外部サービス」セクションを確認する
+    → 記録がない場合は docs/project-definition.md の「機能要件」から判断する
 
   DBへの通信があるか
-    → `ARCHITECTURE.md` の「データストア」セクションを確認する
+    → ARCHITECTURE.md の「データストア」セクションを確認する
 
   リクエスト頻度の目安はあるか
-    → `ARCHITECTURE.md` の「非機能要件 > パフォーマンス」セクションを確認する
+    → ARCHITECTURE.md の「非機能要件 > パフォーマンス」セクションを確認する
 
   冪等でない操作が含まれるか
-    → `docs/project-definition.md` の「機能要件 > Must」から判断する
+    → docs/project-definition.md の「機能要件 > Must」から判断する
     → 「決済」「注文」「メール送信」「SMS送信」「通知送信」を含む場合は該当する
 ```
 
@@ -199,7 +199,7 @@ AIは以下の判断フローを自律的に実行する。人間が指示する
 
 コネクションプーリング：
   以下のいずれかを満たす場合に実装する
-    ・`ARCHITECTURE.md` の非機能要件で同時接続数が10以上と定義されている
+    ・ARCHITECTURE.md の非機能要件で同時接続数が10以上と定義されている
     ・1秒あたり10リクエスト以上のDB・外部API通信が想定されている
   上記のいずれも該当しない場合はスキップする
 ```
@@ -225,7 +225,7 @@ AIは以下の判断フローを自律的に実行する。人間が指示する
   この2つは別の障害を想定している。片方だけの設定は不完全。
 
 原則2：タイムアウト値は constants/ に定数として定義する
-   コードに数値を直接書かない（`.opencode/standards/principles/ssot-and-constants.md` の原則に従う）
+   コードに数値を直接書かない（.opencode/standards/principles/ssot-and-constants.md の原則に従う）
   定数名の例：
     EXTERNAL_API_CONNECT_TIMEOUT_MS
     EXTERNAL_API_READ_TIMEOUT_MS
@@ -281,7 +281,7 @@ AIは以下の判断フローを自律的に実行する。人間が指示する
     サーバーはこのIDをキャッシュして2回目以降は最初の結果を返す
   方式B：DBのユニーク制約を使う
     同じデータを2回INSERTしても1件になるようにDB制約を設ける
-  使用する方式は実装前に決定して `ARCHITECTURE.md` に記録する
+  使用する方式は実装前に決定して ARCHITECTURE.md に記録する
 
 原則3：決済サービスの冪等性仕様は必ず公式ドキュメントで確認する
   各決済サービスによって冪等キーの実装方法が異なる
@@ -306,7 +306,7 @@ AIは以下の判断フローを自律的に実行する。人間が指示する
 原則3：Open状態のときのフォールバック動作を定義する
   フォールバックなし：即時エラーを返す（最もシンプル）
   フォールバックあり：キャッシュ値を返す・デフォルト値を返す
-  どちらにするかは実装前に決定して `ARCHITECTURE.md` に記録する
+  どちらにするかは実装前に決定して ARCHITECTURE.md に記録する
 ```
 
 ### コネクションプーリング
@@ -333,12 +333,12 @@ AIは以下の判断フローを自律的に実行する。人間が指示する
 ## AIの実装手順（自律実行・人間の指示を待たない）
 
 ```
-Step 1：`ARCHITECTURE.md` を読み、使用言語・使用フレームワーク・
+Step 1：ARCHITECTURE.md を読み、使用言語・使用フレームワーク・
         外部通信の有無・非機能要件を確認する
   → 確認できない場合は人間に質問する（推測で進めない）
 
 Step 2：「プロジェクト性質による採否の自律判断」の手順で採否を決定する
-  → 決定した採否と根拠を `ARCHITECTURE.md` の「通信設計」セクションに記録する
+  → 決定した採否と根拠を ARCHITECTURE.md の「通信設計」セクションに記録する
 
 Step 3：採用した対策ごとに対応する検索クエリでWebを検索する
   → 「AIが実装前に必ずWebで検索する」セクションの
@@ -375,7 +375,7 @@ Step 5：実装完了後に Report Format で変更内容を報告する
 ```
 1. 「[対策名] の採否について判断できない点があります」と人間に通知する
 2. 判断できない理由を具体的に説明する
-   例：「`ARCHITECTURE.md` に外部サービスへの通信が記載されていないため、
+   例：「ARCHITECTURE.md に外部サービスへの通信が記載されていないため、
         コネクションプーリングの採否が判断できません」
 3. 判断に必要な情報を1点だけ質問する
 4. 回答を得てから採否を決定する
@@ -441,7 +441,7 @@ N+1問題の防止:
 Introspectionの制御:
    Introspection（スキーマ情報の取得）は開発環境のみ有効にする
    本番環境ではIntrospectionを無効化してスキーマ情報を隠す
-   → `.opencode/standards/principles/security-implementation.md` の「GraphQLセキュリティ」セクションも参照する
+   → .opencode/standards/principles/security-implementation.md の「GraphQLセキュリティ」セクションも参照する
 
 Subscriptionのスケール:
    GraphQL Subscriptionを使う場合はWebSocketと同じスケール設計が必要
@@ -455,7 +455,7 @@ Subscriptionのスケール:
 ```
 月次の定期診断で確認する項目：
 
-1. `ARCHITECTURE.md` の「通信設計」テーブルが記入されているか
+1. ARCHITECTURE.md の「通信設計」テーブルが記入されているか
    → 未記入：通信設計が未定義のまま実装されている可能性がある
 
 2. タイムアウト値が constants/ に定数として定義されているか
@@ -465,14 +465,14 @@ Subscriptionのスケール:
    → 冪等でない操作（決済・メール送信など）がリトライ対象に含まれていないか確認する
 
 4. 冪等でない操作に冪等性の確保が実装されているか
-   → `docs/project-definition.md` の機能要件に決済・通知が含まれる場合は必ず確認する
+   → docs/project-definition.md の機能要件に決済・通知が含まれる場合は必ず確認する
 
 5. 採用した対策の設定値が constants/ に定義されているか
    → 定数でない設定値が発見された場合は定数化を指示する
 
-報告形式（`.opencode/agents/resilience-checker.md` の形式に統合して報告する）：
+報告形式（.opencode/agents/resilience-checker.md の形式に統合して報告する）：
 
-[OK]     通信設計：`ARCHITECTURE.md` の通信設計テーブルが記入されている
+[OK]     通信設計：ARCHITECTURE.md の通信設計テーブルが記入されている
 [要対応] タイムアウト：constants/ に定数が定義されていない → 定数化を指示する
 [要対応] 冪等性：決済処理にリトライが実装されているが冪等性の確保がない
 [OK]     リトライ条件：冪等でない操作はリトライ対象から除外されている

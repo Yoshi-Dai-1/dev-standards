@@ -34,7 +34,7 @@ src/
       model/
         useStockSearch.ts
         stockSearch.types.ts
-      `index.ts`            外部公開APIのみexport
+      index.ts            外部公開APIのみexport
     screening/
     auth/
 
@@ -47,7 +47,7 @@ src/
         stock.types.ts
         stock.constants.ts
         useStock.ts
-      `index.ts`
+      index.ts
     user/
 
   shared/                 汎用UI・utils・型・定数（ドメイン非依存）
@@ -80,7 +80,7 @@ features/stock-search/
   model/            ロジック（hooks・型・定数）
   api/              この機能固有のAPIコール（shared/lib を使う）
   _internal/        このfeature内からのみ参照（外部に公開しない）
-  `index.ts`          外部公開API（ここにないものは触れない）
+  index.ts          外部公開API（ここにないものは触れない）
 ```
 
 ---
@@ -127,7 +127,7 @@ project-root/
   .eslintrc.json      import/no-cycle ルールを必ず含める
   tsconfig.json
   .env.example
-  `ARCHITECTURE.md`     FSDの層ルールをプロジェクト固有に記載
+  ARCHITECTURE.md     FSDの層ルールをプロジェクト固有に記載
   README.md
 ```
 

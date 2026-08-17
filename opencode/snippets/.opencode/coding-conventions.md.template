@@ -10,13 +10,13 @@
 
 ```
 1. このプロジェクトの規約
-   確認順序：`ARCHITECTURE.md` の「命名規則」セクションを最初に確認する。
+   確認順序：ARCHITECTURE.md の「命名規則」セクションを最初に確認する。
             次にこのファイル（coding-conventions.md）を確認する。
-            `ARCHITECTURE.md` が SSOT であり、このファイルはその補足として機能する。
+            ARCHITECTURE.md が SSOT であり、このファイルはその補足として機能する。
    → 記載がある → それに従う。記載がない場合のみ次へ。
 
 2. 使用フレームワークの規約・雛形（scaffold）が定める構造
-   → `ARCHITECTURE.md` の「フレームワーク」行を確認する。
+   → ARCHITECTURE.md の「フレームワーク」行を確認する。
    → 例：Next.js の app/ ディレクトリ構成、Django の manage.py startproject が生成する構造
    → 存在する → それに従う。フレームワークが強制しない部分のみ次へ。
 

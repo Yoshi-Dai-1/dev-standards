@@ -162,7 +162,7 @@ tests/
 ### JavaScript / TypeScript の場合（ESLint）
 
 ```json
-// eslint.config.mjs — `ARCHITECTURE.md` の層定義から自動生成される
+// eslint.config.mjs — ARCHITECTURE.md の層定義から自動生成される
 {
   "rules": {
     "import/no-cycle": "error",
@@ -184,7 +184,7 @@ AIが修正方法を推測なしで実行できるようになる。
 ### Python の場合（Ruff）
 
 ```toml
-# pyproject.toml の [tool.ruff.lint] に追記 — `ARCHITECTURE.md` の層定義から自動生成される
+# pyproject.toml の [tool.ruff.lint] に追記 — ARCHITECTURE.md の層定義から自動生成される
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "[上位層から禁止するモジュールパス]" = { msg = "[アーキテクチャ違反] 〜 [正しい依存経路] 経由に変更してください。" }
 ```

@@ -7,8 +7,8 @@
 
 ```
 OWASP Top 10 [現在年]        → 現在有効なバージョンを確認
-使用言語・使用フレームワーク（`ARCHITECTURE.md`に記録）の security guide [現在年] → 言語・フレームワーク固有の最新ガイドを確認
-適用される法令の最新状況      → GDPR改正・個人情報保護法改正・その他 `docs/project-definition.md` で特定した法令の改正状況
+使用言語・使用フレームワーク（ARCHITECTURE.mdに記録）の security guide [現在年] → 言語・フレームワーク固有の最新ガイドを確認
+適用される法令の最新状況      → GDPR改正・個人情報保護法改正・その他 docs/project-definition.md で特定した法令の改正状況
 ```
 
 ### 実装中（以下の操作を行ったとき、またはその結果をAIが受け取ったとき）
@@ -47,7 +47,7 @@ npm audit / pip-audit / cargo audit / govulncheck を実行した結果を受け
 
   audit コマンドの出力に "high" または "critical"（大文字小文字不問）の脆弱性が含まれていたとき：
     → CRITICAL の場合は即座に人間に報告する
-    → @security-auditor を呼び出す。呼び出し形式は `.opencode/agents/_shared/security-auditor-invocation.md` を参照
+    → @security-auditor を呼び出す。呼び出し形式は .opencode/agents/_shared/security-auditor-invocation.md を参照
     → 除外条件: 既にこのセッション内で同一 CVE について @security-auditor を呼び出した場合はスキップする
 ```
 
@@ -60,7 +60,7 @@ URLは変更される可能性があるため組織名・ドメインで判断�
 どんな弱点か  → CWE（cwe.mitre.org）
 既知の脆弱性  → CVE/NVD（cve.mitre.org / nvd.nist.gov）
 管理・統制    → NIST（nist.gov）SP 800-53・CSF / ISMAP
-実装方法      → 各言語・フレームワーク（`ARCHITECTURE.md`に記録）の公式ドキュメント
+実装方法      → 各言語・フレームワーク（ARCHITECTURE.mdに記録）の公式ドキュメント
 ライブラリ    → GitHub 公式リポジトリ セキュリティアドバイザリ
 ```
 

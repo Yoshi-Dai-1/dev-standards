@@ -80,9 +80,9 @@ src/
   未使用の依存関係を含めない
   ツリーシェイキングが有効なバンドラー設定を使う
 
-対策3：コールドスタートの許容時間を`ARCHITECTURE.md`の非機能要件に定義する
-  serverlessアーキテクチャが選択されている場合、`.opencode/instructions/stack-setup.md` Step 3.5の実行時に
-  `ARCHITECTURE.md` の「非機能要件 → コールドスタート」セクションが記入済みか確認する。
+対策3：コールドスタートの許容時間をARCHITECTURE.mdの非機能要件に定義する
+  serverlessアーキテクチャが選択されている場合、.opencode/instructions/stack-setup.md Step 3.5の実行時に
+  ARCHITECTURE.md の「非機能要件 → コールドスタート」セクションが記入済みか確認する。
   未記入の場合は人間に以下の選択肢を提示する:
   (1) 許容する（500ms以内）、(2) 許容しない（Provisioned Concurrencyを設定する）、(3) 後で決める
   ユーザー向けAPIで許容できないなら Provisioned Concurrency（AWS）等を検討する
@@ -133,7 +133,7 @@ src/
 
 すべてのイベントハンドラーは冪等に実装する：
   同じイベントを2回処理しても結果が変わらない設計にする
-  → `.opencode/standards/principles/network-resilience.md` の「冪等性の確保」原則に従う
+  → .opencode/standards/principles/network-resilience.md の「冪等性の確保」原則に従う
 
 具体的な実装：
   イベントIDをDBに記録して2回目以降はスキップする
@@ -151,7 +151,7 @@ DBコネクションの管理：
 外部API呼び出し：
   タイムアウトは関数全体のタイムアウトより短く設定する
   関数タイムアウト15秒 → 外部API読み取りタイムアウト10秒（余裕を持たせる）
-  → `.opencode/standards/principles/network-resilience.md` の実装原則に従う
+  → .opencode/standards/principles/network-resilience.md の実装原則に従う
 
 リトライ：
   プラットフォームが自動リトライする設定がある場合は

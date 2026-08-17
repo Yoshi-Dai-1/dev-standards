@@ -85,9 +85,9 @@ project-root/
   src/           （上記の構成）
   public/
   .env.example
-  `ARCHITECTURE.md`
+  ARCHITECTURE.md
   README.md
-  `package.json`
+  package.json
   tsconfig.json
   vite.config.ts（またはnext.config.js等）
 ```

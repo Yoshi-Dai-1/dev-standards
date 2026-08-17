@@ -80,7 +80,7 @@
   [ ] バックアップから実際にリストアできることを確認したか（★最重要）
 
 復旧手順：
-  [ ] ロールバック手順が文書化されているか（`docs/operations.md`）
+  [ ] ロールバック手順が文書化されているか（docs/operations.md）
   [ ] デプロイ失敗時の手順が決まっているか
   [ ] DBマイグレーション失敗時の手順が決まっているか
 
@@ -238,12 +238,12 @@ resilience.md の観点から設計を確認してください：
 ### 月次の定期診断
 
 ```
-`.opencode/standards/principles/resilience.md` と `ARCHITECTURE.md` を参照して、
+.opencode/standards/principles/resilience.md と ARCHITECTURE.md を参照して、
 現在のシステムのレジリエンスを評価してください。
 
 確認してほしい項目：
-1. バックアップのリストアテストが最近実施されているか（`docs/operations.md`確認）
-2. 依存関係リスクのリストが最新か（`ARCHITECTURE.md`確認）
+1. バックアップのリストアテストが最近実施されているか（docs/operations.md確認）
+2. 依存関係リスクのリストが最新か（ARCHITECTURE.md確認）
 3. ヘルスチェックエンドポイントが機能しているか
 4. 直近1ヶ月のエラーログで見落とされているパターンがないか
 

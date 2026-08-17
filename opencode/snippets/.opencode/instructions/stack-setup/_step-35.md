@@ -107,12 +107,12 @@
   3. 以下を人間に報告する
      ```
      **Webフロントエンドが含まれるプロジェクトのため、アクセシビリティ要件の定義を推奨します**
-       根拠：`.opencode/standards/principles/non-functional-requirements.md`「アクセシビリティ」セクション
+       根拠：.opencode/standards/principles/non-functional-requirements.md「アクセシビリティ」セクション
        最低限定義すべきこと：
          - WCAGの適合レベル目標（Level A / AA / AAA）
          - 法的義務の有無（公共機関向けサービス・障害者向けサービスの場合は専門家確認が必要）
        最新のWCAG要件を確認する：`WCAG 2.2 requirements [現在年]`
-       アクセシビリティ要件を `ARCHITECTURE.md` に追加しますか？
+       アクセシビリティ要件を ARCHITECTURE.md に追加しますか？
        （「はい」の場合は適合レベル目標を教えてください。後で決める場合は「スキップ」と答えてください）
      ```
   4. 適合レベルが指定された場合のみ `ARCHITECTURE.md` の「非機能要件」セクションに追記する
