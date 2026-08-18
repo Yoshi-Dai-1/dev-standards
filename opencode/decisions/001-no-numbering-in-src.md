@@ -44,4 +44,4 @@
 ## 例外
 
 `docs/` や教材リポジトリでは「読む順序が意味を持つ」ため、ナンバリングを許可する。
-→ 詳細は `architectures/document-project.md` を参照
+→ 詳細は `.opencode/standards/architectures/document-project.md` を参照

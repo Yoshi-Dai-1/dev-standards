@@ -43,4 +43,4 @@
 
 ## 補足
 
-ファイル名のルールは別（`../principles/naming-conventions.md` 参照）。ディレクトリ名のみkebab-caseを強制する。
+ファイル名のルールは別（`.opencode/standards/principles/naming-conventions.md` 参照）。ディレクトリ名のみkebab-caseを強制する。
