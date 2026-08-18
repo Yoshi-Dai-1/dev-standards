@@ -223,7 +223,7 @@ function calculateLegacyScore(value: number): number {
                   対処：YAGNI原則をBoundariesに明記する
 
 命名の不一致    → 既存コードと異なる命名スタイルが混入する
-                  対処：coding-conventions.md を渡してから依頼する
+                  対処：`.opencode/coding-conventions.md` を渡してから依頼する
 
 エラーハンドリング省略 → try/catchがない・エラーを握りつぶす
                   対処：「エラーハンドリングを確認して」と明示する
@@ -232,7 +232,7 @@ function calculateLegacyScore(value: number): number {
                   対処：「定数はすべて constants/ に移して」と指示する
 
 複雑性の蓄積    → 動けばいいコードが積み上がる
-                   対処：.opencode/standards/principles/file-size-and-cohesion.md の閾値に従い分割を指示する
+                   対処：`.opencode/standards/principles/file-size-and-cohesion.md` の閾値に従い分割を指示する
 ```
 
 ### 品質チェックの確認順序（毎実装後）
