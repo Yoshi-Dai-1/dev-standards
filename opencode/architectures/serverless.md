@@ -9,18 +9,18 @@
 
 ```
 条件1：処理がイベント（HTTPリクエスト・キューメッセージ・スケジュール）に応答する形か
-  → 常時起動・WebSocketなど持続的接続が必要な場合は backend-api.md を選ぶ
+  → 常時起動・WebSocketなど持続的接続が必要な場合は `.opencode/standards/architectures/backend-api.md` を選ぶ
 
 条件2：1つの関数の最大実行時間が以下の範囲に収まるか
   AWS Lambda        → 最大15分
   Cloudflare Workers → 最大30秒（CPU時間）
   Vercel Edge Functions → 最大30秒
-  → 長時間バッチ処理には backend-api.md + data-pipeline.md を選ぶ
+  → 長時間バッチ処理には `.opencode/standards/architectures/backend-api.md` + `.opencode/standards/architectures/data-pipeline.md` を選ぶ
 
 条件3：グローバルなステートを関数間で共有しないか
   → 関数はステートレスが原則。DBやキャッシュを外部に持つ設計が必要
 
-迷った場合：まず backend-api.md を選ぶ。
+迷った場合：まず `.opencode/standards/architectures/backend-api.md` を選ぶ。
   サーバーコストの最適化や特定のイベント駆動要件が確定してから移行する。
 ```
 
@@ -81,8 +81,8 @@ src/
   ツリーシェイキングが有効なバンドラー設定を使う
 
 対策3：コールドスタートの許容時間をARCHITECTURE.mdの非機能要件に定義する
-  serverlessアーキテクチャが選択されている場合、.opencode/instructions/stack-setup.md Step 3.5の実行時に
-  ARCHITECTURE.md の「非機能要件 → コールドスタート」セクションが記入済みか確認する。
+  serverlessアーキテクチャが選択されている場合、`.opencode/instructions/stack-setup.md` Step 3.5の実行時に
+  `ARCHITECTURE.md` の「非機能要件 → コールドスタート」セクションが記入済みか確認する。
   未記入の場合は人間に以下の選択肢を提示する:
   (1) 許容する（500ms以内）、(2) 許容しない（Provisioned Concurrencyを設定する）、(3) 後で決める
   ユーザー向けAPIで許容できないなら Provisioned Concurrency（AWS）等を検討する
@@ -133,7 +133,7 @@ src/
 
 すべてのイベントハンドラーは冪等に実装する：
   同じイベントを2回処理しても結果が変わらない設計にする
-  → .opencode/standards/principles/network-resilience.md の「冪等性の確保」原則に従う
+  → `.opencode/standards/principles/network-resilience.md` の「冪等性の確保」原則に従う
 
 具体的な実装：
   イベントIDをDBに記録して2回目以降はスキップする
@@ -151,7 +151,7 @@ DBコネクションの管理：
 外部API呼び出し：
   タイムアウトは関数全体のタイムアウトより短く設定する
   関数タイムアウト15秒 → 外部API読み取りタイムアウト10秒（余裕を持たせる）
-  → .opencode/standards/principles/network-resilience.md の実装原則に従う
+  → `.opencode/standards/principles/network-resilience.md` の実装原則に従う
 
 リトライ：
   プラットフォームが自動リトライする設定がある場合は
