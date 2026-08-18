@@ -162,7 +162,7 @@ if [[ "$HAS_UI" =~ ^[Yy]$ ]]; then
   fi
   for DESIGN_TEMPLATE in "$SNIPPETS/design/token-ssot.json.template" "$SNIPPETS/design/component-map.json.template"; do
     if [ -f "$DESIGN_TEMPLATE" ]; then
-      TARGET_NAME=$(basename "$DESIGN_TEMPLATE")
+      TARGET_NAME=$(basename "$DESIGN_TEMPLATE" .template)
       if [ ! -f "design/$TARGET_NAME" ]; then
         cp "$DESIGN_TEMPLATE" "design/$TARGET_NAME"
         echo "✅ design/$TARGET_NAME をコピーしました"
