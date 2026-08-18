@@ -13,7 +13,7 @@
 1. デプロイ先・インフラ        ← 最初に決める（他の判断に影響する）
 2. The Twelve-Factor App 適用  ← インフラに合わせて設計を調整
 3. CI/CDパイプライン           ← デプロイを自動化する
-4. セキュリティ整備            ← production-readiness.md と併用
+4. セキュリティ整備            ← `.opencode/standards/principles/production-readiness.md` と併用
 5. 監視・アラート              ← 何かが壊れたときに気づく仕組み
 6. 運用手順の文書化            ← 自分が忘れたときのために
 ```
