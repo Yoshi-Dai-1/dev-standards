@@ -120,22 +120,22 @@ PASS と判定し、`docs/tasks.json` の `passes` フィールドを `true` に
 
 ```
 Planner（サブエージェント）
-  役割：1〜4文のプロンプトを詳細な仕様書（docs/spec.md）と
-        Task List（docs/tasks.json）に変換する
+  役割：1〜4文のプロンプトを詳細な仕様書（`docs/spec.md`）と
+        Task List（`docs/tasks.json`）に変換する
   使うタイミング：中規模以上のタスク開始時
-  書く場所：.opencode/agents/planner.md
+  書く場所：`.opencode/agents/planner.md`
 
 Generator（メインエージェント・Build）
   役割：仕様書から実装する。各スプリント開始前に Evaluator へ
         Sprint Contract のレビューを依頼し、承認を得てから実装に入る
   使うタイミング：常時
-   書く場所：AGENTS.md（＋instructions/ skills/ が自動補助）
+   書く場所：`AGENTS.md`（＋instructions/ skills/ が自動補助）
 
 Evaluator（サブエージェント）
   役割：① Sprint Contract のレビュー（スプリント開始前・合意）
         ② ビルド完了後の品質評価（playwright-cli で実機確認）
   使うタイミング：フルアプリ構築・主観的品質が重要なとき
-  書く場所：.opencode/agents/evaluator.md
+  書く場所：`.opencode/agents/evaluator.md`
 ```
 
 ### Task List（`docs/tasks.json`）
@@ -280,7 +280,7 @@ CLI の具体的なコマンドは `command -v` / `--help` / `webfetch` で
 ## ハーネスの育て方（時系列）
 
 ```
-Day 1：AGENTS.mdに5行（プロジェクト概要・コマンド・禁止事項）
+Day 1：`AGENTS.md`に5行（プロジェクト概要・コマンド・禁止事項）
 Week 1：同じ指摘を2回した → instructions/ に追加
 Week 2：3回以上繰り返した作業 → skills/ に追加（/skill-creator で作成）
 Month 1：使っていないものを削除（最初のGC）
@@ -313,7 +313,7 @@ handoff スキルが自動生成した `.opencode/handoff-artifact.md` を、
 新しいセッションの Session Protocol step 1 が自動読取する。
 
 ```markdown
-# .opencode/handoff-artifact.md の内容
+# `.opencode/handoff-artifact.md` の内容
 - 取り組んでいた機能
 - 完了した部分
 - 途中で止まっている部分
@@ -405,14 +405,14 @@ setup-harness.sh でテンプレートをコピーして、
 **ハーネス健全性の評価（定期実行）**：
 
    ```
-   .opencode/standards/principles/harness-engineering.md と .opencode/standards/principles/subagents.md を読んで、
+   `.opencode/standards/principles/harness-engineering.md` と `.opencode/standards/principles/subagents.md` を読んで、
    現在の .opencode/ ディレクトリの構成を評価してください。
    以下を確認してください：
-   1. AGENTS.mdが60〜200行以内か
+   1. `AGENTS.md`が60〜200行以内か
    2. instructions/ に使われていないファイルがないか
    3. skills/ に使われていないスキルがないか
    4. usage/ の履歴から削除候補を特定する
-   5. agents/ のサブエージェント定義が .opencode/standards/principles/subagents.md の設計基準に従っているか
+   5. agents/ のサブエージェント定義が `.opencode/standards/principles/subagents.md` の設計基準に従っているか
    ```
 
 ドキュメントリンクの自動検証・品質診断の自動化（Scheduled/Continuous）を
@@ -431,5 +431,5 @@ setup-harness.sh でテンプレートをコピーして、
 **Task List の現在の進捗を確認する**：
 
 ```
-docs/tasks.json を読んで、未完了（passes: false）のタスクを一覧してください。
+`docs/tasks.json` を読んで、未完了（passes: false）のタスクを一覧してください。
 ```
