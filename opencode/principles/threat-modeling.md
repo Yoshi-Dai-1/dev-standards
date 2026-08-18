@@ -6,9 +6,9 @@ AIが以下のタイミングで自律的に参照する。人間が指示する
 
 ```
 参照タイミング：
-  .opencode/standards/principles/security-requirements.md の対応レベルが Lv.3以上と判定されたとき
-  ARCHITECTURE.md Step3 でセキュリティ要件を記録するとき
-  .opencode/standards/principles/security-requirements.md のLv.3チェックリストに「脅威モデリング」が含まれるとき
+  `.opencode/standards/principles/security-requirements.md` の対応レベルが Lv.3以上と判定されたとき
+  `ARCHITECTURE.md` Step3 でセキュリティ要件を記録するとき
+  `.opencode/standards/principles/security-requirements.md` のLv.3チェックリストに「脅威モデリング」が含まれるとき
 ```
 
 脅威モデリングは年々手法・ツールが更新される。
@@ -83,7 +83,7 @@ E = Elevation of Privilege（権限昇格）
 
 外部エンティティの特定：
   一般ユーザー・管理者・外部APIプロバイダー・CI/CDシステム
-  （docs/project-definition.md に記載の対象ユーザーと連携サービスを参照して特定する）
+  （`docs/project-definition.md` に記載の対象ユーザーと連携サービスを参照して特定する）
 ```
 
 ### Step 2：STRIDE各項目で脅威を列挙する
@@ -104,7 +104,7 @@ E = Elevation of Privilege（権限昇格）
 4象限（影響度×発生確率）で分類する。
 
 ```
-深刻度分類は risk-based-approach.md の「深刻度ラベルの体系と使い分け」に従う。
+深刻度分類は `.opencode/standards/principles/risk-based-approach.md` の「深刻度ラベルの体系と使い分け」に従う。
 CRITICAL/HIGH/MEDIUM/LOW と4象限（A/B/C/D）の紐付けは同ファイルを参照。
 
 影響度の判定基準:
@@ -122,7 +122,7 @@ CRITICAL/HIGH/MEDIUM/LOW と4象限（A/B/C/D）の紐付けは同ファイル�
 ```
 CRITICAL/HIGH の脅威：
   → 対策を現スプリントまたは次スプリントに組み込む
-  → ARCHITECTURE.md の「セキュリティ要件」セクションに追記する
+  → `ARCHITECTURE.md` の「セキュリティ要件」セクションに追記する
 
 MEDIUM/LOW の脅威：
   → decisions/ に記録し、計画的に対処する
@@ -141,7 +141,7 @@ MEDIUM/LOW の脅威：
      専門家への相談を提案する
 
 プロジェクトの規模・予算上、すべての脅威に対処できない場合：
-  → risk-based-approach.md の優先順位に従い、
+  → `.opencode/standards/principles/risk-based-approach.md` の優先順位に従い、
     CRITICAL/HIGH から対処する
   → LOW は「受容可能なリスク」として decisions/ に記録する
 ```
@@ -152,11 +152,11 @@ MEDIUM/LOW の脅威：
 
 ```
 Lv.3（商用・中規模以上）：
-  → 初回：ARCHITECTURE.md Step3 完了後に実施する
+  → 初回：`ARCHITECTURE.md` Step3 完了後に実施する
   → 以降：大きな機能追加のスプリント開始前に再実施する
 
 Lv.4（規制対象）：
-  → 初回：ARCHITECTURE.md Step3 完了後に実施する
+  → 初回：`ARCHITECTURE.md` Step3 完了後に実施する
   → 以降：すべてのスプリント開始前に再実施する
   → 外部監査：年次でセキュリティ専門家によるレビューを計画する
 ```
