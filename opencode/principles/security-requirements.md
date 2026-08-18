@@ -171,15 +171,15 @@ EC・電子商取引 → 特定商取引法（日本）/ 消費者契約法（�
 - 認証・認可を実装したとき → 実装前に `@security-designer` を呼び出す
 - 外部入力を受け取るエンドポイントを実装したとき → バックエンドバリデーションを確認する
 - 環境変数を追加したとき → `.env.example` に反映しシークレットスキャンを実行する
-- package.json / requirements.txt / requirements-dev.txt / pyproject.toml / go.mod / Cargo.toml / pom.xml / build.gradle / build.gradle.kts / Gemfile / composer.json / pubspec.yaml / *.csproj / packages.config を編集したとき → .opencode/instructions/security.md の言語別コマンド対応表に従いauditを実行する。対応表にない言語の場合は人間に確認を促す
+- package.json / requirements.txt / requirements-dev.txt / pyproject.toml / go.mod / Cargo.toml / pom.xml / build.gradle / build.gradle.kts / Gemfile / composer.json / pubspec.yaml / *.csproj / packages.config を編集したとき → `.opencode/instructions/security.md` の言語別コマンド対応表に従いauditを実行する。対応表にない言語の場合は人間に確認を促す
 - 実装完了後 → `@security-auditor` を呼び出す
-【以下は docs/project-definition.md の内容から記入する。該当しない行は削除する】
+【以下は `docs/project-definition.md` の内容から記入する。該当しない行は削除する】
 [個人情報あり]   - 収集・保存・削除のすべてにプライバシーポリシーの根拠が必要
 [決済あり]       - カード番号をサーバーに保持しない（Stripe等のトークン化を使う）
 [EU展開あり]     - ユーザー同意なしにCookieを設定しない・削除要求に72時間以内に対応
 [医療データあり] - アクセスログを改ざん不可な形式で保存する
 [GDPR適用]       - データ処理の法的根拠を実装前に明確にする
-[PCI DSS]        - 年次のセキュリティレビュー計画を docs/operations.md に記録する
+[PCI DSS]        - 年次のセキュリティレビュー計画を `docs/operations.md` に記録する
 ```
 
 ---
@@ -242,7 +242,7 @@ Python:
   Go:      govulncheck ./...
 
 CIで検知されたHIGH以上の脆弱性は即時対応する（D領域ではなくA領域として扱う）。
-詳細は .opencode/standards/principles/risk-based-approach.md の「リスクの4象限」を参照。
+詳細は `.opencode/standards/principles/risk-based-approach.md` の「リスクの4象限」を参照。
 ```
 
 ---
@@ -290,8 +290,8 @@ Lv.1の全項目に加えて：
 
 ```
 Lv.2の全項目に加えて：
-[ ] 脅威モデリング実施（STRIDEモデル）→ .opencode/standards/principles/threat-modeling.md の手順に従い実施・decisions/に記録
-[ ] DevSecOps：SAST/DAST/シークレットスキャンをCIパイプラインに組み込み → .opencode/standards/principles/security-implementation.md の「DevSecOpsパイプライン」セクションの手順に従い実施
+[ ] 脅威モデリング実施（STRIDEモデル）→ `.opencode/standards/principles/threat-modeling.md` の手順に従い実施・decisions/に記録
+[ ] DevSecOps：SAST/DAST/シークレットスキャンをCIパイプラインに組み込み → `.opencode/standards/principles/security-implementation.md` の「DevSecOpsパイプライン」セクションの手順に従い実施
 [ ] ペネトレーションテスト → 以下を実施する：
     実施前に以下を検索して最新の手法・ツールを確認する：
     「OWASP penetration testing [現在年]」
@@ -303,7 +303,7 @@ Lv.2の全項目に加えて：
       PTES（pentest-standard.org）→ ペネトレーションテスト実施標準
     AIツールは「既知の脆弱性パターンの自動検出」に有効。
     商用・Lv.4プロジェクトでは AIツールに加えて専門家による実施を推奨する。
-    実施計画を docs/operations.md に記録する。
+    実施計画を `docs/operations.md` に記録する。
 [ ] DB：最小権限・ネットワーク分離（VPC/プライベートサブネット）
 [ ] WAF・レートリミットの設置
 ```
@@ -315,7 +315,7 @@ Lv.3の全項目に加えて（該当する規制のみ）：
 [ ] PCI DSS：カード番号を自サーバーに保持しない（Stripe等のトークン化）
 [ ] GDPR：同意取得・削除要求72時間対応・データ処理の法的根拠を明確化
 [ ] ISMAP：組織のセキュリティ管理基準の整備・第三者審査の計画
-[ ] 年次セキュリティレビュー計画を docs/operations.md に記録
+[ ] 年次セキュリティレビュー計画を `docs/operations.md` に記録
 [ ] 監査ログを改ざん不可な形式で保存
 ```
 
@@ -454,7 +454,7 @@ OWASP Mobile Top 10 を基準とする。
 
 **インシデント対応計画**（Lv.3以上）：
 ```
-docs/operations.md に記録する：
+`docs/operations.md` に記録する：
 - 脆弱性発見時の連絡フロー
 - 緊急パッチの適用手順
 - 個人情報漏洩時の監督機関への報告（72時間以内）
