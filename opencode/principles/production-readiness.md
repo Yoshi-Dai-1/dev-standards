@@ -66,8 +66,8 @@ AIが自律的に `@security-auditor` を呼び出した後、
 [ ] すべての例外がキャッチされ、ログに記録されているか
 [ ] 外部APIの呼び出しに接続タイムアウトと読み取りタイムアウトの両方が設定されているか
     （タイムアウト値が constants/ に定数として定義されているか）
-[ ] ARCHITECTURE.md の「通信設計」セクションに採否と根拠が記録されているか
-    （詳細な判断基準：.opencode/standards/principles/network-resilience.md）
+[ ] `ARCHITECTURE.md` の「通信設計」セクションに採否と根拠が記録されているか
+    （詳細な判断基準：`.opencode/standards/principles/network-resilience.md`）
 [ ] リトライを実装している場合、冪等でない操作（決済・メール送信・SMS送信・通知送信）が
     リトライ対象から除外されているか
 [ ] 冪等でない操作にリトライが必要な場合、冪等性の確保が先に実装されているか
@@ -156,10 +156,10 @@ AIが自律的に `@security-auditor` を呼び出した後、
 [ ] APIのエンドポイント一覧が文書化されているか
     文書化されていない場合、以下の検索クエリで実施方法を確認する：
     `[ARCHITECTURE.md の「フレームワーク」値] API documentation [現在年]`
-    信頼できる情報源の判断基準：.opencode/standards/principles/naming-conventions.md の
+    信頼できる情報源の判断基準：`.opencode/standards/principles/naming-conventions.md` の
     「信頼できる情報源の優先順位」を適用する。
     フレームワーク非依存の場合は `OpenAPI Specification [現在年]`（spec.openapis.org）を参照する。
-    選定したツールを ARCHITECTURE.md の「技術スタック」セクションに記録する。
+    選定したツールを `ARCHITECTURE.md` の「技術スタック」セクションに記録する。
 [ ] 既知の問題・制限事項が記録されているか
 ```
 
@@ -169,7 +169,7 @@ AIが自律的に `@security-auditor` を呼び出した後、
 
 ```
 テスト戦略の確認：
-  [ ] ARCHITECTURE.md の「テスト戦略」セクションに方針が記載されているか
+  [ ] `ARCHITECTURE.md` の「テスト戦略」セクションに方針が記載されているか
   [ ] テストフレームワークが決定・設定されているか
 
 テストの実装確認：
@@ -220,8 +220,8 @@ AIが自律的に `@security-auditor` を呼び出した後、
 → 両方記録されている：以下のチェックリストを確認する
 
 ```
-[ ] 本番相当のデータ量（ARCHITECTURE.md の「データ件数（1年後想定）」の値）で
-    主要APIのレスポンスタイムが目標値（ARCHITECTURE.md の p95 値）を満たすか確認したか
+[ ] 本番相当のデータ量（`ARCHITECTURE.md` の「データ件数（1年後想定）」の値）で
+    主要APIのレスポンスタイムが目標値（`ARCHITECTURE.md` の p95 値）を満たすか確認したか
 [ ] 定義された同時接続ユーザー数の負荷をかけたとき、エラーが発生しないか確認したか
 ```
 
@@ -258,12 +258,12 @@ AIが自律的に `@security-auditor` を呼び出した後、
   [ ] 政府・重要インフラ向けの場合：サイバーセキュリティ基本法・ISMAPへの対応を確認したか
 
 アクセシビリティ（Webフロントエンドを含む場合）：
-  [ ] ARCHITECTURE.md の「アクセシビリティ」セクションに適合レベル目標が記載されているか
-  [ ] 定めた適合レベルのチェックリストを実施したか（non-functional-requirements.md 参照）
+  [ ] `ARCHITECTURE.md` の「アクセシビリティ」セクションに適合レベル目標が記載されているか
+  [ ] 定めた適合レベルのチェックリストを実施したか（`.opencode/standards/principles/non-functional-requirements.md` 参照）
   [ ] 法的義務がある場合（公共機関等）：専門家による確認を実施したか
 
 国際化（多言語展開がある場合）：
-  [ ] ARCHITECTURE.md の「国際化」セクションに方針が記載されているか
+  [ ] `ARCHITECTURE.md` の「国際化」セクションに方針が記載されているか
   [ ] UIテキストがハードコードされていないか（翻訳ファイルで管理されているか）
   [ ] タイムゾーンがUTCで保存されているか
 
@@ -273,13 +273,13 @@ WebSocket（WebSocketを使用している場合）：
   [ ] 本番環境でWebSocket接続時の認証・認可チェックが機能しているか
 
 GraphQL（GraphQLを使用している場合）：
-  → security-implementation.md の「GraphQLセキュリティ」セクションのチェックリストを実施
+  → `.opencode/standards/principles/security-implementation.md` の「GraphQLセキュリティ」セクションのチェックリストを実施
   → N+1問題への対策（DataLoader等）が実装されているか
 
 データベースマイグレーション（DBスキーマ変更がある場合）：
   [ ] すべてのマイグレーションにdown（ロールバック）が定義されているか
   [ ] ゼロダウンタイムでのマイグレーションが可能か（本番稼働中の場合）
-  [ ] マイグレーション失敗時のロールバック手順が docs/operations.md に記載されているか
+  [ ] マイグレーション失敗時のロールバック手順が `docs/operations.md` に記載されているか
 ```
 
 ### OSS として公開する場合
@@ -335,7 +335,7 @@ GraphQL（GraphQLを使用している場合）：
 
 ```
 構造的品質：
-  [ ] 300行を超えているファイルがないか（file-size-and-cohesion.md 参照。あれば分割を検討）
+  [ ] 300行を超えているファイルがないか（`.opencode/standards/principles/file-size-and-cohesion.md` 参照。あれば分割を検討）
   [ ] 同じロジックが複数箇所にコピーされていないか
   [ ] マジックナンバーが定数化されているか
   [ ] 循環依存がないか（ESLint import/no-cycle で確認）
@@ -368,14 +368,14 @@ GraphQL（GraphQLを使用している場合）：
   [ ] PR テンプレートが用意されているか
 
 SLA / 可用性：
-  [ ] SLA / SLO / SLI が定義され、ARCHITECTURE.md に記録されているか
+  [ ] SLA / SLO / SLI が定義され、`ARCHITECTURE.md` に記録されているか
   [ ] エラーバジェットの計算・管理方法が決まっているか
   [ ] ステージング環境が本番と同じ構成で存在するか
 
 インシデント対応：
   [ ] インシデントの重要度定義（P0〜P3）が決まっているか
   [ ] オンコール体制・連絡先が決まっているか
-  [ ] ポストモーテムのテンプレートが準備されているか（docs/postmortem-template.md）
+  [ ] ポストモーテムのテンプレートが準備されているか（`docs/postmortem-template.md`）
 
 監査ログ：
   [ ] 監査すべき操作が定義されているか（ログイン・権限変更・個人情報アクセス等）
