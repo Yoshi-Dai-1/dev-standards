@@ -176,10 +176,10 @@ tests/
 1. これはどのレイヤーに属するか？              → ARCHITECTURE.mdで確認
 2. 一緒に変わるものは一緒に置かれているか？     → 凝集度の確認
 3. 依存の方向は正しいか？                      → 循環依存の確認
-4. 名前を見ただけで責務が分かるか？             → .opencode/standards/principles/naming-conventions.md で確認
-5. 1ファイルが .opencode/standards/principles/file-size-and-cohesion.md の閾値を超えていないか？           → 分割を検討
-6. 同じ情報が複数箇所にないか？                 → .opencode/standards/principles/ssot-and-constants.md で確認
-7. 非機能要件（性能・セキュリティ）を満たすか？ → .opencode/standards/principles/non-functional-requirements.md で確認
+4. 名前を見ただけで責務が分かるか？             → `.opencode/standards/principles/naming-conventions.md` で確認
+5. 1ファイルが `.opencode/standards/principles/file-size-and-cohesion.md` の閾値を超えていないか？           → 分割を検討
+6. 同じ情報が複数箇所にないか？                 → `.opencode/standards/principles/ssot-and-constants.md` で確認
+7. 非機能要件（性能・セキュリティ）を満たすか？ → `.opencode/standards/principles/non-functional-requirements.md` で確認
 ```
 
 ---
