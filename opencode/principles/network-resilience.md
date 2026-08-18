@@ -17,7 +17,7 @@
   外部API・DBへの通信を含む機能の実装依頼を受けたとき
     → `.opencode/instructions/network-resilience.md` の自律トリガー経由
   `ARCHITECTURE.md` Step3 完了後
-    → ARCHITECTURE.md.template の通信設計セクション記入時
+    → `ARCHITECTURE.md` の通信設計セクション記入時
   @resilience-checker の月次診断時
     → `.opencode/agents/resilience-checker.md` の診断項目から参照
   `.opencode/standards/principles/production-readiness.md` のチェック実行時

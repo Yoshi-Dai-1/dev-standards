@@ -15,7 +15,7 @@
 ```
 参照タイミングと参照元：
   セキュリティ関連機能の実装依頼を受けたとき → `.opencode/instructions/security.md` の自律トリガー経由
-  `ARCHITECTURE.md` Step3 完了後              → ARCHITECTURE.md.template に組み込み済み
+  `ARCHITECTURE.md` Step3 完了後              → `ARCHITECTURE.md` に組み込み済み
   @security-designer 完了後         → `.opencode/agents/security-designer.md` の実装手順
 ```
 
