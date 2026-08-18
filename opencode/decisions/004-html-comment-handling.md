@@ -32,7 +32,7 @@ HTML コメントを以下3種に分類し、それぞれ異なる扱いとす�
 | 分類 | 性質 | 扱い | 例 |
 |------|------|------|----|
 | **挿入位置マーカー** | 値の記入位置を示す。可視テキストで代替可能 | **冗長 → 削除**<br>（既存の可視ルールでカバーされている場合） | `<!-- 新しい月を右端に追加する -->` が更新ルールに重複する場合 |
-| **消費型コメント** | 初回記入時に AI をガイドする。完了後は不要 | **HTML コメントとして維持**<br>セクション削除やテンプレートコピー時に自然に除去される | AGENTS.md の `## 初期セットアップ` 内のコメント<br>project-definition-guide.md のテンプレート内コメント |
+| **消費型コメント** | 初回記入時に AI をガイドする。完了後は不要 | **HTML コメントとして維持**<br>セクション削除やテンプレートコピー時に自然に除去される | `AGENTS.md` の `## 初期セットアップ` 内のコメント<br>`.opencode/standards/principles/project-definition-guide.md` のテンプレート内コメント |
 | **永続注釈** | ファイル構造や更新ルールとして恒久的に必要 | **可視テキストに変換**<br>形式は `【...】` またはセクション内プレーンテキスト | 列の並び・記入ルール・注意事項 |
 
 ### 変換ルール
@@ -74,7 +74,7 @@ HTML コメントを以下3種に分類し、それぞれ異なる扱いとす�
 - 可視テキストへの変換形式は、文脈に応じて `【...】` 記法とプレーンテキストを使い分ける
   - `【...】`: システムレベルの補足説明（テンプレート構造の意図等）
   - プレーンテキスト: 更新ルールなど、ユーザー向け指示と一体化すべき情報
-- 消費型コメントが配置されるセクションは、完了後にそのセクションごと削除されることを設計で保証する（例：AGENTS.md の `## 初期セットアップ`）
+- 消費型コメントが配置されるセクションは、完了後にそのセクションごと削除されることを設計で保証する（例：`AGENTS.md` の `## 初期セットアップ`）
 
 ## 結果・影響
 
@@ -94,15 +94,15 @@ HTML コメントを以下3種に分類し、それぞれ異なる扱いとす�
 - 当日の適用例:
   - Group A（quality-scorecard / security-audit-log）: 挿入位置マーカー（冗長）→ 削除
   - Group B（全 8 ファイル）: 永続注釈 → 可視テキスト変換
-    - 対象: quality-scorecard, security-audit-log, adr-index, project-context, security-requirements 内3件, AGENTS.md 内5件
+    - 対象: quality-scorecard, security-audit-log, adr-index, project-context, security-requirements 内3件, `AGENTS.md` 内5件
     - project-definition-guide は Group B に含まれていたが、後日のレビューで**消費型コメント**と判断され HTML コメントに差し戻し（2026-07-16 同日）
-  - Group C（AGENTS.md）: 消費型コメント → HTML コメント維持 + セクション削除
-  - Group D（monthly-diagnosis.md / handoff/SKILL.md）: write_file に preservation ルール追加
+  - Group C（`AGENTS.md`）: 消費型コメント → HTML コメント維持 + セクション削除
+  - Group D（`.opencode/skills/live-operation/references/monthly-diagnosis.md` / `.opencode/skills/handoff/SKILL.md`）: write_file に preservation ルール追加
 - Group F 初回（ARCHITECTURE.md.template 6件）: 永続注釈 → 可視テキスト変換（同日）
 - Group F 差し戻し（ARCHITECTURE.md.template 6件）: 永続注釈と判断したが**消費型コメント**に再分類。全件 HTML コメントに差し戻し（同日）
 - 2026-08-02: 消費型コメントの残存問題への対処を追加適用
   - 消費型コメントは初回セットアップ**完了時に全削除**する方針に統一（セクション削除への依存を撤廃）
-  - ARCHITECTURE.md.template: 完了時クリーンアップを「すべてのHTMLコメント削除（コメントアウトされたアーキテクチャブロック含む）」に統合
-  - project-definition-guide.md: テンプレート保存時にHTMLコメント全削除の指示を追記
-  - _fill-guide.md: コメント維持ルールの根拠を「記入プロセス中の参照指示」に更新（完了時削除を明記）
-  - requirements-change.md: Light Flow（3ファイル編集時の整合性チェック）を追加し、編集時にコメントを残さない設計に
+  - `ARCHITECTURE.md.template`: 完了時クリーンアップを「すべてのHTMLコメント削除（コメントアウトされたアーキテクチャブロック含む）」に統合
+  - `.opencode/standards/principles/project-definition-guide.md`: テンプレート保存時にHTMLコメント全削除の指示を追記
+  - `.opencode/instructions/agents-fill-guide.md`: コメント維持ルールの根拠を「記入プロセス中の参照指示」に更新（完了時削除を明記）
+  - `.opencode/instructions/requirements-change.md`: Light Flow（3ファイル編集時の整合性チェック）を追加し、編集時にコメントを残さない設計に
