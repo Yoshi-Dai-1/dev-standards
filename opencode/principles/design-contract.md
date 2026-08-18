@@ -159,8 +159,7 @@ component/  部品スコープの割り当て
 }
 ```
 
-`design/token-ssot.json`・`design/component-map.json`・`design/INTAKE.md` は
-setup-harness.sh の実行時に自動作成される。作成・値の記入手順は `design/INTAKE.md` に従う。
+`design/token-ssot.json`・`design/component-map.json` の値の収集・記入手順は `design/INTAKE.md` に従う。
 
 ---
 
