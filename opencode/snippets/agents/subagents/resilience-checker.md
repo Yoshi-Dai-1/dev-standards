@@ -88,8 +88,8 @@ CLI優先: 確認・操作には CLI ツールを使用する。ブラウザ操�
 
 ### 推奨アクション（優先度順）
 
-1. [HIGH] リストアテストを実施し、docs/operations.md に記録する
-2. [MEDIUM] ARCHITECTURE.md の依存関係リスクテーブルを記入する
+1. [HIGH] リストアテストを実施し、`docs/operations.md` に記録する
+2. [MEDIUM] `ARCHITECTURE.md` の依存関係リスクテーブルを記入する
 3. [LOW] ___
 
 ### 次回診断予定
