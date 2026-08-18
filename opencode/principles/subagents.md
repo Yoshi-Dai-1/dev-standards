@@ -98,7 +98,7 @@ src/ 以下のコードベースを対象に品質診断を実施してくださ
 
 ```
 @resilience-checker
-現在のプロジェクト（ARCHITECTURE.md・docs/operations.md参照）の
+現在のプロジェクト（`ARCHITECTURE.md`・`docs/operations.md`参照）の
 レジリエンスを診断してください。
 ```
 
@@ -134,7 +134,7 @@ src/ 以下のコードベースを対象に品質診断を実施してくださ
 
 ```
 @evaluator
-Sprint [番号] の Contract を docs/spec.md で確認して承認してください。
+Sprint [番号] の Contract を `docs/spec.md` で確認して承認してください。
 ```
 
 **【スプリント完了後】QA評価 + Task List 更新：**
@@ -142,8 +142,8 @@ Sprint [番号] の Contract を docs/spec.md で確認して承認してくだ�
 ```
 @evaluator
 Sprint [番号] の評価をしてください。
-仕様は docs/spec.md を参照してください。
-PASSの場合は docs/tasks.json の該当スプリントの passes を true に更新してください。
+仕様は `docs/spec.md` を参照してください。
+PASSの場合は `docs/tasks.json` の該当スプリントの passes を true に更新してください。
 ```
 
 → 詳細は `.opencode/standards/principles/harness-engineering.md` の Planner・Generator・Evaluator の 3 段階構成を参照。
@@ -165,14 +165,14 @@ PASSの場合は docs/tasks.json の該当スプリントの passes を true に
 
 OpenCode の場合（`.opencode/agents/` に配置）：
 ```
-  planner.md
-  evaluator.md
-  code-reviewer.md
-  security-auditor.md
-  test-generator.md
-  codebase-investigator.md
-  code-quality-auditor.md     ← 月次品質診断
-  resilience-checker.md       ← 月次レジリエンス診断
+  `.opencode/agents/planner.md`
+  `.opencode/agents/evaluator.md`
+  `.opencode/agents/code-reviewer.md`
+  `.opencode/agents/security-auditor.md`
+  `.opencode/agents/test-generator.md`
+  `.opencode/agents/codebase-investigator.md`
+  `.opencode/agents/code-quality-auditor.md`     ← 月次品質診断
+  `.opencode/agents/resilience-checker.md`       ← 月次レジリエンス診断
 ```
 
 テンプレートは `.opencode/agents/` にある。
@@ -189,11 +189,11 @@ OpenCode の場合（`.opencode/agents/` に配置）：
 ```
 コンテキスト管理の三層：
 
-Layer 1：AGENTS.md（60〜200行）
+Layer 1：`AGENTS.md`（60〜200行）
           常にロードされる。最小限の必須情報のみ。
           詳細は別ファイルへの参照で示す。
 
-Layer 2：ARCHITECTURE.md・coding-conventions.md等
+Layer 2：`ARCHITECTURE.md`・`.opencode/coding-conventions.md`等
           必要なときだけ参照される詳細情報。
 
 Layer 3：サブエージェント
