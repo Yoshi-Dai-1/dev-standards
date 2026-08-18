@@ -66,7 +66,7 @@ Layer 3: 各プロジェクトの .opencode/ ディレクトリ
 新プロジェクト開始時：
   1. yori を参照して構成を決定
   2. 最も近いテンプレートリポジトリから新リポジトリを作成
-  3. .opencode/project-context.md を書く
+  3. `.opencode/project-context.md` を書く
   4. 開発中の判断を decisions/ にフィードバック
 ```
 
