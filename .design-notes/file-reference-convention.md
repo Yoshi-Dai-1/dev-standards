@@ -51,6 +51,10 @@ AI エージェントが「これはファイル参照か、他の何か（概�
   - 対象: principles（resilience/production-readiness/network-resilience/security*/threat/risk/subagents/code*/naming/project-definition-guide/harness-engineering 等）・architectures（microservices/mobile/serverless）・snippets/agents
   - 除外: ツリー図（ベース名裸）・実コード例・検索クエリ例・配布対象外の `decisions/` 内メモ・JSON 値
   - 検証: 配布対象のフェンス内裸参照は、ツリー図・例示・クエリ例のみ（変更不必要）
+- 2026-08-15: 展開後実在パスとの実地照合（setup-harness.sh を実行して照合）で、`design/token-ssot.json`・`design/component-map.json` が `.template` 付きで展開される不整合を発見（コミット `04ce6e2`）
+  - setup-harness.sh が `.template` を除去せずコピーしていたため、ハーネス内の42件の参照先（`.json`）が展開後に存在しなかった
+  - 修正: `TARGET_NAME=$(basename "$DESIGN_TEMPLATE" .template)` で `.template` を除去して展開
+  - 教訓: 展開後パスと参照の整合は、setup スクリプトのソース読解だけでは検出できず、**実際に展開して実在パスと照合**すべき
 
 ## 検証方法
 
