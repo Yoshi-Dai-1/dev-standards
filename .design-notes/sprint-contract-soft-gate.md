@@ -20,7 +20,7 @@ evaluator.md line 63:
 
 | 要素 | 内容 |
 |------|------|
-| 判断基準 | evaluator.md の言語指示 |
+| 判断基準 | `.opencode/agents/evaluator.md` の言語指示 |
 | 強制手段 | AI への読み込みと理解への依存 |
 | ブロック機能 | なし（プラグインによる `tool.execute.before` ガードなし） |
 | 検証方法 | docs/spec.md の「承認」欄に `Evaluator / YYYY-MM-DD` が記入されたか |
@@ -48,7 +48,7 @@ evaluator.md line 63:
 
 | リスク | 発生条件 | 影響 |
 |--------|----------|------|
-| コンテキスト忘却 | 長時間セッションで evaluator.md の指示を忘却 | 承認前に実装開始 |
+| コンテキスト忘却 | 長時間セッションで `.opencode/agents/evaluator.md` の指示を忘却 | 承認前に実装開始 |
 | 自己評価バイアス | 「承認がなくても大丈夫」と AI が判断 | 承認プロセスをスキップ |
 | Context Anxiety | 手順を省略して完了しようとする | Sprint Contract レビューを飛ばす |
 
@@ -77,10 +77,10 @@ evaluator.md line 63:
 4. 未承認ならブロック
 ```
 
-- evaluator-tools.ts と同パターン（マーカー作成→検出→削除）
+- `.opencode/plugins/evaluator-tools.ts` と同パターン（マーカー作成→検出→削除）
 - 既存アーキテクチャとの一貫性あり
 
-### パターンB：tasks.json 拡張方式
+### パターンB：`tasks.json` 拡張方式
 
 ```
 1. tasks.json に sprintApproved: boolean フィールドを追加
@@ -88,14 +88,14 @@ evaluator.md line 63:
 3. 実装プラグインが src/** への書き込み時に sprintApproved を確認
 ```
 
-- tasks.json への一元管理（状態が分散しない）
-- ただし既存の tasks-guard.ts と保護ロジックが重複
+- `tasks.json` への一元管理（状態が分散しない）
+- ただし既存の `.opencode/plugins/tasks-guard.ts` と保護ロジックが重複
 
 ### 推奨
 
 **パターンA（マーカーファイル方式）** を推奨する。理由：
-- 既存の evaluator-tools.ts / tasks-guard.ts のパターンと一貫
-- tasks.json の構造変更なし
+- 既存の `.opencode/plugins/evaluator-tools.ts` / `.opencode/plugins/tasks-guard.ts` のパターンと一貫
+- `tasks.json` の構造変更なし
 - プラグインの独立性を維持
 
 ## 決定事項

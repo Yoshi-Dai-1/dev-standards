@@ -80,7 +80,7 @@ AI が UI を実装するとき、以下の問題が繰り返し発生する：
 ### Token 値の変更
 
 1. `design/token-ssot.json` を編集する
-2. グローバルCSS（globals.css / variables.css）を追従させる
+2. グローバルCSS（`globals.css` / `variables.css`）を追従させる
 3. 変更の影響を受ける全コンポーネントを確認する
 4. `design/component-map.json` の token 参照がずれていないか確認する
 
@@ -120,7 +120,7 @@ AI が UI を実装するとき、以下の問題が繰り返し発生する：
 以下の確認順を固定する。この手順は変更単位別の手順（Token / コンポーネント追加 / コンポーネント変更）より優先する。
 
 1. `design/token-ssot.json` を編集する（primitive → semantic → component の順）
-2. グローバルCSS（globals.css / variables.css）を追従させる
+2. グローバルCSS（`globals.css` / `variables.css`）を追従させる
 3. 全コンポーネントのAPI を確認する（破壊的変更がないか）
 4. `design/component-map.json` を更新する（token 参照・variants）
 5. 影響を受ける全テンプレート・ページを確認する

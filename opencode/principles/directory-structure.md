@@ -173,7 +173,7 @@ tests/
 ## 判断フローチャート（何かを決めるときの思考順序）
 
 ```
-1. これはどのレイヤーに属するか？              → ARCHITECTURE.mdで確認
+1. これはどのレイヤーに属するか？              → `ARCHITECTURE.md` で確認
 2. 一緒に変わるものは一緒に置かれているか？     → 凝集度の確認
 3. 依存の方向は正しいか？                      → 循環依存の確認
 4. 名前を見ただけで責務が分かるか？             → `.opencode/standards/principles/naming-conventions.md` で確認

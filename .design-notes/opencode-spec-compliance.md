@@ -29,7 +29,7 @@ handoff 再設計（2026-07-01 完了）の全要素が公式仕様に準拠す�
 ### Plugin 配置
 - `.opencode/plugins/handoff.ts` — 公式の自動ロードディレクトリ
 
-### AGENTS.md
+### `AGENTS.md`
 - Rules 項でプロジェクトルートの `AGENTS.md` が永続コンテキストとして読み込まれる仕様 — 設計と合致
 
 ### `todowrite` ツール

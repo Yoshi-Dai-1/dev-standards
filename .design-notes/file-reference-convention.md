@@ -67,7 +67,7 @@ AI エージェントが「これはファイル参照か、他の何か（概�
 
 ### 2. 展開後実在パスとの実地照合（推奨・最重要）
 
-setup-harness.sh を一時ディレクトリで実行し、展開後の実在ファイルセットを取得して、全バッククォート付き参照がそのセットに含まれることを確認する。
+`opencode/setup-harness.sh` を一時ディレクトリで実行し、展開後の実在ファイルセットを取得して、全バッククォート付き参照がそのセットに含まれることを確認する。
 
 ```
 YORI_HAS_UI=y YORI_QUALITY_STRATEGY_CHOICE=1 YORI_USAGE_GIT_CHOICE=1 bash opencode/setup-harness.sh

@@ -123,6 +123,10 @@ yori/
     operations.md           運用手順書
     quality-scorecard.md    品質スコアカード
     build-log.md            ビルドログ
+    security-audit-log.md   セキュリティ監査ログ
+    spec-structure.md       仕様書テンプレート（Planner が spec.md を生成する際の元）
+    sprint-contract-template.md  Sprint Contract テンプレート
+    tasks-json-template.json     Task List テンプレート（Planner が tasks.json を生成する際の元）
     working/                作業ディレクトリ
   .opencode/
     instructions/           ルールファイル（イベント駆動で注入）

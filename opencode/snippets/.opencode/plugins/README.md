@@ -20,7 +20,7 @@ OpenCode Plugin は TypeScript + Bun ランタイムで動作するイベント�
 | `working-dir-guide.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | `docs/working/` ファイル Read/Write/Edit 検知時のルール注入 |
 | `evaluator-tools.ts` | `tool`（カスタムツール） | `evaluator-passed` / `evaluator-failed` ツール定義 |
 | `compaction-context.ts` | `experimental.session.compacting` | コンパクション時に作業ディレクトリの状態を維持 |
-| `env-check.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | Python/Node.js 環境パス自動書き換え + .nvmrc 不一致警告（セッション内1回） |
+| `env-check.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | Python/Node.js 環境パス自動書き換え + `.nvmrc` 不一致警告（セッション内1回） |
 | `rule-injector.ts` | `tool.execute.before` / `experimental.session.compacting` / `event` | ファイル種別・内容に応じてルールファイルの参照を注入（`AGENTS.md` 肥大化防止。規約未読ブロック・mkdir ゲート・tdd ハードゲート付き） |
 | `destructive-op-guard.ts` | `tool.execute.before` | 破壊的Git操作（reset --hard / rebase / push --force / rm -rf 等）のブロック |
 | `commit-review.ts` | `tool.execute.before` | git commit 検出 → 子セッションで @code-reviewer + @security-auditor を並列実行 → 問題ありならブロック |
@@ -109,7 +109,7 @@ for f in plugins/*.ts; do bunx --bun tsc --noEmit --strict --skipLibCheck --type
 - ツール不在時（例：`.venv/bin/pytest` が存在しない）はサイレントスキップ
 
 **Java/PHP をスキップする理由：**
-Java/PHP には lint-and-typecheck の全言語に共通して採用している「`which` で検出して即座に実行できる高速CLIツール」が標準化されていない。代わりにビルドツール（Maven/Gradle/Composer）経由の品質チェックが必要なため、Plugin 層ではなく `stack-setup.md` 層でプロジェクト固有対応として案内する。
+Java/PHP には lint-and-typecheck の全言語に共通して採用している「`which` で検出して即座に実行できる高速CLIツール」が標準化されていない。代わりにビルドツール（Maven/Gradle/Composer）経由の品質チェックが必要なため、Plugin 層ではなく `.opencode/instructions/stack-setup.md` 層でプロジェクト固有対応として案内する。
 
 ### 動作の流れ
 
@@ -128,7 +128,7 @@ Java/PHP には lint-and-typecheck の全言語に共通して採用している
 ### 責任境界
 
 **`lint-and-typecheck.ts`（Plugin 層）はツールのインストールを行わない。**
-インストールは `stack-setup.md`（ルール層）が担当し、auto-deploy level に従って
+インストールは `.opencode/instructions/stack-setup.md`（ルール層）が担当し、auto-deploy level に従って
 自動実行・確認付き実行・提案のみを切り替える。
 
 - Plugin 層：ツールが既に存在することを前提に `which` 検出 → 実行 → 結果通知
@@ -225,9 +225,9 @@ main ブランチに直接コミットして問題ない。
 | `git add` | 頻繁に使う正常操作 |
 | ファイル削除（単一ファイル） | 誤検知が多い（正常なリファクタリング・リネームを阻害するため） |
 
-**設計意図**: `destructive-op-guard.ts` は Safety Rules の完全なコード実装ではなく、**復元が困難な操作のみを最低限ブロックする**ガードレール。復元可能な操作（通常 push, commit, 単一ファイル削除）は `AGENTS.md` の行動原則（AI 自発遵守）に委ね、誤検知リスクを回避している。
+**設計意図**: `.opencode/plugins/destructive-op-guard.ts` は Safety Rules の完全なコード実装ではなく、**復元が困難な操作のみを最低限ブロックする**ガードレール。復元可能な操作（通常 push, commit, 単一ファイル削除）は `AGENTS.md` の行動原則（AI 自発遵守）に委ね、誤検知リスクを回避している。
 
-`commit-review.ts`、`secrets-guard.ts` と合わせて defense in depth を構成する。
+`.opencode/plugins/commit-review.ts`、`.opencode/plugins/secrets-guard.ts` と合わせて defense in depth を構成する。
 
 ## `rule-injector.ts` 詳細
 
@@ -237,7 +237,7 @@ main ブランチに直接コミットして問題ない。
 ### 作用の流れ
 
 ```
-Session開始（instructions: AGENTS.md / cli-first.md / .opencode/instructions/naming-conventions.md / .opencode/instructions/code-quality.md / ARCHITECTURE.md / project-definition.md）
+Session開始（instructions: `AGENTS.md` / `.opencode/instructions/cli-first.md` / `.opencode/instructions/naming-conventions.md` / `.opencode/instructions/code-quality.md` / `ARCHITECTURE.md` / `docs/project-definition.md`）
   ↓
 AI: アーキテクチャ設計・プロジェクト設定（コードは未記述）
   ↓
@@ -245,7 +245,7 @@ AI: 最初のコードファイルを作成しようとする
   ↓
 Plugin: コードファイル検出 + 規約未読 → throw new Error() で書き込みを BLOCK（リトライしても読了まで再ブロック）
   ↓
-AI: エラーを確認 → 規約ファイル（directory-structure / coding-conventions）を読む
+AI: エラーを確認 → 規約ファイル（`.opencode/instructions/directory-structure.md` / `.opencode/coding-conventions.md`）を読む
   ↓
 AI: 規約に従って正しいコードを書く
   ↓
@@ -260,14 +260,14 @@ AI が自己回復し、規約を読んでから再試行する。
 
 | 作用 | トリガー | 内容 |
 |------|----------|------|
-| **BLOCK**（読了まで） | コードファイル（`.ts/.js/.py/.css/.scss/...`）の write/edit | 2つの規約ファイル（directory-structure / coding-conventions）を読むよう要求。書き込みを中断。未読のまま再試行しても再ブロック（リトライバイパス対策） |
-| **BLOCK**（読了まで） | テストファイル（`.test.*` / `_test.*` / `test_*.*` / `*Test.java` 等）の write/edit | `tdd-cycle.md` を読むよう要求。書き込みを中断 |
-| **BLOCK**（読了まで） | bash の `mkdir` コマンド | `directory-structure.md` を読むよう要求。実行を中断 |
-| **noReply 注入** | コードファイル + 非コードファイル（`package.json` / `docs/project-definition.md` / `AGENTS.md` / 依存関係ファイル 等） | `security.md` の確認を推奨。内容キーワード（login/auth/token/stripe/payment 等）に合致すると再注入 |
-| **noReply 注入** | コードファイル + `ARCHITECTURE.md` + `docs/project-definition.md` | `network-resilience.md` の確認を推奨。内容キーワード（fetch/axios/retry/timeout/redis 等）に合致すると再注入 |
-| **noReply 注入** | `.tsx/.jsx/.css/.scss` + `DESIGN.md` + `design/*.json` | `design-contract.md` の確認を推奨 |
-| **noReply 注入** | `ARCHITECTURE.md` 編集 | `stack-setup.md` の確認を推奨 |
-| **noReply 注入** | テストファイルの write/edit | `tdd-cycle.md` の確認を推奨（読了後）。内容キーワード（test/spec/tdd/describe/it/assert/expect/func Test/#[test]）に合致すると再注入 |
+| **BLOCK**（読了まで） | コードファイル（`.ts/.js/.py/.css/.scss/...`）の write/edit | 2つの規約ファイル（`.opencode/instructions/directory-structure.md` / `.opencode/coding-conventions.md`）を読むよう要求。書き込みを中断。未読のまま再試行しても再ブロック（リトライバイパス対策） |
+| **BLOCK**（読了まで） | テストファイル（`.test.*` / `_test.*` / `test_*.*` / `*Test.java` 等）の write/edit | `.opencode/instructions/tdd-cycle.md` を読むよう要求。書き込みを中断 |
+| **BLOCK**（読了まで） | bash の `mkdir` コマンド | `.opencode/instructions/directory-structure.md` を読むよう要求。実行を中断 |
+| **noReply 注入** | コードファイル + 非コードファイル（`package.json` / `docs/project-definition.md` / `AGENTS.md` / 依存関係ファイル 等） | `.opencode/instructions/security.md` の確認を推奨。内容キーワード（login/auth/token/stripe/payment 等）に合致すると再注入 |
+| **noReply 注入** | コードファイル + `ARCHITECTURE.md` + `docs/project-definition.md` | `.opencode/instructions/network-resilience.md` の確認を推奨。内容キーワード（fetch/axios/retry/timeout/redis 等）に合致すると再注入 |
+| **noReply 注入** | `.tsx/.jsx/.css/.scss` + `DESIGN.md` + `design/*.json` | `.opencode/instructions/design-contract.md` の確認を推奨 |
+| **noReply 注入** | `ARCHITECTURE.md` 編集 | `.opencode/instructions/stack-setup.md` の確認を推奨 |
+| **noReply 注入** | テストファイルの write/edit | `.opencode/instructions/tdd-cycle.md` の確認を推奨（読了後）。内容キーワード（test/spec/tdd/describe/it/assert/expect/func Test/#[test]）に合致すると再注入 |
 
 注入通知はバッチ化されている：1回のツール実行で複数ルールに該当した場合、複数回の prompt を送らず1回の noReply に全ルールを列挙する。
 
@@ -276,14 +276,14 @@ AI が自己回復し、規約を読んでから再試行する。
 **規約ゲート（コードファイル）**: `conventionsOffered === false` かつ `CODE_FILE_PATTERN` に一致
 - 未読の規約ファイルのパスを列挙して `throw new Error()`
 - `conventionsOffered` は「全規約読了済み」を意味し、読了が確認できた場合のみ true になる。未読のまま再試行しても再ブロックする（リトライバイパス修正）
-- `naming-conventions.md` / `code-quality.md` は常時読込（instructions）のためゲート・通知対象外
+- `.opencode/instructions/naming-conventions.md` / `.opencode/instructions/code-quality.md` は常時読込（instructions）のためゲート・通知対象外
 
-**tdd ゲート（テストファイル）**: `TEST_FILE_PATTERN` に一致かつ `tdd-cycle.md` 未読
-- テストファイルの作成・編集は `tdd-cycle.md` を読了するまでブロックする
+**tdd ゲート（テストファイル）**: `TEST_FILE_PATTERN` に一致かつ `.opencode/instructions/tdd-cycle.md` 未読
+- テストファイルの作成・編集は `.opencode/instructions/tdd-cycle.md` を読了するまでブロックする
 - 読了後（`readByAI`）は通常の noReply 注入に移行する
 
-**mkdir ゲート（bash）**: bash コマンドに `mkdir` が含まれ、`directory-structure.md` 未読
-- ディレクトリ作成は `directory-structure.md` を読了するまでブロックする
+**mkdir ゲート（bash）**: bash コマンドに `mkdir` が含まれ、`.opencode/instructions/directory-structure.md` 未読
+- ディレクトリ作成は `.opencode/instructions/directory-structure.md` を読了するまでブロックする
 - 読了後はブロックしない
 
 **再試行**: AI が規約を読み、全ての読了が確認されると以降のコードファイル書き込みはブロックしない
@@ -299,9 +299,9 @@ AI が自己回復し、規約を読んでから再試行する。
 ### 初期状態
 
 `opencode.json` の `instructions` フィールドは 6ファイル（`AGENTS.md` / `.opencode/instructions/cli-first.md` / `.opencode/instructions/naming-conventions.md` / `.opencode/instructions/code-quality.md` / `ARCHITECTURE.md` / `docs/project-definition.md`）を読み込む。
-`cli-first.md`・`naming-conventions.md`・`code-quality.md` を除く `instructions/` 配下のルールファイル（および `.opencode/coding-conventions.md`）はセッション開始時には読み込まれず、
+`.opencode/instructions/cli-first.md`・`.opencode/instructions/naming-conventions.md`・`.opencode/instructions/code-quality.md` を除く `instructions/` 配下のルールファイル（および `.opencode/coding-conventions.md`）はセッション開始時には読み込まれず、
 この Plugin が BLOCK または noReply 注入でイベント駆動する。
-`naming-conventions.md` は常時読み込まれるため「作成・命名前に欠かさず読む」ことを保証し、`code-quality.md` は常時読み込まれるため「コードを書く前段階から品質6軸・分割統合の基準を踏まえる」ことを保証する。`directory-structure.md` は mkdir ゲート、`coding-conventions.md` はコード書き込みゲートでそれぞれ読了を強制する。
+`.opencode/instructions/naming-conventions.md` は常時読み込まれるため「作成・命名前に欠かさず読む」ことを保証し、`.opencode/instructions/code-quality.md` は常時読み込まれるため「コードを書く前段階から品質6軸・分割統合の基準を踏まえる」ことを保証する。`.opencode/instructions/directory-structure.md` は mkdir ゲート、`.opencode/coding-conventions.md` はコード書き込みゲートでそれぞれ読了を強制する。
 
 ## `arch-diag.ts` 詳細
 

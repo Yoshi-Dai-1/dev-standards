@@ -313,7 +313,7 @@ UIを持つプロジェクトで `DESIGN.md` を作成する場合：
 **種別**：[Webフロントエンド / バックエンドAPI / モノリポ / データパイプライン / ドキュメント]  
 **採用アーキテクチャ**：[FSD / レイヤードアーキテクチャ / etc.]  
 **デザイン入口**：[なし / `DESIGN.md` 参照]  
-**参照ドキュメント**：.opencode/standards/architectures/
+**参照ドキュメント**：`.opencode/standards/architectures/`
 
 ---
 

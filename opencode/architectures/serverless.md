@@ -80,7 +80,7 @@ src/
   未使用の依存関係を含めない
   ツリーシェイキングが有効なバンドラー設定を使う
 
-対策3：コールドスタートの許容時間をARCHITECTURE.mdの非機能要件に定義する
+対策3：コールドスタートの許容時間を`ARCHITECTURE.md`の非機能要件に定義する
   serverlessアーキテクチャが選択されている場合、`.opencode/instructions/stack-setup.md` Step 3.5の実行時に
   `ARCHITECTURE.md` の「非機能要件 → コールドスタート」セクションが記入済みか確認する。
   未記入の場合は人間に以下の選択肢を提示する:

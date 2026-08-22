@@ -123,6 +123,10 @@ target-project/
     operations.md           Operations manual
     quality-scorecard.md    Quality scorecard
     build-log.md            Build log
+    security-audit-log.md   Security audit log
+    spec-structure.md       Spec template (Planner uses to generate spec.md)
+    sprint-contract-template.md  Sprint contract template
+    tasks-json-template.json     Task list template (Planner uses to generate tasks.json)
     working/                Working directory
   .opencode/
     instructions/           Rule files (event-driven injection)

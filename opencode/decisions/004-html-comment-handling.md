@@ -98,8 +98,8 @@ HTML コメントを以下3種に分類し、それぞれ異なる扱いとす�
     - project-definition-guide は Group B に含まれていたが、後日のレビューで**消費型コメント**と判断され HTML コメントに差し戻し（2026-07-16 同日）
   - Group C（`AGENTS.md`）: 消費型コメント → HTML コメント維持 + セクション削除
   - Group D（`.opencode/skills/live-operation/references/monthly-diagnosis.md` / `.opencode/skills/handoff/SKILL.md`）: write_file に preservation ルール追加
-- Group F 初回（ARCHITECTURE.md.template 6件）: 永続注釈 → 可視テキスト変換（同日）
-- Group F 差し戻し（ARCHITECTURE.md.template 6件）: 永続注釈と判断したが**消費型コメント**に再分類。全件 HTML コメントに差し戻し（同日）
+- Group F 初回（`ARCHITECTURE.md.template` 6件）: 永続注釈 → 可視テキスト変換（同日）
+- Group F 差し戻し（`ARCHITECTURE.md.template` 6件）: 永続注釈と判断したが**消費型コメント**に再分類。全件 HTML コメントに差し戻し（同日）
 - 2026-08-02: 消費型コメントの残存問題への対処を追加適用
   - 消費型コメントは初回セットアップ**完了時に全削除**する方針に統一（セクション削除への依存を撤廃）
   - `ARCHITECTURE.md.template`: 完了時クリーンアップを「すべてのHTMLコメント削除（コメントアウトされたアーキテクチャブロック含む）」に統合

@@ -8,16 +8,16 @@
 
 ## 背景
 
-AGENTS.md:82 で session-context.md は「更新する（overwrite）」と規定されている。
+`AGENTS.md`:82 で `.design-notes/session-context.md` は「更新する（overwrite）」と規定されている。
 しかし以下の問題が発生した：
 
-1. AIが session-context.md を読み、既存のパターン（第N部の羅列）を踏襲
-2. AGENTS.md の「更新する」より、ファイル自体の構造パターンの影響が強く働いた
-3. 結果として追記（append）が発生。AGENTS.md の規定に反する
+1. AIが `.design-notes/session-context.md` を読み、既存のパターン（第N部の羅列）を踏襲
+2. `AGENTS.md` の「更新する」より、ファイル自体の構造パターンの影響が強く働いた
+3. 結果として追記（append）が発生。`AGENTS.md` の規定に反する
 
 ## 1次対応（2026-06-01）
 
-session-context.md 冒頭に以下のコメントを追加：
+`.design-notes/session-context.md` 冒頭に以下のコメントを追加：
 
 ```markdown
 <!-- セッション終了時に上書き更新する（追記しない）。
@@ -31,7 +31,7 @@ session-context.md 冒頭に以下のコメントを追加：
 
 ### 検証方法
 
-次セッション終了時に session-context.md が追記形式か更新形式かを確認する。
+次セッション終了時に `.design-notes/session-context.md` が追記形式か更新形式かを確認する。
 
 - **✅ 更新（overwrite）されている** → 問題なし。追加措置不要
 - **❌ 追記（append）されている** → コメントだけでは不十分と判断

@@ -33,7 +33,7 @@ id_ecdsa
 .ssh/
 
 # === 認証情報ファイル ===
-`credentials.json`
+credentials.json
 service-account*.json
 *service-account*.json
 .netrc
@@ -44,7 +44,7 @@ service-account*.json
 *.db
 
 # === Docker（本番シークレットを含む場合）===
-`docker-compose.override.yml`
+docker-compose.override.yml
 
 # === OS生成ファイル ===
 .DS_Store
@@ -52,7 +52,7 @@ Thumbs.db
 desktop.ini
 
 # === エディタ・IDE ===
-`.vscode/settings.json`
+.vscode/settings.json
 # `.vscode/extensions.json` はコミットしてよい（チームで共有）
 .idea/
 *.swp

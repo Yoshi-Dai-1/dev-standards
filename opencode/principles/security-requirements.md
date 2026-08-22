@@ -74,7 +74,7 @@ AIがプロジェクト定義を読んでセキュリティ対応レベル（Lv.
 中規模以上（6人以上）│  Lv.3   │  Lv.4   │  Lv.4+
 
 プロジェクト規模の定義: 個人=開発者1人、小規模=2〜5人、中規模以上=6人以上
-（.opencode/standards/principles/commercial-operations.mdのチーム規模定義と統一）
+（`.opencode/standards/principles/commercial-operations.md`のチーム規模定義と統一）
 データ感度の定義: 機密なし=公開情報のみ、個人情報=氏名・メール・住所等、決済・医療=クレジットカード・医療記録・要配慮個人情報
 チーム規模が境界の場合（例: 2人と3人の間）は、データ感度が高い方のレベルを採用する
 ```
@@ -290,7 +290,7 @@ Lv.1の全項目に加えて：
 
 ```
 Lv.2の全項目に加えて：
-[ ] 脅威モデリング実施（STRIDEモデル）→ `.opencode/standards/principles/threat-modeling.md` の手順に従い実施・decisions/に記録
+[ ] 脅威モデリング実施（STRIDEモデル）→ `.opencode/standards/principles/threat-modeling.md` の手順に従い実施・`decisions/`に記録
 [ ] DevSecOps：SAST/DAST/シークレットスキャンをCIパイプラインに組み込み → `.opencode/standards/principles/security-implementation.md` の「DevSecOpsパイプライン」セクションの手順に従い実施
 [ ] ペネトレーションテスト → 以下を実施する：
     実施前に以下を検索して最新の手法・ツールを確認する：
@@ -416,7 +416,7 @@ OWASP Mobile Top 10 を基準とする。
 上記にない言語の場合：
 1. `OWASP [言語名] cheat sheet` / `[言語名] security best practices [現在年]` をWebで検索する
 2. 導出した要件を参照情報源とともに人間に提示する
-3. 同じ言語で2回以上指摘が発生した場合 → decisions/ へのルール化を提案する
+3. 同じ言語で2回以上指摘が発生した場合 → `decisions/` へのルール化を提案する
 
 ---
 

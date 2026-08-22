@@ -1,4 +1,4 @@
-# AGENTS.md (yori 固有)
+# `AGENTS.md` (yori 固有)
 
 <!-- このファイルは yori リポジトリの開発用。
      opencode/snippets/agents/AGENTS.md とは別物。
@@ -9,7 +9,7 @@
 **yori**：AIエージェントとともに開発するためのハーネスエンジニアリングのナレッジベース。
 あらゆるプロジェクト種別に横断的に適用できる設計思想・テンプレート・原則を集積する。
 
-**技術スタック**: Markdown + Bash（opencode/setup-harness.sh）
+**技術スタック**: Markdown + Bash（`opencode/setup-harness.sh`）
 
 ## Commands
 
@@ -86,7 +86,7 @@ plugins/*.ts（コードによるガードレール。イベント駆動・自�
 
 **セッション開始時**:
 1. `.design-notes/session-context.md` が存在する場合 → 読んで設計文脈を復元する
-2. `opencode/README.md` の「Directory Structure」セクションを参照可能にする。ディレクトリ構造はAGENTS.mdのArchitectureセクションで把握済み
+2. `opencode/README.md` の「Directory Structure」セクションを参照可能にする。ディレクトリ構造は`AGENTS.md`のArchitectureセクションで把握済み
 3. 前回のセッションで「変更が必要」とマークされたファイルを確認する
 
 **セッション終了時**:

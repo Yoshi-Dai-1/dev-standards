@@ -129,23 +129,23 @@ yori の修正・改善時に新規ファイルや既存ファイルの戦略を
 
 ## `.opencode/instructions/`（AI 振る舞いルール）
 
-### 全ファイル（code-quality.md, code-review.md, design-contract.md, directory-structure.md, naming-conventions.md, network-resilience.md, security.md, stack-setup.md, tdd-cycle.md, `_shared/*.md`, `_template.md`, およびサブファイル群）
+### 全ファイル（`.opencode/instructions/code-quality.md`, `.opencode/instructions/code-review.md`, `.opencode/instructions/design-contract.md`, `.opencode/instructions/directory-structure.md`, `.opencode/instructions/naming-conventions.md`, `.opencode/instructions/network-resilience.md`, `.opencode/instructions/security.md`, `.opencode/instructions/stack-setup.md`, `.opencode/instructions/tdd-cycle.md`, `_shared/*.md`, `_template.md`, およびサブファイル群）
 - **戦略**: C
 - **元**: `snippets/.opencode/instructions/`（再帰的 `find`、`_fill-guide.md` は除外）
 - **行**: 196-207
-- **理由**: AI エージェントの思考と判断を制御するルール定義。yori が提供する定義であり、プロジェクトが直接編集することは稀（カスタマイズは AGENTS.md や project-context.md で行う）。バグ修正や新ルールの追加を再実行で反映させる必要がある。
+- **理由**: AI エージェントの思考と判断を制御するルール定義。yori が提供する定義であり、プロジェクトが直接編集することは稀（カスタマイズは `AGENTS.md` や `.opencode/project-context.md` で行う）。バグ修正や新ルールの追加を再実行で反映させる必要がある。
 
 ### `agents-fill-guide.md`
 - **戦略**: C
 - **元**: `snippets/.opencode/instructions/_fill-guide.md`
 - **行**: 127-131（別コピー処理）
-- **理由**: AGENTS.md 記入ガイド。`_fill-guide.md` から `agents-fill-guide.md` にリネームして配置。AI が参照するため `.opencode/instructions/` に置く（エージェント定義ではない）。yori 開発者のみが更新する。
+- **理由**: `AGENTS.md` 記入ガイド。`_fill-guide.md` から `agents-fill-guide.md` にリネームして配置。AI が参照するため `.opencode/instructions/` に置く（エージェント定義ではない）。yori 開発者のみが更新する。
 
 ---
 
 ## `.opencode/agents/`（サブエージェント定義）
 
-### サブエージェント: planner.md, evaluator.md, code-reviewer.md, security-designer.md, security-auditor.md, test-generator.md, codebase-investigator.md, resilience-checker.md, code-quality-auditor.md
+### サブエージェント: `.opencode/agents/planner.md`, `.opencode/agents/evaluator.md`, `.opencode/agents/code-reviewer.md`, `.opencode/agents/security-designer.md`, `.opencode/agents/security-auditor.md`, `.opencode/agents/test-generator.md`, `.opencode/agents/codebase-investigator.md`, `.opencode/agents/resilience-checker.md`, `.opencode/agents/code-quality-auditor.md`
 - **戦略**: C
 - **元**: `snippets/agents/subagents/*.md`
 - **行**: 229-233
@@ -299,7 +299,7 @@ yori の修正・改善時に新規ファイルや既存ファイルの戦略を
 
 ## `.gitignore` 追記エントリ
 
-### handoff-artifact.md, .handoff-trigger, .setup-diff.log, standards/, .env, .env.local, .env.*.local, usage/
+### `handoff-artifact.md`, `.handoff-trigger`, `.setup-diff.log`, `standards/`, `.env`, `.env.local`, `.env.*.local`, `usage/`
 - **戦略**: D
 - **行**: 724-783
 - **理由**: 各エントリは `grep -q` でガード — 未記入の場合のみ追記。`usage/` のみユーザーに gitignore するか選択させる。

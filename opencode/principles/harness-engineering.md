@@ -44,13 +44,15 @@ AIエージェントが暴走せずに正しい方向へ進み続けるための
   ARCHITECTURE.md        設計の詳細（AGENTS.mdから参照）
 
   docs/（プロジェクト成果物・AIと人間が共有するドキュメント）
-    docs/project-definition.md  プロジェクトの目的・制約・Won't
-    docs/spec.md                仕様書・Sprint Contract（Plannerが生成）
-    tasks.json          Task List・pass/fail追跡（Plannerが生成・Evaluatorが更新）
+    project-definition.md  プロジェクトの目的・制約・Won't
     build-log.md           セッション間の意思決定・試行錯誤の積み上げログ
     operations.md          本番運用手順書
+    quality-scorecard.md   品質スコアカード
+    security-audit-log.md  セキュリティ監査ログ
+    spec-structure.md      仕様書テンプレート（Planner が spec.md を生成する際の元）
+    sprint-contract-template.md  Sprint Contract テンプレート
+    tasks-json-template.json     Task List テンプレート（Planner が tasks.json を生成する際の元）
     working/               タスクごとの揮発的な状態（計画・メモ・チェックリスト）
-    archive/               完了したタスクのアーカイブ（task-archive.ts が自動提案・.gitignore 対象）
 
   .opencode/（ハーネスの詳細）
     instructions/        opencode.json instructions がセッション開始時にLLMに注入（判断基準）
@@ -59,10 +61,12 @@ AIエージェントが暴走せずに正しい方向へ進み続けるための
     agents/              サブエージェント定義（@名前で呼び出す）
     plugins/             TypeScript Plugin（イベント駆動の自動ガードレール）
     usage/               使用履歴（GCの判断基準）
+    config/              SSoT ファイル（secret-patterns.json / skills.lock.yaml）
     coding-conventions.md  プロジェクト固有のコーディング規約（AIが常に参照）
     project-context.md   プロジェクト文脈・現在のフェーズ（AIがセッション開始時に参照）
-    .opencode/handoff-artifact.md  Context Reset 時の引き継ぎ（スナップショット・毎回上書き）
-    persona.md           エージェントの性格定義（任意）
+    handoff-artifact.md  Context Reset 時の引き継ぎ（スナップショット・毎回上書き）
+    adr-index.md         ADR インデックス（月次診断時に自動更新）
+    package.json         Plugin 依存関係（bun install で自動インストール）
     standards/           yori の参照ドキュメント（setup-harness.sh が自動コピー）
       principles/        開発原則集（tdd-with-ai / security-implementation 等）
       architectures/     アーキテクチャパターン集
@@ -79,10 +83,10 @@ AIエージェントが暴走せずに正しい方向へ進み続けるための
 | ファイル | 読み込まれるタイミング | 役割 |
 |---------|---------------------|------|
 | `AGENTS.md` | 常時（セッション開始時） | 常駐指示・禁止事項・参照先 |
-| instructions/ | `opencode.json` instructions がセッション開始時に注入 | マークダウン判断基準の提供 |
-| skills/ | descriptionで自動参照（発言検知）、または/コマンドで明示呼び出し | 手順書（定型作業の標準化）|
-| agents/ | @エージェント名で呼び出したとき | 独立コンテキストの専門処理 |
-| plugins/ | コードイベント発生時（ツール実行後等） | 強制的なガードレール・自動記録・プロアクティブなルール注入 |
+| `instructions/` | `opencode.json` instructions がセッション開始時に注入 | マークダウン判断基準の提供 |
+| `skills/` | descriptionで自動参照（発言検知）、または/コマンドで明示呼び出し | 手順書（定型作業の標準化）|
+| `agents/` | @エージェント名で呼び出したとき | 独立コンテキストの専門処理 |
+| `plugins/` | コードイベント発生時（ツール実行後等） | 強制的なガードレール・自動記録・プロアクティブなルール注入 |
 
 ---
 
@@ -129,7 +133,7 @@ Generator（メインエージェント・Build）
   役割：仕様書から実装する。各スプリント開始前に Evaluator へ
         Sprint Contract のレビューを依頼し、承認を得てから実装に入る
   使うタイミング：常時
-   書く場所：`AGENTS.md`（＋instructions/ skills/ が自動補助）
+   書く場所：`AGENTS.md`（＋`instructions/` `skills/` が自動補助）
 
 Evaluator（サブエージェント）
   役割：① Sprint Contract のレビュー（スプリント開始前・合意）
@@ -191,7 +195,7 @@ Evaluator が承認してから実装に入る。
 
 ```
 10分以内の単機能実装   → ハーネスなし（プロンプト直接）
-30分〜1時間の中規模   → AGENTS.md + instructions/ + skills/ + code-reviewer
+30分〜1時間の中規模   → `AGENTS.md` + `instructions/` + `skills/` + code-reviewer
 数時間のフルアプリ    → 上記 + Planner + Generator + Evaluator
                         （Sprint Contract → Build → QA サイクル）
 ```
@@ -201,7 +205,7 @@ Evaluator が承認してから実装に入る。
 ## 6つの原則
 
 **1. Progressive Disclosure（段階的開示）**
-`AGENTS.md`は60〜200行以内。詳細は instructions/・docs/ に分離して
+`AGENTS.md`は60〜200行以内。詳細は `instructions/`・`docs/` に分離して
 必要なときだけ読み込まれるようにする。
 全部を常に見せるのではなく、必要なときに必要なものだけ。
 
@@ -281,8 +285,8 @@ CLI の具体的なコマンドは `command -v` / `--help` / `webfetch` で
 
 ```
 Day 1：`AGENTS.md`に5行（プロジェクト概要・コマンド・禁止事項）
-Week 1：同じ指摘を2回した → instructions/ に追加
-Week 2：3回以上繰り返した作業 → skills/ に追加（/skill-creator で作成）
+Week 1：同じ指摘を2回した → `instructions/` に追加
+Week 2：3回以上繰り返した作業 → `skills/` に追加（/skill-creator で作成）
 Month 1：使っていないものを削除（最初のGC）
 以降：問題にぶつかるたびに追加・定期的に削除
 ```
@@ -409,10 +413,10 @@ setup-harness.sh でテンプレートをコピーして、
    現在の .opencode/ ディレクトリの構成を評価してください。
    以下を確認してください：
    1. `AGENTS.md`が60〜200行以内か
-   2. instructions/ に使われていないファイルがないか
-   3. skills/ に使われていないスキルがないか
-   4. usage/ の履歴から削除候補を特定する
-   5. agents/ のサブエージェント定義が `.opencode/standards/principles/subagents.md` の設計基準に従っているか
+   2. `instructions/` に使われていないファイルがないか
+   3. `skills/` に使われていないスキルがないか
+   4. `usage/` の履歴から削除候補を特定する
+   5. `agents/` のサブエージェント定義が `.opencode/standards/principles/subagents.md` の設計基準に従っているか
    ```
 
 ドキュメントリンクの自動検証・品質診断の自動化（Scheduled/Continuous）を

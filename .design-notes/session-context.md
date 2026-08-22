@@ -9,7 +9,7 @@
 ### 方針（ユーザー確認済み）
 - 影響度順（Phase 1〜5）に優先修正・最終目標は全件
 - パス形式: ハーネス展開後フルパスで統一
-- ルート配置ファイル（AGENTS.md / ARCHITECTURE.md / DESIGN.md / opencode.json）はベース名のままバッククォートのみ付与
+- ルート配置ファイル（`AGENTS.md` / `ARCHITECTURE.md` / `DESIGN.md` / `opencode.json`）はベース名のままバッククォートのみ付与
 - 対象外: コードフェンス内 / TS 実行用引数（`Bun.file()` 等）/ JSON 値（opencode.json.template の instructions 配列）/ Design Token 参照値（`{primitive.shadow.md}`）/ ユーザー固有サンプル（`src/services/*`）
 - TS テンプレートリテラル内のバッククォートは `\`` エスケープが必要
 - 検証スキャナ: コードフェンス除去 + バッククォート区間除去後に `(?<![\w./-])([\w./-]+\.(?:md|json|ts|...))(?![\w.-])` で走査（URL 除外）
@@ -45,10 +45,10 @@
 - テストハーネス（archdiag-test）で全 PASS（41+12+13=66件）。test-plugins-consistency.ts の session.deleted フィクスチャを `properties.sessionID` → `properties.info.id` に修正（実型と整合）
 
 ### 判断基準（ユーザーと確認済みの監査結論から）
-- AGENTS.md の `instructions[]` 明記は維持（opencode ソース `instruction.ts` の `systemPaths()` が `Set<string>` で絶対パス管理 → 二重ロードされない）
+- `AGENTS.md` の `instructions[]` 明記は維持（opencode ソース `instruction.ts` の `systemPaths()` が `Set<string>` で絶対パス管理 → 二重ロードされない）
 - lockfile-record の exitCode キャストは API 型の制約上必要（output 型に exitCode フィールドがない）
 
-## code-quality.md 常時化（2026-08-14 実施）
+## `.opencode/instructions/code-quality.md` 常時化（2026-08-14 実施）
 
 ### 変更ファイル
 - `opencode/snippets/opencode.json.template`: `instructions[]` に `.opencode/instructions/code-quality.md` を追加（**6ファイル構成**）
@@ -59,9 +59,9 @@
 - `opencode/snippets/.opencode/instructions/code-quality.md`: principle 参照（code-quality / cognitive-load-design / file-size-and-cohesion / tdd-with-ai）は維持
 
 ### 判断基準（ユーザーと確認済み）
-- code-quality.md 常時化の目的: **コードを書く前段階（思考段階）から品質6軸・分割統合の基準を考慮**できるようにする。プラグインはコード編集イベントでしか注入できず、設計・計画段階の品質判断が未保護だった
-- code-quality.md は「入り口の instruction」。詳細は principles/ を **必要時に自律的に読みに行く**（naming 常時化と同じ設計パターン）
-- **coding-conventions.md は常時化しない**: プロジェクト固有にカスタマイズされるファイル（7.4KB+）で、既に初回書き込みハードゲートで読了100%保証済み。常時化は文脈圧迫のリスクがメリットを上回る
+- `.opencode/instructions/code-quality.md` 常時化の目的: **コードを書く前段階（思考段階）から品質6軸・分割統合の基準を考慮**できるようにする。プラグインはコード編集イベントでしか注入できず、設計・計画段階の品質判断が未保護だった
+- `.opencode/instructions/code-quality.md` は「入り口の instruction」。詳細は principles/ を **必要時に自律的に読みに行く**（naming 常時化と同じ設計パターン）
+- **`.opencode/coding-conventions.md` は常時化しない**: プロジェクト固有にカスタマイズされるファイル（7.4KB+）で、既に初回書き込みハードゲートで読了100%保証済み。常時化は文脈圧迫のリスクがメリットを上回る
 - principles（file-size-and-cohesion / cognitive-load-design / code-quality）は on-demand 維持。約20KB の常時化は文脈圧迫
 
 ### テスト
@@ -70,9 +70,9 @@
 - 全テスト PASS（計66件: 12+41+13）
 
 ### v1120test 反映
-- setup-harness.sh 再実行（YORI_HAS_UI=n / QUALITY_STRATEGY=1 / USAGE_GIT=1）
+- `opencode/setup-harness.sh` 再実行（YORI_HAS_UI=n / QUALITY_STRATEGY=1 / USAGE_GIT=1）
 - `.opencode/instructions/code-quality.md` / `rule-injector.ts` / `plugins/README.md` が yori 最新と SAME
-- `opencode.json`: 上書き保護のため手動で code-quality.md 追記（6ファイル構成）
+- `opencode.json`: 上書き保護のため手動で `.opencode/instructions/code-quality.md` 追記（6ファイル構成）
 - `ARCHITECTURE.md`: コード品質セクションに「ベースルール：`.opencode/instructions/code-quality.md`（常時読込）」を手動追記（参照先2ファイル実在確認）
 - STALE_REF = 0 / 参照先全パス実在
 
@@ -81,9 +81,9 @@
 - 前回の分析「コンパクション後の再読は自己回復」は不正確 → 訂正。注記が再読防止の有効防御
 - **修正**:
   - `agents/AGENTS.md:22`: `cli-first.md` → `cli-first.md`（常時読込）
-  - `.opencode/instructions/naming-conventions.md`: ARCHITECTURE.md 参照5箇所（15/74/101/103/113/120）に「（常時読込）」付与
-- code-quality.md 内の参照は全て非常時化 principles（正当な on-demand）なので注記不要
-- v1120test: naming-conventions.md は setup で自動反映（SAME 確認）。AGENTS.md はプロジェクト固有版で cli-first 参照がないため手動編集不要
+  - `.opencode/instructions/naming-conventions.md`: `ARCHITECTURE.md` 参照5箇所（15/74/101/103/113/120）に「（常時読込）」付与
+- `.opencode/instructions/code-quality.md` 内の参照は全て非常時化 principles（正当な on-demand）なので注記不要
+- v1120test: `.opencode/instructions/naming-conventions.md` は setup で自動反映（SAME 確認）。`AGENTS.md` はプロジェクト固有版で cli-first 参照がないため手動編集不要
 - 全テスト PASS（66件: 12+41+13）
 
 ## ステージ済みの変更
@@ -106,25 +106,25 @@
 - `.design-notes/session-context.md`: 本ファイル更新
 
 ## 未解決の課題
-- 検証用プロジェクト（v1120test 等）の opencode.json は上書き保護（戦略 A）のため、naming-conventions.md / code-quality.md の常時化が自動反映されない。opencode.json に手動追加が必要（v1120test は反映済み）。プロジェクト固有の編集を尊重するため自動変更しない
+- 検証用プロジェクト（v1120test 等）の `opencode.json` は上書き保護（戦略 A）のため、`.opencode/instructions/naming-conventions.md` / `.opencode/instructions/code-quality.md` の常時化が自動反映されない。opencode.json に手動追加が必要（v1120test は反映済み）。プロジェクト固有の編集を尊重するため自動変更しない
 - touch / 非 mkdir によるファイル作成はゲート対象外のまま（ユーザー確認済み・現状維持）
 
 ## 質疑監査（2026-08-14 追記）
-- **Q1（常時読込注記の要否）**: **残す判断**。code-quality.md の「このルールはセッション開始時に常時読み込まれる。」は必要。ただし根拠は「naming と同型」ではなく独立判断:
-  - 事実: ルール系の常時読込ファイルは全て「常時有効宣言」を持つ（cli-first.md「全セッション・全フェーズで有効」/ naming「常時読み込まれる」/ code-quality 同文）。AGENTS.md（最上位SSOT）と ARCHITECTURE.md（書かれる対象）は宣言を持たないのが一貫
-  - 機能: AGENTS.md:8 が「instructions は Plugin がイベント駆動で注入する」と宣言しているため、常時読込ルールが「セッション開始時から有効である」ことの適用タイミング明示が必要。この情報は opencode.json（AIの文脈外）にしか存在せず、ファイル自身の宣言でのみ文脈内で完結 → 真の重複ではない
+- **Q1（常時読込注記の要否）**: **残す判断**。`.opencode/instructions/code-quality.md` の「このルールはセッション開始時に常時読み込まれる。」は必要。ただし根拠は「naming と同型」ではなく独立判断:
+  - 事実: ルール系の常時読込ファイルは全て「常時有効宣言」を持つ（`.opencode/instructions/cli-first.md`「全セッション・全フェーズで有効」/ naming「常時読み込まれる」/ `.opencode/instructions/code-quality.md` 同文）。`AGENTS.md`（最上位SSOT）と `ARCHITECTURE.md`（書かれる対象）は宣言を持たないのが一貫
+  - 機能: `AGENTS.md`:8 が「instructions は Plugin がイベント駆動で注入する」と宣言しているため、常時読込ルールが「セッション開始時から有効である」ことの適用タイミング明示が必要。この情報は opencode.json（AIの文脈外）にしか存在せず、ファイル自身の宣言でのみ文脈内で完結 → 真の重複ではない
   - 「無ければ正しく判断できない」は不正確。正しくは「適用タイミングの誤認防止・文書契約」
-- **Q2（ARCHITECTURE.md.template の「詳細・深掘りは principles を参照」行）**: **冗長と判断し削除（ユーザー承認済み 2026-08-14）**
-  - 根拠: `code-quality.md:5-8`（常時読込）冒頭に同一導線が既にあり、ARCHITECTURE.md も常時読込なので AI の文脈内で同じ情報が既に成立。再掲しても到達手段は増えない
-  - 残したのは「ベースルール：`...code-quality.md`（常時読込）に従う。」のみ（適用タイミングの明示として独自機能を持つため）
+- **Q2（`ARCHITECTURE.md.template` の「詳細・深掘りは principles を参照」行）**: **冗長と判断し削除（ユーザー承認済み 2026-08-14）**
+  - 根拠: `.opencode/instructions/code-quality.md`:5-8（常時読込）冒頭に同一導線が既にあり、`ARCHITECTURE.md` も常時読込なので AI の文脈内で同じ情報が既に成立。再掲しても到達手段は増えない
+  - 残したのは「ベースルール：`.opencode/instructions/code-quality.md`（常時読込）に従う。」のみ（適用タイミングの明示として独自機能を持つため）
   - naming セクション（同型）も同時に削除し整合性を確保: `ARCHITECTURE.md.template` 409行（naming）/496行（code-quality）→ 両「詳細・深掘り」行を削除
-  - v1120test ARCHITECTURE.md（102-103 / 178-179行）にも手動反映（上書き保護のため）
+  - v1120test `ARCHITECTURE.md`（102-103 / 178-179行）にも手動反映（上書き保護のため）
   - 全66テスト PASS を確認（この行へのテスト依存なし）
 - **Q3（監査で検出・修正）**:
-  1. `code-review.md:18`: `instructions/naming-conventions.md`（相対パス・注記なし）→ `.opencode/instructions/naming-conventions.md`（常時読込）に完全一致形へ修正。設置場所が reference 側のためテスト対象外ではあるがパス表記不統一を解消
-  2. `AGENTS.md:117`: `ARCHITECTURE.md` に（常時読込）注記を付与（セッション開始時の確認は注入済み内容の参照なので注記が有効）。v1120test AGENTS.md:49 にも手動反映
-  3. AGENTS.md:117 以外は ARCHITECTURE.md 参照は「編集対象」または「0-* 初期セットアップ」中のものであり、注記追加は不要と判断（編集時は Read が正当、初期セットアップはテンプレート全文の refile が目的）
-- v1120test: code-review.md は setup 再実行で自動反映（SAME 確認済み）、AGENTS.md と ARCHITECTURE.md はプロジェクト固有版のため手動反映
+  1. `.opencode/instructions/code-review.md`:18: `instructions/naming-conventions.md`（相対パス・注記なし）→ `.opencode/instructions/naming-conventions.md`（常時読込）に完全一致形へ修正。設置場所が reference 側のためテスト対象外ではあるがパス表記不統一を解消
+  2. `AGENTS.md:117`: `ARCHITECTURE.md` に（常時読込）注記を付与（セッション開始時の確認は注入済み内容の参照なので注記が有効）。v1120test `AGENTS.md`:49 にも手動反映
+  3. `AGENTS.md`:117 以外は `ARCHITECTURE.md` 参照は「編集対象」または「0-* 初期セットアップ」中のものであり、注記追加は不要と判断（編集時は Read が正当、初期セットアップはテンプレート全文の refile が目的）
+- v1120test: `.opencode/instructions/code-review.md` は setup 再実行で自動反映（SAME 確認済み）、`AGENTS.md` と `ARCHITECTURE.md` はプロジェクト固有版のため手動反映
 
 ## 次のセッションでやること
 - 今回の変更（ファイル参照バッククォート＋フルパス統一 86ファイル）と、未コミットの naming/code-quality 常時化・API キャスト除去のコミット可否を人間に確認する（commit/push は人間の指示があるまで実行しない）
@@ -133,7 +133,7 @@
 - テストハーネス: `/var/folders/2r/4xmj5zsd5736vnnwzp3gj1x40000gn/T/opencode/archdiag-test/`
   - `test-arch-diag.ts` 13件 / `test-rule-injector.ts` 12件（新規9件: リトライバイパス・読了後パス・tdd ゲート・mkdir ゲート・バッチ化・コンパクション再起動）/ `test-template.ts` 1件 / `test-plugins-consistency.ts` **36件**（新規9件: 常時化整合性 + 優先チェーンの並び順回帰2件） PASS（計62件）
 - 全 Plugin typecheck: `bunx --bun tsc --noEmit --strict --skipLibCheck --types bun plugins/*.ts` でエラーゼロ
-- 新規配布検証: 一時ディレクトリで setup-harness.sh 実行 → opencode.json に naming-conventions.md が含まれ、`.opencode/instructions/naming-conventions.md`・`.opencode/standards/principles/naming-conventions.md`・`.opencode/instructions/stack-setup/_step-35.md` が最新配布されることを確認。STALE_REF チェック（principles 旧参照）0件
+- 新規配布検証: 一時ディレクトリで setup-harness.sh 実行 → `opencode.json` に `naming-conventions.md` が含まれ、`.opencode/instructions/naming-conventions.md`・`.opencode/standards/principles/naming-conventions.md`・`.opencode/instructions/stack-setup/_step-35.md` が最新配布されることを確認。STALE_REF チェック（principles 旧参照）0件
 - tdd/mkdir ゲートは設計メモの `tddGateFired` / `mkdirGateFired` フラグ方式ではなく readByAI / conventionsRead ベースで実装（未読の限り再ブロック）。リトライバイパス修正の原則と一貫し、コンパクションリセットで再武装される
 - 事後レビュー（2026-08-13）で修正した参照不整合:
   1. instruction 優先チェーン表の内部矛盾（コア表4th と言語別優先注記）→ 言語別・フレームワーク(3) > コア表(4) に統一
