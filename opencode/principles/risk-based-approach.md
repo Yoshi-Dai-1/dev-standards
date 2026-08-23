@@ -253,7 +253,7 @@ pip-audit          # Python
 
 月次診断時、AIは以下を評価する：
 
-1. 現在のプロジェクト状態（`ARCHITECTURE.md`・decisions/・usage/参照）を踏まえる
+1. 現在のプロジェクト状態（`ARCHITECTURE.md`・`decisions/`・`usage/`参照）を踏まえる
 2. リスクの4象限で現状を評価し、各領域に該当する項目を列挙する：
    - A領域（即座に対処）：
    - B領域（監視する）：

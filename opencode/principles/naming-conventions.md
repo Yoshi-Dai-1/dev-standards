@@ -353,7 +353,7 @@ CREATE INDEX idx_stock_prices_stock_code ON stock_prices(stock_code);
 
 ```
 可逆性：すべてのマイグレーションは up（適用）と down（ロールバック）を定義する
-        down が実装できない変更（データ削除を伴うもの）は decisions/ に理由を記録する
+        down が実装できない変更（データ削除を伴うもの）は `decisions/` に理由を記録する
 
 ゼロダウンタイム：本番稼働中のマイグレーションはカラム追加・インデックス追加のみ安全
                   カラム削除・リネームは2段階で行う

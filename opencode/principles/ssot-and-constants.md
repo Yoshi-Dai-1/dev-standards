@@ -106,7 +106,7 @@ NODE_ENV=development     # development / production / test
 ```
 `README.md`           セットアップ手順・概要
 `ARCHITECTURE.md`     設計思想・層のルール・制約
-decisions/          個別の判断記録（ADR）
+`decisions/`          個別の判断記録（ADR）
 
 # 禁止：同じルールをREADMEとARCHITECTUREの両方に書く
 ```

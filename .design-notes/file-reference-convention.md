@@ -47,7 +47,7 @@ AI エージェントが「これはファイル参照か、他の何か（概�
   - 散文のベース名参照→展開後フルパスへ変換（architectures 相互参照 / plugins / instructions / principles、ワイルドカード含む）
   - ツリー図内のフルパスはベース名裸へ統一
   - 検証: 散文のベース名参照 0件・裸ファイル参照 0件
-- 2026-08-15: フェンス内チェックリスト・プロンプト例・判断ブロックの裸参照を、展開後フルパス＋バッククォートへ統一（`e4cd665`〜`3f73ecb`）
+- 2026-08-15: フェンス内チェックリスト・プロンプト例・判断ブロックの裸参照を、展開後フルパス＋バッククォートへ統一（コミット `b5aa5b1`〜`3f73ecb`）
   - 対象: principles（resilience/production-readiness/network-resilience/security*/threat/risk/subagents/code*/naming/project-definition-guide/harness-engineering 等）・architectures（microservices/mobile/serverless）・snippets/agents
   - 除外: ツリー図（ベース名裸）・実コード例・検索クエリ例・配布対象外の `decisions/` 内メモ・JSON 値
   - 検証: 配布対象のフェンス内裸参照は、ツリー図・例示・クエリ例のみ（変更不必要）
@@ -55,6 +55,9 @@ AI エージェントが「これはファイル参照か、他の何か（概�
   - setup-harness.sh が `.template` を除去せずコピーしていたため、ハーネス内の42件の参照先（`.json`）が展開後に存在しなかった
   - 修正: `TARGET_NAME=$(basename "$DESIGN_TEMPLATE" .template)` で `.template` を除去して展開
   - 教訓: 展開後パスと参照の整合は、setup スクリプトのソース読解だけでは検出できず、**実際に展開して実在パスと照合**すべき
+- 2026-08-23: コードフェンス内のbareディレクトリ参照（`decisions/`・`usage/`・`instructions/`・`skills/`・`agents/`・`plugins/`）にバッククォートを追加（principles 11ファイル・25箇所）
+  - 規約上「プロンプト例・判断ブロック・チェックリストはフルパス＋バッククォート」が適用されるが、コードフェンス内のbare参照が残っていた
+  - 検証: setup-harness.sh 展開後ファイルリストと全バッククォート付き参照の照合で0件不整合を確認
 
 ## 検証方法
 

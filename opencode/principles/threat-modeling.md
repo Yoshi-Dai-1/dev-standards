@@ -125,9 +125,9 @@ CRITICAL/HIGH の脅威：
   → `ARCHITECTURE.md` の「セキュリティ要件」セクションに追記する
 
 MEDIUM/LOW の脅威：
-  → decisions/ に記録し、計画的に対処する
+  → `decisions/` に記録し、計画的に対処する
 
-すべての脅威と対策を decisions/[連番]-threat-modeling.md に記録する
+すべての脅威と対策を `decisions/[連番]-threat-modeling.md` に記録する
 ```
 
 ### Step 5：例外対応
@@ -143,7 +143,7 @@ MEDIUM/LOW の脅威：
 プロジェクトの規模・予算上、すべての脅威に対処できない場合：
   → `.opencode/standards/principles/risk-based-approach.md` の優先順位に従い、
     CRITICAL/HIGH から対処する
-  → LOW は「受容可能なリスク」として decisions/ に記録する
+  → LOW は「受容可能なリスク」として `decisions/` に記録する
 ```
 
 ---
