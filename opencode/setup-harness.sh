@@ -730,12 +730,16 @@ if [ -f ".gitignore" ]; then
 
   fi
 
-  # bun.lock（配布先で bun install が生成する依存ロックファイル）は自動生成物なので
+  # bun.lock と node_modules/（配布先で bun install が生成する自動生成物）は
   # git 管理対象外にする。yori リポジトリ側では bun.lock をコミットする（開発の再現性担保）
-  # が、配布先で生成される bun.lock を初心者がうっかりコミットしてしまうのを防ぐ。
+  # が、配布先で生成される bun.lock / node_modules/ を初心者がうっかりコミットしてしまうのを防ぐ。
   if ! grep -q "\.opencode/bun.lock" .gitignore; then
     echo ".opencode/bun.lock" >> .gitignore
     echo "✅ .gitignore に .opencode/bun.lock を追記しました（配布先の自動生成物）"
+  fi
+  if ! grep -q "\.opencode/node_modules/" .gitignore; then
+    echo ".opencode/node_modules/" >> .gitignore
+    echo "✅ .gitignore に .opencode/node_modules/ を追記しました（配布先の自動生成物）"
   fi
 
   # .opencode/standards/ の追記（handoff 処理とは独立して確実に設定する）
