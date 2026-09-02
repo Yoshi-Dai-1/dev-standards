@@ -42,7 +42,7 @@ After setup, open the project in OpenCode and start a session. The AI will autom
 | Plugins | 17 | TypeScript event-driven guardrails (secrets prevention, diagnostics, env check, lint, skill tracking, etc.) |
 | Instructions | 11 | Rule files injected on session events |
 | Subagents | 9 | Agent definitions specialized for specific tasks |
-| ADRs | 3 | Architecture Decision Records |
+| ADRs | 4 | Architecture Decision Records |
 
 ## Project Structure
 
@@ -65,9 +65,6 @@ yori/
   .releaserc.json           semantic-release configuration
   .github/                  GitHub Actions workflows
   .design-notes/            Design notes (yori development, not distributed)
-  .releaserc.json           semantic-release config
-  .github/                  GitHub Actions workflows
-  .design-notes/            Design memos (yori-internal, not distributed)
 ```
 
 ## Links

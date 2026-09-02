@@ -194,7 +194,7 @@ else
 fi
 
 # instructions テンプレート（常に最新版を反映）
-# 含まれるルール：cli-first.md / code-quality.md / code-review.md / design-contract.md / directory-structure.md / naming-conventions.md / network-resilience.md / network-resilience/*.md / requirements-change.md / security.md / security/*.md / stack-setup.md / stack-setup/*.md / tdd-cycle.md / _shared/*.md / _template.md
+# 含まれるルール：cli-first.md / code-quality.md / code-review.md / design-contract.md / directory-structure.md / naming-conventions.md / network-resilience.md / network-resilience/*.md / requirements-change.md / security.md / security/*.md / stack-setup.md / stack-setup/*.md / stack-setup/_ls-lint.md / stack-setup/_dependabot.md / tdd-cycle.md / _shared/*.md / _template.md
 # 除外：_fill-guide.md（AGENTS.md 記入ガイドは別のコピー処理で agents-fill-guide.md にリネームして配置）
 while IFS= read -r -d '' RULE_FILE; do
   BASENAME=$(basename "$RULE_FILE")
@@ -560,6 +560,105 @@ else
   echo "ℹ️  .editorconfig は既に存在します（上書き保護）"
 fi
 
+# .ls-lint.yml をコピー（ファイル名規約の機械的強制。常時上書き）
+if [ -f "$SNIPPETS/.ls-lint.yml" ]; then
+  cp "$SNIPPETS/.ls-lint.yml" .ls-lint.yml
+  echo "✅ .ls-lint.yml をコピーしました（ファイル名規約の機械的強制）"
+fi
+
+# .github/dependabot.yml をコピー（依存関係自動更新）
+if [ ! -f ".github/dependabot.yml" ]; then
+  mkdir -p .github
+  cat > .github/dependabot.yml << 'DEPEOF'
+version: 2
+updates:
+  # npm/yarn/pnpm (JavaScript/TypeScript)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # pip (Python)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # cargo (Rust)
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # go (Go)
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # bundler (Ruby)
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # composer (PHP)
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # NuGet (C#)
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # Gradle/Maven (Java/Kotlin)
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+DEPEOF
+  echo "✅ .github/dependabot.yml をコピーしました（依存関係自動更新）"
+else
+  echo "ℹ️  .github/dependabot.yml は既に存在します（上書き保護）"
+fi
+
+# .github/workflows/ のテンプレートをコピー（GitHub Actions CI/CD。常時上書き）
+if [ -d "$SNIPPETS/.github/workflows" ]; then
+  mkdir -p .github/workflows
+  for TEMPLATE in "$SNIPPETS/.github/workflows/"*.template; do
+    if [ -f "$TEMPLATE" ]; then
+      BASENAME=$(basename "$TEMPLATE" .template)
+      cp "$TEMPLATE" ".github/workflows/$BASENAME"
+      echo "✅ .github/workflows/$BASENAME をコピーしました（GitHub Actions CI/CD）"
+    fi
+  done
+fi
+
 # docs/ の雛形ファイルを作成
 if [ ! -f "docs/project-definition.md" ]; then
   cat > docs/project-definition.md << 'DOCEOF'
@@ -886,6 +985,35 @@ HOOKEOF
   git update-index --chmod=+x .git/hooks/pre-commit 2>/dev/null || true
   echo "✅ .git/hooks/pre-commit を設定しました（$PATTERNS_JSON から動的生成）"
   echo "   人間のコミットも機密情報から保護。パターン更新は同 JSON を編集して setup-harness.sh 再実行"
+
+  # .git/hooks/commit-msg を作成（Conventional Commits のフォーマット検証）
+  cat > .git/hooks/commit-msg << 'MSGEOF'
+#!/bin/bash
+# commit-msg hook: Conventional Commits のフォーマットを検証
+# 自動生成元：setup-harness.sh
+# 再生成するには setup-harness.sh を再実行してください。
+
+commit_msg=$(cat "$1")
+pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?: .{1,}"
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo "" >&2
+  echo "[ERROR] コミットメッセージが Conventional Commits のフォーマットに従っていません" >&2
+  echo "" >&2
+  echo "正しい形式: type(scope): message" >&2
+  echo "  type: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert" >&2
+  echo "" >&2
+  echo "例: feat: add user authentication" >&2
+  echo "例: fix(api): handle null response" >&2
+  echo "" >&2
+  echo "意図したコミットの場合: git commit --no-verify（慎重に使用）" >&2
+  exit 1
+fi
+exit 0
+MSGEOF
+  chmod +x .git/hooks/commit-msg
+  git update-index --chmod=+x .git/hooks/commit-msg 2>/dev/null || true
+  echo "✅ .git/hooks/commit-msg を設定しました（Conventional Commits 検証）"
 fi
 
 echo "🔍 セットアップの検証中..."

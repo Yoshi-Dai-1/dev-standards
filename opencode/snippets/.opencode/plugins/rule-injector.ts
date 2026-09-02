@@ -52,6 +52,13 @@ const RULES: RuleDef[] = [
     name: "stack-setup",
     filePath: ".opencode/instructions/stack-setup.md",
     filePattern: /ARCHITECTURE\.md$/i,
+    contentPatterns: [/技術スタック|採用アーキテクチャ|法的・コンプライアンス/],
+  },
+  {
+    name: "ls-lint-sync",
+    filePath: ".opencode/instructions/stack-setup/_ls-lint.md",
+    filePattern: /ARCHITECTURE\.md$/i,
+    contentPatterns: [/ディレクトリ構成/],
   },
   {
     name: "tdd-cycle",

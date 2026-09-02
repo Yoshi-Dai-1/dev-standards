@@ -1,0 +1,45 @@
+name: Code Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  codecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint and typecheck
+        run: |
+          # lint-and-typecheck.ts の内容を CI で実行
+          npx tsc --noEmit
+          npx eslint . --max-warnings 0
+          npx prettier --check .
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run Knip (unused code detection)
+        run: npx knip --no-progress
+        continue-on-error: true
+
+      - name: Run vulnerability scan
+        run: npm audit
+        continue-on-error: true
+
+      - name: Run ls-lint (filename conventions)
+        run: npx @ls-lint/ls-lint
+        continue-on-error: true

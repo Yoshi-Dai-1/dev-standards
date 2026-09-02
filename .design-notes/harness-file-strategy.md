@@ -47,6 +47,12 @@ yori の修正・改善時に新規ファイルや既存ファイルの戦略を
 - **行**: 556-559
 - **理由**: エディタ設定。ユーザーがインデントや文字コードをカスタマイズする可能性がある。
 
+### `.ls-lint.yml`
+- **戦略**: C
+- **元**: `snippets/.ls-lint.yml`
+- **行**: 563-567
+- **理由**: ファイル名規約の機械的強制。SSoT は naming-conventions.md。プロジェクトが直接編集することは稀。yori のルール変更・バグ修正を届ける必要がある。
+
 ### `.gitignore`
 - **戦略**: A（テンプレート本体）+ D（エントリ追記）
 - **元**: `snippets/.gitignore.template`
@@ -58,6 +64,11 @@ yori の修正・改善時に新規ファイルや既存ファイルの戦略を
 - **作成**: `touch .env`
 - **行**: 549
 - **理由**: 機密情報を含む。存在しない場合のみ作成、絶対に上書きしない。
+
+### `.github/dependabot.yml`
+- **戦略**: A
+- **作成**: inline `cat >` heredoc（`setup-harness.sh` 569-648行目）
+- **理由**: 依存関係自動更新設定。ユーザーがカスタムエコシステムやスケジュールを追加する可能性がある。存在しない場合のみ作成。
 
 ---
 
@@ -129,7 +140,7 @@ yori の修正・改善時に新規ファイルや既存ファイルの戦略を
 
 ## `.opencode/instructions/`（AI 振る舞いルール）
 
-### 全ファイル（`.opencode/instructions/code-quality.md`, `.opencode/instructions/code-review.md`, `.opencode/instructions/design-contract.md`, `.opencode/instructions/directory-structure.md`, `.opencode/instructions/naming-conventions.md`, `.opencode/instructions/network-resilience.md`, `.opencode/instructions/security.md`, `.opencode/instructions/stack-setup.md`, `.opencode/instructions/tdd-cycle.md`, `_shared/*.md`, `_template.md`, およびサブファイル群）
+### 全ファイル（`.opencode/instructions/code-quality.md`, `.opencode/instructions/code-review.md`, `.opencode/instructions/design-contract.md`, `.opencode/instructions/directory-structure.md`, `.opencode/instructions/naming-conventions.md`, `.opencode/instructions/network-resilience.md`, `.opencode/instructions/security.md`, `.opencode/instructions/stack-setup.md`, `.opencode/instructions/tdd-cycle.md`, `_shared/*.md`, `_template.md`, およびサブファイル群：`_ls-lint.md`, `_dependabot.md`）
 - **戦略**: C
 - **元**: `snippets/.opencode/instructions/`（再帰的 `find`、`_fill-guide.md` は除外）
 - **行**: 196-207
@@ -182,6 +193,16 @@ yori の修正・改善時に新規ファイルや既存ファイルの戦略を
 - **元**: `snippets/.opencode/plugins/*.ts` + `README.md`
 - **行**: 356-362
 - **理由**: 実行可能コード。ガードレールと自動化を提供する。バグ修正と機能追加が最も頻繁に発生するカテゴリ。ユーザーは別ファイル名でカスタムプラグインを作成でき、それらはループの走査対象外。yori 提供ファイルのみが上書きされる。
+
+---
+
+## `.github/workflows/`（GitHub Actions テンプレート）
+
+### `codecheck.yml.template`, `monthly-diagnosis.yml.template`
+- **戦略**: C
+- **元**: `snippets/.github/workflows/*.template`
+- **行**: 650-660
+- **理由**: GitHub Actions ワークフローのテンプレート。プロジェクトは独自のワークフローファイルを作成し、テンプレートを直接編集しない。yori の改善（トリガー条件・ステップ修正）を届ける必要がある。
 
 ---
 

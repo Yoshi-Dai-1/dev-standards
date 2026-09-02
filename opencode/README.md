@@ -73,6 +73,9 @@ After execution, the following files are created/copied:
 - `.opencode/standards/`: yori reference documents (principles/ / architectures/)
 - `opencode.json`: OpenCode configuration file
 - `.env`, `.env.example`, `.editorconfig`
+- `.ls-lint.yml`: Filename convention enforcement config
+- `.github/dependabot.yml`: Dependency auto-update config
+- `.github/workflows/`: GitHub Actions workflow templates (codecheck.yml, monthly-diagnosis.yml)
 - `.git/hooks/pre-commit`: Secrets prevention hook
 
 **Re-running is safe**: Project-specific files are not overwritten.
@@ -102,6 +105,8 @@ yori/
     snippets/              Template collection
       agents/              AGENTS.md template + subagent definitions
       .opencode/           Harness skeleton (instructions/ / skills/ / plugins/)
+      .ls-lint.yml         ls-lint config template
+      .github/             GitHub Actions workflow templates + Dependabot config
       design/              Design token templates
       docs/                Document templates
       opencode.json        OpenCode config template
@@ -144,6 +149,12 @@ target-project/
   .env                      Environment variables (human-only input)
   .env.example              Environment variable template (committed)
   .editorconfig             Cross-editor code style consistency
+  .ls-lint.yml              Filename convention enforcement config
+  .github/
+    dependabot.yml          Dependency auto-update config
+    workflows/
+      codecheck.yml         CI code check
+      monthly-diagnosis.yml Monthly diagnosis
   .git/hooks/pre-commit     Secrets prevention hook
 ```
 

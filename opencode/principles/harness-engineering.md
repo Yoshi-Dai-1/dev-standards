@@ -281,6 +281,59 @@ CLI の具体的なコマンドは `command -v` / `--help` / `webfetch` で
 
 ---
 
+## 横断的品質ゲート
+
+ハーネスは単発のルールではなく、複数の品質ゲートが横断的に動作する。
+各ゲートは独立して機能し、重複・競合がない設計となっている。
+
+### ls-lint（ファイル名規約の機械的強制）
+
+**目的**: ファイル名・ディレクトリ名の命名規則を機械的に強制する。
+AI エージェントの自律適用だけに頼ると、記憶の喪失や指示逸脱のリスクがあるため、ls-lint が pre-commit hook と CI で二重に保護する。
+
+**3層防御**:
+| 場面 | タイミング | 役割 |
+|------|-----------|------|
+| pre-commit hook | git commit 前 | コミット時の最終ゲート |
+| `.opencode/plugins/lint-and-typecheck.ts` | ファイル編集後 | 開発中のリアルタイムフィードバック |
+| GitHub Actions | PR作成時 | CI での最終検証 |
+
+**トリガー条件**:
+- `ARCHITECTURE.md` の「ディレクトリ構成」セクションが変更されたとき
+- `ls-lint-sync` ルール（`rule-injector.ts`）が `_ls-lint.md` を読み込む
+
+**SSoT**: `.opencode/instructions/naming-conventions.md`
+`.ls-lint.yml` は naming-conventions.md のルールを機械的に表現したもの。
+
+**Strategy C**: 常時上書き（`setup-harness.sh` 563-567行目）
+
+### Dependabot（依存関係自動更新）
+
+**目的**: GitHub の依存関係自動更新機能。セキュリティパッチとバージョン更新を自動でPR作成する。
+
+**トリガー条件**:
+- `ARCHITECTURE.md` の「技術スタック」セクションが変更されたとき
+- `stack-setup` ルール（`rule-injector.ts`）が `stack-setup.md` を読み込み、`_dependabot.md` を参照
+
+**エコシステムマッピング**:
+npm（JavaScript/TypeScript）、pip（Python）、cargo（Rust）、gomod（Go）、bundler（Ruby）、composer（PHP）、nuget（C#）、gradle（Java/Kotlin）、github-actions（CI/CD）、docker（コンテナ）
+
+**Strategy A**: 上書き保護（`setup-harness.sh` 569-648行目）
+ユーザーがカスタムエコシステムやスケジュールを追加する可能性があるため、存在しない場合のみ作成。
+
+### GitHub Actions ワークフロー
+
+**目的**: CI/CD 品質ゲート。`lint-and-typecheck.ts` の CI 版として機能する。
+
+**テンプレート**:
+- `codecheck.yml.template`: リント・型チェック・ls-lint を PR 作成時に実行
+- `monthly-diagnosis.yml.template`: 月次診断（フルテストスイート + Knip + 脆弱性スキャン）
+
+**Strategy C**: 常時上書き（`setup-harness.sh` 650-660行目）
+`.template` サフィックスを外してコピー。プロジェクトは独自のワークフローファイルを作成し、テンプレートを直接編集しない。
+
+---
+
 ## ハーネスの育て方（時系列）
 
 ```

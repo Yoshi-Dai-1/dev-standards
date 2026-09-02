@@ -1,0 +1,60 @@
+name: Monthly Diagnosis
+
+on:
+  schedule:
+    # 毎月1日の UTC 0:00 (JST 9:00) に実行
+    - cron: '0 0 1 * *'
+  workflow_dispatch: # 手動実行也可
+
+jobs:
+  diagnosis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run comprehensive lint
+        run: |
+          echo "=== Comprehensive Lint Check ==="
+          npx tsc --noEmit
+          npx eslint . --max-warnings 0
+          npx prettier --check .
+
+      - name: Run full test suite
+        run: |
+          echo "=== Full Test Suite ==="
+          npm test
+
+      - name: Run Knip (unused code detection)
+        run: |
+          echo "=== Unused Code Detection ==="
+          npx knip --no-progress
+
+      - name: Run vulnerability scan
+        run: |
+          echo "=== Vulnerability Scan ==="
+          npm audit --audit-level=high
+
+      - name: Run ls-lint (filename conventions)
+        run: |
+          echo "=== Filename Convention Check ==="
+          npx @ls-lint/ls-lint
+
+      - name: Generate report
+        if: always()
+        run: |
+          echo "=== Monthly Diagnosis Report ==="
+          echo "Date: $(date -u)"
+          echo "Branch: ${{ github.ref }}"
+          echo "Commit: ${{ github.sha }}"
+          echo ""
+          echo "All checks completed. Review the results above."

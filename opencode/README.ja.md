@@ -73,6 +73,9 @@ bash ../yori/opencode/setup-harness.sh
 - `.opencode/standards/`：yori の参照ドキュメント（principles/ / architectures/）
 - `opencode.json`：OpenCode 設定ファイル
 - `.env`, `.env.example`, `.editorconfig`
+- `.ls-lint.yml`：ファイル名規約の機械的強制設定
+- `.github/dependabot.yml`：依存関係自動更新設定
+- `.github/workflows/`：GitHub Actions ワークフローテンプレート（codecheck.yml, monthly-diagnosis.yml）
 - `.git/hooks/pre-commit`：機密情報コミット防止フック
 
 **再実行は安全です**：プロジェクト固有ファイルは上書きされません。
@@ -102,6 +105,8 @@ yori/
     snippets/               テンプレート集
       agents/               AGENTS.md テンプレート・サブエージェント定義
       .opencode/            ハーネス雛形（instructions/ / skills/ / plugins/）
+      .ls-lint.yml          ls-lint 設定テンプレート
+      .github/              GitHub Actions ワークフローテンプレート + Dependabot 設定
       design/               デザイントークン雛形
       docs/                 ドキュメント雛形
       opencode.json         OpenCode 設定テンプレート
@@ -144,6 +149,12 @@ yori/
   .env                      環境変数（値は人間のみ入力）
   .env.example              環境変数テンプレート（コミット対象）
   .editorconfig             エディタ間コードスタイル統一
+  .ls-lint.yml              ファイル名規約の機械的強制設定
+  .github/
+    dependabot.yml          依存関係自動更新設定
+    workflows/
+      codecheck.yml         CI コードチェック
+      monthly-diagnosis.yml 月次診断
   .git/hooks/pre-commit     機密情報コミット防止フック
 ```
 

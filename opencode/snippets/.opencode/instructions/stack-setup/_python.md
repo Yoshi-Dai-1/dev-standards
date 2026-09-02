@@ -1,5 +1,7 @@
 #### Python が含まれる場合
 
+**以下のアクションは `.opencode/project-context.md` の「設定ファイルの自動展開レベル」に従う。**
+
 ```
 .python-version       → 下記テンプレートで作成（ARCHITECTURE.md のバージョンを優先）
 pyproject.toml        → 下記テンプレートで作成（Ruff・mypy の設定を含む）
@@ -20,9 +22,9 @@ requirements-dev.txt  → 下記テンプレートで作成
 確認付き展開：「python3 -m venv .venv を作成しますか？」と確認し、承認後に実行する
 展開なし：  コマンドを提示するのみ（実行しない）
 ```
-- 仮想環境作成後、`env-check.ts` Plugin が `python3` / `pip` コマンドを自動的に `.venv/bin/` 配下に書き換える
+- 仮想環境作成後、`.opencode/plugins/env-check.ts` Plugin が `python3` / `pip` コマンドを自動的に `.venv/bin/` 配下に書き換える
 - `source .venv/bin/activate` は不要（Plugin がパス解決するため）
-- OS 別の python3 存在確認は `_install-protocol.md` の共通プロトコルに従う
+- OS 別の python3 存在確認は `.opencode/instructions/stack-setup/_install-protocol.md` の共通プロトコルに従う
 
 **開発ツールのインストール（`requirements-dev.txt` を SSOT として使用）：**
 ```bash
@@ -69,6 +71,7 @@ pytest
 pytest-cov
 ruff
 mypy
+pip-audit
 ```
 
 **`pyproject.toml` テンプレート（Ruff 設定）：**
@@ -89,7 +92,17 @@ indent-style = "space"
 strict = true
 ```
 
+**脆弱性検出ツール（pip-audit）：**
+```bash
+# 仮想環境内で実行
+.venv/bin/pip-audit
+```
+- `pip-audit` は PyPI のOSV データベースから脆弱性情報を照合
+- `requirements.txt` の全パッケージをスキャン
+- 脆弱性が見つかった場合は修正バージョンを提案
+
 展開後、ユーザーに以下を案内する：
 > Python プロジェクト用の設定ファイルを作成しました。
-> lint・フォーマットの自動チェックには `.opencode/plugins/lint-and-typecheck.ts` が有効です（`.opencode/plugins/README.md` 参照）。
+> lint・フォーマット・脆弱性検出は、ファイルを編集するたびに自動で行われます。
+> 検出結果はエディタ上に表示されます。
 > `pyproject.toml` に追加設定が必要な場合は指示してください。

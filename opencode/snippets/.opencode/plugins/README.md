@@ -266,7 +266,7 @@ AI が自己回復し、規約を読んでから再試行する。
 | **noReply 注入** | コードファイル + 非コードファイル（`package.json` / `docs/project-definition.md` / `AGENTS.md` / 依存関係ファイル 等） | `.opencode/instructions/security.md` の確認を推奨。内容キーワード（login/auth/token/stripe/payment 等）に合致すると再注入 |
 | **noReply 注入** | コードファイル + `ARCHITECTURE.md` + `docs/project-definition.md` | `.opencode/instructions/network-resilience.md` の確認を推奨。内容キーワード（fetch/axios/retry/timeout/redis 等）に合致すると再注入 |
 | **noReply 注入** | `.tsx/.jsx/.css/.scss` + `DESIGN.md` + `design/*.json` | `.opencode/instructions/design-contract.md` の確認を推奨 |
-| **noReply 注入** | `ARCHITECTURE.md` 編集 | `.opencode/instructions/stack-setup.md` の確認を推奨 |
+| **noReply 注入** | `ARCHITECTURE.md` 「技術スタック」「採用アーキテクチャ」「法的・コンプライアンス」セクション編集 | `.opencode/instructions/stack-setup.md` の確認を推奨 |
 | **noReply 注入** | テストファイルの write/edit | `.opencode/instructions/tdd-cycle.md` の確認を推奨（読了後）。内容キーワード（test/spec/tdd/describe/it/assert/expect/func Test/#[test]）に合致すると再注入 |
 
 注入通知はバッチ化されている：1回のツール実行で複数ルールに該当した場合、複数回の prompt を送らず1回の noReply に全ルールを列挙する。

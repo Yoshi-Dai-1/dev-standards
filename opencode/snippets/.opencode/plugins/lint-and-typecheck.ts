@@ -247,6 +247,68 @@ export const LintAndTypecheckPlugin: Plugin = async ({ $, client }) => {
         if (e2) errors.push("csLint: " + e2)
       }
 
+      // --- ls-lint (全言語共通: ファイル名規約の機械的強制) ---
+      if (await exists($, "ls-lint")) {
+        const e = await lintFile($, "ls-lint", fp, attempt)
+        if (e) errors.push("ls-lint: " + e)
+      } else if (await exists($, "npx")) {
+        const r = await $`test -f .ls-lint.yml`.nothrow().quiet()
+        if (r.exitCode === 0) {
+          const e = await lintFile($, "npx @ls-lint/ls-lint", fp, attempt)
+          if (e) errors.push("ls-lint: " + e)
+        }
+      }
+
+      // --- Knip (JS/TS only: 未使用コード/依存関係検出) ---
+      if (/\.(ts|tsx|js|jsx|mts|cts|mjs|cjs)$/.test(fp)) {
+        if (await exists($, "knip")) {
+          const e = await lintFile($, "knip --no-progress", fp, attempt)
+          if (e) errors.push("knip: " + e)
+        } else if (await exists($, "npx")) {
+          const r = await $`test -f knip.json`.nothrow().quiet()
+          if (r.exitCode === 0) {
+            const e = await lintFile($, "npx knip --no-progress", fp, attempt)
+            if (e) errors.push("knip: " + e)
+          }
+        }
+      }
+
+      // --- 脆弱性検出ツール (全言語共通) ---
+      // Python: pip-audit
+      if (/\.py$/.test(fp)) {
+        if (await exists($, "pip-audit")) {
+          const e = await lintFile($, "pip-audit", fp, attempt)
+          if (e) errors.push("vuln: " + e)
+        } else if (await exists($, ".venv/bin/pip-audit")) {
+          const e = await lintFile($, ".venv/bin/pip-audit", fp, attempt)
+          if (e) errors.push("vuln: " + e)
+        }
+      }
+
+      // Go: govulncheck
+      if (/\.go$/.test(fp)) {
+        if (await exists($, "govulncheck")) {
+          const e = await lintFile($, "govulncheck ./...", fp, attempt)
+          if (e) errors.push("vuln: " + e)
+        }
+      }
+
+      // Rust: cargo audit
+      if (/\.rs$/.test(fp)) {
+        if (await exists($, "cargo-audit")) {
+          const e = await lintFile($, "cargo audit", fp, attempt)
+          if (e) errors.push("vuln: " + e)
+        }
+      }
+
+      // Ruby: bundler-audit
+      if (/\.rb$/.test(fp)) {
+        if (await exists($, "bundle-audit")) {
+          const e = await lintFile($, "bundle-audit check --update", fp, attempt)
+          if (e) errors.push("vuln: " + e)
+        }
+      }
+
       if (errors.length === 0 && attempt.n === 0 && lang !== "") {
         await client.tui.showToast({
           body: {

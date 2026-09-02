@@ -1,6 +1,6 @@
 # 技術スタック設定ファイルの展開ルール
 
-`ARCHITECTURE.md` 編集時に Plugin が注入する。
+`ARCHITECTURE.md` の「技術スタック」「採用アーキテクチャ」「法的・コンプライアンス」セクション編集時に Plugin が注入する。
 
 ## 検出と展開の手順
 
@@ -37,7 +37,7 @@
   挙動：承認後に作成（electron-builder.yml / tauri.conf.json / backend.tf / cdk.json）
 ```
 
-**展開レベルチェック：** `.opencode/project-context.md` の「設定ファイルの自動展開レベル」を確認する。
+**自動展開レベルの確認：** `.opencode/project-context.md` の「設定ファイルの自動展開レベル」を確認する。
 未設定の場合は人間に確認する（自動展開 / 確認付き展開 / 展開なし の3択）。
 
 **既存ファイルは上書きしない。**
@@ -61,14 +61,21 @@
 | C / C++ / C# | `.opencode/instructions/stack-setup/_c-family.md` |
 | PHP | `.opencode/instructions/stack-setup/_php.md` |
 
+**言語ファイルの実行方法（設定ファイルの自動展開レベルに従う）：**
+→ `## 重要なルール` の「設定ファイルの展開は...」に従う。
+- ツールインストールコマンドは上記に加え、`.opencode/instructions/stack-setup/_install-protocol.md` の共通プロトコルに従う
+
 ### .env 展開 + .gitignore 補完
-→ `.opencode/instructions/stack-setup/_env-gitignore.md` を読んで実行する（.gitignore は展開レベルに関わらず常に実行）
+→ `.opencode/instructions/stack-setup/_env-gitignore.md` を読んで実行する（.gitignore は自動展開レベルに関わらず常に実行）
 
 ### アーキテクチャ種別別ファイル展開
 → `.opencode/instructions/stack-setup/_arch-deploy.md` を読んで実行する
 
 ### Step 3.5: 命名規則・フレームワーク深掘り・コンプライアンス
 → `.opencode/instructions/stack-setup/_step-35.md` を読んで実行する（Step 2 と Step 3 の完了直後または `ARCHITECTURE.md` 更新時）
+
+### Dependabot 設定
+→ `.opencode/instructions/stack-setup/_dependabot.md` を読んで実行する（「技術スタック」セクション更新時）
 
 ### Step 3.6: アーキテクチャ固有ルールの適用
 → `.opencode/instructions/stack-setup/_step-36-arch.md` を読んで実行する
