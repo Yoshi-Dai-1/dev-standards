@@ -66,7 +66,7 @@ CLI で外部リソース（DB・API・クラウドサービス等）の状態�
    - `DESIGN.md`（作成された場合のみ）
    矛盾を発見した場合は人間に報告し、修正方針の指示を仰ぐ。
    修正が完了するまで次のステップに進まない
-3. `docs/project-definition.md` / `ARCHITECTURE.md` に HTMLコメント（`<!-- ... -->`）が残っていないか確認し、残っていれば削除する
+3. `docs/project-definition.md` / `ARCHITECTURE.md` / `.opencode/project-context.md` に HTMLコメント（`<!-- ... -->`）が残っていないか確認し、残っていれば削除する
 4. handoff スキルを実行する（`skill({ name: "handoff" })`）
 5. この「## 初期セットアップ（初回セッションのみ）」セクション全文を削除する
 6. 人間に「新規セッションを開始してください」と促す
